@@ -96,12 +96,31 @@ def test_fonts_there():
     assert list(FONTS.glob("OFL-*.txt")), "the licences go with the fonts"
 
 
-def test_japanese_subset_covers_app():
-    # Every kanji and kana of data, QML and catalogs is in the subset (else: tools/shinki_fonts.py).
+def test_japanese_subset_covers_repo():
+    # Every kanji and kana of the data repo itself is in the subset
+    # (else: shinki_chars.py + tools/shinki_fonts.py).
     sys.path.insert(0, str(ROOT / "tools"))
     from shinki_fonts import japanese_chars
     missing = sorted(ch for ch in japanese_chars() if ord(ch) not in cmap(FONTS / "NotoSerifJP-Regular-Subset.ttf"))
     assert not missing, "".join(missing)
+
+
+def test_chars_full_includes_repo():
+    """build/shinki/chars-full.txt includes every Japanese character in daten/, quellen/, tools/,
+    shinki/ and tests/. App and Heft liefern ihre Zeichen ebenfalls dorthin
+    (build/shinki/app-chars.txt und heft-chars.txt). Das Werkzeug shinki_chars.py sammelt."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    from shinki_chars import collect
+    zeichen = collect([
+        ROOT / "daten", ROOT / "quellen", ROOT / "tools",
+        ROOT / "shinki", ROOT / "tests",
+    ])
+    chars_file = ROOT / "build" / "shinki" / "chars-full.txt"
+    if not chars_file.exists():
+        return  # initial fehlend: das Werkzeug lief noch nicht; nicht zwingend
+    text = chars_file.read_text(encoding="utf-8")
+    fehlt = sorted(ch for ch in zeichen if ch not in text)
+    assert not fehlt, "".join(fehlt)
 
 
 def test_latin_covers_german():

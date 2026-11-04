@@ -8,18 +8,24 @@
   Crimson Pro (variable, 200–900)
       Latin only (the app's languages are German and English): a third of the size.
   Noto Serif JP Regular (an instance of the variable font)
-      only the kanji and kana the app shows: programme data (daten/), QML and catalogs (app/).
+      only the kanji and kana the data, the QML and the catalogs show.
       The whole font has 13 MB; tests/test_shinki.py checks that the subset still covers
       every character, so a new kanji in the data fails until this tool runs again.
 
+  Quelle der japanischen Zeichen: build/shinki/chars-full.txt (eine Zeile, alle Zeichen
+  sortiert und eindeutig). Wer Zeichen hinzufügt, muss diese Datei aktualisieren:
+  shinki_chars.py sammelt sie aus den Daten-, QML-, i18n- und C++-Dateien aller Repos
+  (mitori-daten, Mitori-App, mitori-heft), das Ergebnis konkateniert ein Schritt in
+  jedem Repo, die Vereinigung steht hier.
+
 Needs fontTools (pyftsubset); the CI does not, it reads the committed subsets.
 """
-import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "shinki" / "fonts"
+CHARS = ROOT / "build" / "shinki" / "chars-full.txt"
 
 # Latin, Latin-1, Latin Extended-A/B, general punctuation and €. Crimson Pro has no arrows (→);
 # Qt takes them from a fallback font.
@@ -36,22 +42,13 @@ JAPANESE_FONT = "NotoSerifJP[wght].ttf"
 JAPANESE_OUT = "NotoSerifJP-Regular-Subset.ttf"
 
 
-def is_japanese(ch):
-    """Kana, CJK ideographs and the CJK punctuation the app writes (「」・ー …)."""
-    c = ord(ch)
-    return (0x3000 <= c <= 0x30FF or 0x3400 <= c <= 0x4DBF or 0x4E00 <= c <= 0x9FFF
-            or 0xF900 <= c <= 0xFAFF or 0xFF00 <= c <= 0xFFEF)
-
-
 def japanese_chars():
-    """Every Japanese character in the programme data, the QML and the catalogs."""
-    files = list((ROOT / "daten").glob("*.yaml")) + list((ROOT / "app" / "qml").rglob("*.qml"))
-    files += list((ROOT / "app" / "qml").rglob("*.js")) + list((ROOT / "app" / "i18n").glob("*.ts"))
-    files += [p for p in (ROOT / "app").rglob("*.cpp")]
-    chars = set()
-    for path in files:
-        chars |= {ch for ch in path.read_text(encoding="utf-8", errors="ignore") if is_japanese(ch)}
-    return chars
+    """Every Japanese character collected in build/shinki/chars-full.txt."""
+    if not CHARS.exists():
+        sys.exit(f"shinki_fonts: {CHARS.relative_to(ROOT)} fehlt; shinki_chars.py in jedem Repo laufen")
+    text = CHARS.read_text(encoding="utf-8")
+    # Eine Zeile, durch Whitespace getrennt; leere Zeichen ignorieren.
+    return {ch for ch in text if ch.strip()}
 
 
 def find(source, name):
