@@ -11,6 +11,7 @@ ShinkiDialog 1.0 ShinkiDialog.qml
 ShinkiGroupHead 1.0 ShinkiGroupHead.qml
 ShinkiHead 1.0 ShinkiHead.qml
 ShinkiHeading 1.0 ShinkiHeading.qml
+ShinkiHeatGrid 1.0 ShinkiHeatGrid.qml
 ShinkiHint 1.0 ShinkiHint.qml
 ShinkiIcon 1.0 ShinkiIcon.qml
 ShinkiKpi 1.0 ShinkiKpi.qml
