@@ -1,5 +1,6 @@
 """Checks of tools/daten.py and its output mitori-daten.json (the app's programme data)."""
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -27,6 +28,13 @@ def alle_ids(daten):
         for art in ("kamae", "kiriotoshi"):
             if art in d:
                 yield d[art]["id"]
+
+
+def test_stand_steht_in_den_daten_und_im_changelog(daten):
+    stand = (WURZEL / "STAND").read_text(encoding="utf-8").strip()
+    assert re.fullmatch(r"\d{4}\.\d{1,2}\.\d+", stand), stand
+    assert daten["stand"] == stand
+    assert f"## [{stand}] — " in (WURZEL / "CHANGELOG.md").read_text(encoding="utf-8")
 
 
 def test_format_und_disziplinen(daten):
@@ -153,16 +161,6 @@ def test_kana(wort, lesung):
     modul = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(modul)
     assert modul.kana(wort) == lesung
-
-
-def test_uebersetzungen_vollstaendig():
-    """Platzhalter: Der deutsche Übersetzungskatalog (app/i18n/mitori_de.ts) lebt im App-Repo und
-    wird dort geprüft. Das Daten-Repo hat keinen i18n-Katalog."""
-
-
-def test_englisch_nicht_deutsch():
-    """Platzhalter: Englische Pluralformen (mitori_en.ts) leben im App-Repo und werden dort gegen
-    die deutschen abgeglichen."""
 
 
 # Waiting times (Meine Grade): every grade one can take has `wartezeit` {jahre, nach} from its
