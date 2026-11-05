@@ -1,6 +1,8 @@
 """Checks of tools/bundle.py: codes, wrapping the key, encrypting files (the app reads the same)."""
 import importlib.util
 import os
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -173,7 +175,7 @@ def _gebaut(geheim, tmp_path):
 def test_verifizieren(geheim, tmp_path, monkeypatch):
     """Verifizieren findet eine beschädigte Datei und eine falsche Größe; eine heile geht durch."""
     datei = _gebaut(geheim, tmp_path)
-    monkeypatch.setattr(bundle, "_laenge_fehler", lambda name, probe: [])   # kein echtes Video
+    monkeypatch.setattr(bundle, "_laenge_fehler", lambda *a: [])   # kein echtes Video
     assert bundle.verifiziert("aikido-kyu") == []
     roh = bytearray(datei.read_bytes())
     roh[-5] ^= 1
@@ -192,3 +194,142 @@ def test_stand(geheim, tmp_path):
     aikido = next(z for z in zeilen if z.startswith("aikido-kyu"))
     assert "Version 1" in aikido and "1 Codes" in aikido
     assert any(z.startswith("daitoryu-kyu") and "nicht gebaut" in z for z in zeilen)
+
+
+# ── Abbrüche und Testbauten ──
+
+ffmpeg_da = pytest.mark.skipif(not shutil.which("ffmpeg"), reason="ffmpeg fehlt")
+
+
+def _video(pfad, sekunden, *zusatz):
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", f"testsrc=size=64x48:rate=25:d={sekunden}",
+                    "-c:v", "libx264", "-preset", "ultrafast", *zusatz, str(pfad)], check=True)
+
+
+def test_abbruch_laesst_keine_fertige_datei(tmp_path, monkeypatch):
+    """Bricht die Kodierung ab, liegt unter dem Zielnamen nichts: der nächste Lauf kodiert neu."""
+    ziel = tmp_path / "a.mkv"
+
+    def bricht_ab(befehl, check):
+        Path(befehl[-1]).write_bytes(b"halb")
+        raise KeyboardInterrupt
+    monkeypatch.setattr(bundle.subprocess, "run", bricht_ab)
+    with pytest.raises(KeyboardInterrupt):
+        bundle.beschnitten(tmp_path / "q.mkv", ziel, {"h": 480, "hoehe": 480, "y": 0})
+    assert not ziel.exists()
+
+    monkeypatch.setattr(bundle.subprocess, "run", lambda befehl, check: Path(befehl[-1]).write_bytes(b"ganz"))
+    bundle.beschnitten(tmp_path / "q.mkv", ziel, {"h": 480, "hoehe": 480, "y": 0})
+    assert ziel.read_bytes() == b"ganz"
+    assert [p.name for p in tmp_path.iterdir()] == ["a.mkv"]
+
+
+@ffmpeg_da
+def test_bilder_zaehlt_wirklich(tmp_path):
+    """Die Kopfdaten lügen bei einem Rest: die Länge kommt aus den gezählten Bildern."""
+    voll = tmp_path / "voll.mkv"
+    _video(voll, 8)
+    assert bundle.bilder(voll) == 200
+    rest = tmp_path / "rest.mkv"
+    rest.write_bytes(voll.read_bytes()[:voll.stat().st_size // 2])
+    assert 0 < bundle.bilder(rest) < 200
+
+
+def _mit_bildern(geheim, tmp_path, monkeypatch, zahl):
+    datei = _gebaut(geheim, tmp_path)
+    m = bundle.manifest_lesen()
+    m["bundles"][0]["videos"][0]["bilder"] = 200
+    bundle.manifest_schreiben(m)
+    monkeypatch.setattr(bundle, "bilder", lambda pfad: zahl)
+    return datei
+
+
+def test_verifizieren_findet_kurzes_video(geheim, tmp_path, monkeypatch):
+    _mit_bildern(geheim, tmp_path, monkeypatch, 180)
+    assert any("180" in f and "200" in f for f in bundle.verifiziert("aikido-kyu"))
+
+
+def test_verifizieren_mit_passender_laenge(geheim, tmp_path, monkeypatch):
+    _mit_bildern(geheim, tmp_path, monkeypatch, 200)
+    assert bundle.verifiziert("aikido-kyu") == []
+
+
+def test_verifizieren_ohne_bundles_ist_ein_fehler(geheim):
+    """„0 Bundles in Ordnung“ bei falschem Ordner wäre ein falsches Ja."""
+    with pytest.raises(SystemExit, match="keine"):
+        bundle.befehl_verifizieren(type("A", (), {"bundle": None}))
+
+
+def test_pruefen_legt_keine_schluessel_an(geheim, tmp_path, monkeypatch):
+    """Ein fehlender Schlüssel bleibt fehlend: sonst umhüllen spätere Codes den falschen."""
+    _gebaut(geheim, tmp_path)
+    (geheim / "schluessel" / "aikido-kyu.key").unlink()
+    assert any("Schlüssel" in f for f in bundle.verifiziert("aikido-kyu"))
+    assert not (geheim / "schluessel" / "aikido-kyu.key").exists()
+
+
+def test_alle_ersetzt_testbauten(geheim, tmp_path, monkeypatch):
+    """Ein Testbau (--ohne-kodieren) zählt für den echten Lauf nicht als gebaut."""
+    _gebaut(geheim, tmp_path)
+    gebaut = []
+    monkeypatch.setattr(bundle, "befehl_build", lambda args: gebaut.append(args.bundle))
+    bundle.befehl_alle(type("A", (), {"neu": False, "ohne_kodieren": False}))
+    assert "aikido-kyu" in gebaut
+    gebaut.clear()
+    bundle.befehl_alle(type("A", (), {"neu": False, "ohne_kodieren": True}))
+    assert "aikido-kyu" not in gebaut
+
+
+def test_stand_nennt_testbauten(geheim, tmp_path):
+    _gebaut(geheim, tmp_path)
+    assert any(z.startswith("aikido-kyu") and "Test" in z for z in bundle.stand_zeilen())
+
+
+def test_testbau_wird_nicht_hochgeladen(geheim, tmp_path, monkeypatch):
+    _gebaut(geheim, tmp_path)
+    monkeypatch.setattr(bundle, "_laenge_fehler", lambda *a: [])
+    args = type("A", (), {"nur_manifest": False, "verband_stimmt_zu": True, "probe": False})
+    with pytest.raises(SystemExit, match="Testbau"):
+        bundle.befehl_hochladen(args)
+
+
+def _echt(geheim):
+    m = bundle.manifest_lesen()
+    m["bundles"][0]["videos"][0]["beschnitten"] = True
+    bundle.manifest_schreiben(m)
+
+
+def test_upload_nur_nach_pruefung(geheim, tmp_path, monkeypatch):
+    """Eine beschädigte Datei geht nicht hinaus, vor dem ersten Request."""
+    datei = _gebaut(geheim, tmp_path)
+    _echt(geheim)
+    (geheim / "gitea-token").write_text("t")
+    monkeypatch.setattr(bundle, "_laenge_fehler", lambda *a: [])
+    monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: pytest.fail("nichts darf hinaus"))
+    roh = bytearray(datei.read_bytes())
+    roh[-5] ^= 1
+    datei.write_bytes(roh)
+    args = type("A", (), {"nur_manifest": False, "verband_stimmt_zu": True, "probe": False})
+    with pytest.raises(SystemExit, match="nichts wird hochgeladen"):
+        bundle.befehl_hochladen(args)
+
+
+def test_probe_nennt_fehlende_dateien(geheim, tmp_path, capsys):
+    datei = _gebaut(geheim, tmp_path)
+    datei.unlink()
+    bundle.befehl_hochladen(type("A", (), {"nur_manifest": False, "verband_stimmt_zu": False, "probe": True}))
+    assert "FEHLT" in capsys.readouterr().out
+
+
+def test_arbeitsdatei_haengt_am_beschnitt():
+    """Ein geänderter Beschnitt nimmt nicht die alte Kodierung."""
+    a = bundle.arbeitsname("aikido/k5", {"h": 480, "y": 100})
+    assert a != bundle.arbeitsname("aikido/k5", {"h": 480, "y": 96})
+    assert a.endswith(".mkv") and "/" not in a
+
+
+def test_alle_hat_keine_version():
+    """Eine Version für alle würde Bundles zurücksetzen: die App sähe das Update nie."""
+    quelle = (Path(bundle.__file__)).read_text(encoding="utf-8")
+    teil = quelle[quelle.index('sub.add_parser("alle")'):quelle.index('sub.add_parser("verifizieren")')]
+    assert "--version" not in teil
