@@ -104,3 +104,91 @@ def test_ids_sind_ordnernamen():
     assert all(bundle.ID.fullmatch(i) for i in bundle.definitionen())
     for falsch in ("..", "/tmp", "a/b", "Aikido", ""):
         assert not bundle.ID.fullmatch(falsch)
+
+
+# ── Das Werkzeug für die Lizenz-Downloads ──
+
+@pytest.fixture
+def geheim(tmp_path, monkeypatch):
+    ordner = tmp_path / "geheim"
+    monkeypatch.setattr(bundle, "GEHEIM", ordner)
+    return ordner
+
+
+def test_geheim_nicht_im_repo(tmp_path, monkeypatch):
+    """Schlüssel, Codes und Videos kommen nie in ein Git-Repo: der Ordner darin wird abgelehnt."""
+    repo = tmp_path / "repo"
+    (repo / ".git").mkdir(parents=True)
+    monkeypatch.setattr(bundle, "GEHEIM", repo / "unter" / "geheim")
+    with pytest.raises(SystemExit, match="Git"):
+        bundle.geheim_pruefen()
+    monkeypatch.setattr(bundle, "GEHEIM", tmp_path / "frei")
+    bundle.geheim_pruefen()
+    assert (tmp_path / "frei").stat().st_mode & 0o077 == 0, "nur der Besitzer"
+
+
+def test_code_mit_empfaenger(geheim):
+    """Die Lizenz: wer welchen Code bekam, steht nur in der privaten CSV, nie im Manifest."""
+    args = type("A", (), {"bundle": "aikido-kyu", "anzahl": 2, "fuer": "Dojo Köln"})
+    bundle.befehl_codes(args)
+    zeilen = (geheim / "codes" / "aikido-kyu.csv").read_text(encoding="utf-8").splitlines()
+    assert zeilen[0] == "code,datum,kennung,fuer"
+    assert len(zeilen) == 3 and all(z.endswith(",Dojo Köln") for z in zeilen[1:])
+    assert "Dojo" not in (geheim / "manifest.json").read_text(encoding="utf-8")
+
+
+def test_upload_nur_verschluesselt(tmp_path):
+    """Vor dem Upload: eine Datei ohne die Magie (ein Klartext-Video) stoppt alles."""
+    klar = tmp_path / "x.mvb"
+    klar.write_bytes(b"\x1aE\xdf\xa3 mkv")
+    with pytest.raises(SystemExit, match="verschlüsselt"):
+        bundle.verschluesselt_pruefen(klar)
+    roh = tmp_path / "y.mvb"
+    bundle.verschluesselt(klar, roh, b"k" * 32)
+    bundle.verschluesselt_pruefen(roh)
+
+
+def test_upload_braucht_zustimmung(geheim):
+    args = type("A", (), {"nur_manifest": False, "verband_stimmt_zu": False, "probe": False})
+    with pytest.raises(SystemExit, match="verband-stimmt-zu"):
+        bundle.befehl_hochladen(args)
+
+
+def _gebaut(geheim, tmp_path):
+    """Ein gebautes Bundle ohne ffmpeg: eine kleine Datei, verschlüsselt, im Manifest."""
+    quelle = tmp_path / "klar.bin"
+    quelle.write_bytes(b"inhalt" * 500000)
+    aus = geheim / "aus" / "aikido-kyu" / "1"
+    aus.mkdir(parents=True)
+    k = bundle.schluessel("aikido-kyu")
+    g, sha, klar = bundle.verschluesselt(quelle, aus / "aikido-k5.mvb", k)
+    m = bundle.manifest_lesen()
+    m["bundles"] = [{"id": "aikido-kyu", "version": 1, "titel": "t", "hinweis": None,
+                     "videos": [{"video": "aikido/k5", "datei": "aikido-k5.mvb", "groesse": g, "sha256": sha,
+                                 "klar": klar, "beschnitten": False}]}]
+    bundle.manifest_schreiben(m)
+    return aus / "aikido-k5.mvb"
+
+
+def test_verifizieren(geheim, tmp_path, monkeypatch):
+    """Verifizieren findet eine beschädigte Datei und eine falsche Größe; eine heile geht durch."""
+    datei = _gebaut(geheim, tmp_path)
+    monkeypatch.setattr(bundle, "_laenge_fehler", lambda name, probe: [])   # kein echtes Video
+    assert bundle.verifiziert("aikido-kyu") == []
+    roh = bytearray(datei.read_bytes())
+    roh[-5] ^= 1
+    datei.write_bytes(roh)
+    assert any("aikido-k5.mvb" in f for f in bundle.verifiziert("aikido-kyu"))
+    datei.unlink()
+    assert any("fehlt" in f for f in bundle.verifiziert("aikido-kyu"))
+
+
+def test_stand(geheim, tmp_path):
+    """Die Übersicht je Bundle: gebaut oder nicht, Version, Größe, Codes."""
+    _gebaut(geheim, tmp_path)
+    args = type("A", (), {"bundle": "aikido-kyu", "anzahl": 1, "fuer": ""})
+    bundle.befehl_codes(args)
+    zeilen = bundle.stand_zeilen()
+    aikido = next(z for z in zeilen if z.startswith("aikido-kyu"))
+    assert "Version 1" in aikido and "1 Codes" in aikido
+    assert any(z.startswith("daitoryu-kyu") and "nicht gebaut" in z for z in zeilen)
