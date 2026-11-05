@@ -155,16 +155,6 @@ def test_kana(wort, lesung):
     assert modul.kana(wort) == lesung
 
 
-def test_uebersetzungen_vollstaendig():
-    """Platzhalter: Der deutsche Übersetzungskatalog (app/i18n/mitori_de.ts) lebt im App-Repo und
-    wird dort geprüft. Das Daten-Repo hat keinen i18n-Katalog."""
-
-
-def test_englisch_nicht_deutsch():
-    """Platzhalter: Englische Pluralformen (mitori_en.ts) leben im App-Repo und werden dort gegen
-    die deutschen abgeglichen."""
-
-
 # Waiting times (Meine Grade): every grade one can take has `wartezeit` {jahre, nach} from its
 # `abstand`: "nach" is "grad" (the previous grade) or "beginn" (the start of training).
 WARTEZEITEN = {

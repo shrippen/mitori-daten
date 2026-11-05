@@ -1,12 +1,11 @@
 name: Checks
 
 # The checks of every commit:
-#   generated YAML up to date (dat.shinki-toho-kommentare.yaml, daten/lexikon.yaml)
+#   generated YAML up to date (daten/shinki-toho-kommentare.yaml, daten/lexikon.yaml)
 #   Datenformat (tools/daten.py, pytest für daten, Bundle, Shinki)
 #   Shinki-Singleton ist up-to-date (tools/shinki_style.py --check)
 #   Schriften und Zeichenteilmenge vorhanden
-# Local only: tools/kapitel.py (Videos) und tools/bundle.py (PyNaCl test) — die
-# brauchen eine reale Video-Quelle bzw. libsodium, nicht hier.
+# Local only: tools/kapitel.py und das Packen echter Bundles (brauchen die Videos).
 #
 # Arch Linux container: same as on the developer machine.
 
@@ -50,9 +49,9 @@ jobs:
         env:
           GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
 
-      - name: Install Python, poppler
+      - name: Install Python, PyNaCl, poppler
         run: |
-          pacman -Syu --noconfirm --needed git python python-yaml python-pytest \
+          pacman -Syu --noconfirm --needed git python python-yaml python-pytest python-pynacl \
             poppler poppler-data
 
       - uses: actions/checkout@v7

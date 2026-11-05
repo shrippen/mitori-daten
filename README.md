@@ -15,8 +15,7 @@ QML-Komponenten, Schriften) und ihre Tests.
 | `quellen/` | Originale (Prüfungsordnungen, Listen, PDFs), von `tools/kommentare.py` und `tools/lexikon.py` gelesen. |
 | `tools/` | `daten.py` (prüft + erzeugt `mitori-daten.json` und `*.lua`), `kommentare.py`, `lexikon.py`, `kapitel.py`, `bundle.py` (Video-Bundle-Encoder), `shinki_style.py`, `shinki_fonts.py`, `shinki_chars.py`. |
 | `shinki/` | Shinki-Stil (neben Kante): Bibel (`README.md`), Werte (`tokens.json`), QML-Komponenten (`qml/Shinki/`), Schriften (`fonts/`). |
-| `tests/` | `test_daten.py` (Datenformat, Glossar, Wartezeiten, Übersetzungen), `test_bundle.py` (Bundle-Encoder), `test_shinki.py` (Kontrast, Schriftfamilien). |
-| `build/shinki/` | Erzeugt: `chars-full.txt` (japanische Zeichen aus Daten, QML, C++, i18n aller Repos). |
+| `tests/` | `test_daten.py` (Datenformat, Glossar, Wartezeiten), `test_bundle.py` (Bundle-Encoder), `test_shinki.py` (Kontrast, Schriftfamilien). |
 | `KORREKTUREN.md` | Offene Fragen zu den Daten, mit IDs (`A-…`, `D-…`, `S-…`) und Status. |
 
 `CHANGELOG.md` beschreibt die Daten-Releases.
@@ -44,29 +43,32 @@ sind untereinander kompatibel.
 
 ## Checks
 
-Der lokale Lauf vor jedem Commit:
+Vor jedem Commit:
 
 ```sh
 python3 tools/daten.py
-python3 tools/daten.py --check            # mit --check nicht (das Werkzeug hat es nicht)
 python3 -m pytest -q tests
 python3 tools/kommentare.py > /dev/null
 python3 tools/lexikon.py > /dev/null
-git diff --exit-code -- daten/shinki-toho-kommentare.yaml daten/lexikon.yaml
+git diff --exit-code -- daten/
+python3 tools/shinki_style.py --check
 ```
 
-CI: `pytest`, `daten.py`, `kommentare.py`, `lexikon.py`. `tools/kapitel.py` und
-`tools/bundle.py` brauchen ffprobe / PyNaCl / eine echte Video-Quelle und laufen lokal.
+Die CI macht dasselbe. `tools/kapitel.py` und das Packen echter Bundles brauchen die Videos und
+laufen lokal.
 
 ## Schriftzeichen-Pipeline
 
-`shinki/fonts/NotoSerifJP-Regular-Subset.ttf` deckt nur die Zeichen ab, die App und Heft
-brauchen (sonst 13 MB). Wer ein neues Kanji einführt:
+`shinki/fonts/NotoSerifJP-Regular-Subset.ttf` hat nur die Zeichen, die die App zeigt (sonst 13 MB);
+sie stehen in `shinki/fonts/chars-full.txt`. Wer ein neues Kanji einführt, fährt beides neu, von
+einem App-Checkout aus:
 
-1. Im eigenen Repo `tools/shinki_chars.py <ordner>... > build/<repo>-chars.txt` laufen.
-2. `mitori-daten/build/shinki/chars-full.txt` um die neue Datei ergänzen (sortiert, eindeutig).
-3. `python3 tools/shinki_fonts.py <google/fonts>` mit dem frischen Subset.
-4. PR; `tests/test_shinki.py` schlägt fehl, bis der Schritt 3 erledigt ist.
+```sh
+python3 tools/shinki_chars.py daten shinki/qml <app>/app --ausgabe shinki/fonts/chars-full.txt
+python3 tools/shinki_fonts.py <google/fonts>
+```
+
+`tests/test_shinki.py` prüft Daten und Stil, `tests/test_shinki_font.py` im App-Repo die App.
 
 ## Lizenz
 
