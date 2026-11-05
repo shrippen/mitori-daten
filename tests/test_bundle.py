@@ -110,6 +110,12 @@ def test_ids_sind_ordnernamen():
 
 # ── Das Werkzeug für die Lizenz-Downloads ──
 
+@pytest.fixture(autouse=True)
+def kein_netz(monkeypatch):
+    """Kein Test spricht mit dem echten Server."""
+    monkeypatch.setattr(bundle.urllib.request, "urlopen", lambda *a, **k: pytest.fail("Netz im Test"))
+
+
 @pytest.fixture
 def geheim(tmp_path, monkeypatch):
     ordner = tmp_path / "geheim"
@@ -333,3 +339,58 @@ def test_alle_hat_keine_version():
     quelle = (Path(bundle.__file__)).read_text(encoding="utf-8")
     teil = quelle[quelle.index('sub.add_parser("alle")'):quelle.index('sub.add_parser("verifizieren")')]
     assert "--version" not in teil
+
+
+def test_bilderzahl_loescht_nie(tmp_path, monkeypatch, capsys):
+    """Weicht die Zahl von der Quelle ab (Vorlauf, fehlender Ordner), bleibt die Kodierung: nur ein Hinweis."""
+    klar = tmp_path / "k.mkv"
+    klar.write_bytes(b"x")
+    quelle = tmp_path / "q.mkv"
+    zahlen = {klar: 252, quelle: 435}
+    monkeypatch.setattr(bundle, "bilder", lambda p: zahlen[p])
+    assert bundle.bilder_der_kodierung("v", quelle, klar) == 252
+    assert klar.exists() and "435" in capsys.readouterr().err
+    zahlen[quelle] = 0
+    assert bundle.bilder_der_kodierung("v", quelle, klar) == 252
+    assert klar.exists()
+
+
+def test_verifizieren_prueft_den_ordner(tmp_path, monkeypatch):
+    """Der Klartext zur Probe entsteht nie in einem Repo."""
+    repo = tmp_path / "repo"
+    (repo / ".git").mkdir(parents=True)
+    monkeypatch.setattr(bundle, "GEHEIM", repo / "geheim")
+    with pytest.raises(SystemExit, match="Git"):
+        bundle.verifiziert("aikido-kyu")
+
+
+def test_upload_ohne_bundles_geht_nicht(geheim, monkeypatch):
+    geheim.mkdir()
+    (geheim / "gitea-token").write_text("t")
+    monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: pytest.fail("nichts darf hinaus"))
+    args = type("A", (), {"nur_manifest": False, "verband_stimmt_zu": True, "probe": False})
+    with pytest.raises(SystemExit, match="keine Bundles"):
+        bundle.befehl_hochladen(args)
+
+
+def test_upload_ohne_ffprobe_geht_nicht(geheim, tmp_path, monkeypatch):
+    _gebaut(geheim, tmp_path)
+    _echt(geheim)
+    (geheim / "gitea-token").write_text("t")
+    monkeypatch.setattr(bundle.shutil, "which", lambda name: None)
+    monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: pytest.fail("nichts darf hinaus"))
+    args = type("A", (), {"nur_manifest": False, "verband_stimmt_zu": True, "probe": False})
+    with pytest.raises(SystemExit, match="ffprobe"):
+        bundle.befehl_hochladen(args)
+
+
+def test_nur_manifest_ohne_dateien(geheim, tmp_path, monkeypatch):
+    """Eine Sperrung (nur das Manifest) braucht die Videos nicht auf diesem Rechner."""
+    datei = _gebaut(geheim, tmp_path)
+    _echt(geheim)
+    datei.unlink()
+    (geheim / "gitea-token").write_text("t")
+    gesendet = []
+    monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: gesendet.append(a))
+    bundle.befehl_hochladen(type("A", (), {"nur_manifest": True, "verband_stimmt_zu": True, "probe": False}))
+    assert len(gesendet) == 1

@@ -45,7 +45,7 @@ Formate (dieselben in app/store/bundlecrypto.cpp):
   {"format": 1,
    "bundles": [{"id": "aikido-kyu", "version": 2, "titel": "Aikido · alle Kyu", "videos": [
                   {"video": "aikido/k5", "datei": "aikido-k5.mvb", "groesse": 123, "sha256": "…",
-                   "klar": 120, "beschnitten": true}], "hinweis": "neu geschnitten …"}],
+                   "klar": 120, "beschnitten": true, "bilder": 3000}], "hinweis": "neu geschnitten …"}],
    "basis": "https://git.arianw.de/api/packages/shrippen/generic",
    "codes": {"<Kennung>": {"bundle": "aikido-kyu", "salz": "…", "t": 3, "m": 65536, "schluessel": "…"}}}
   Datei-URL: <basis>/mitori-<bundle>/<version>/<datei>; das Manifest: <basis>/mitori-manifest/1/manifest.json
@@ -265,7 +265,17 @@ def videodaten():
 
 # ── Befehle ──
 
-BILDER_SPIEL = 2    # Bilder Unterschied zur Quelle, die ein Kodieren am Ende verlieren darf
+BILDER_SPIEL = 2    # so viele Bilder Unterschied zur Quelle sind keinen Hinweis wert
+
+
+def bilder_der_kodierung(video, quelle, klar):
+    """Was `verifizieren` später wiederfinden muss. Die Quelle nur als Hinweis: ihre Pakete sind nicht ihre
+    Bilder (ein per Stream-Copy geschnittenes mp4 hat Vorlauf), und was hier liegt, ist fertig kodiert."""
+    soll = bilder(quelle)
+    ist = bilder(klar)
+    if soll and ist is not None and abs(ist - soll) > BILDER_SPIEL:
+        print(f"bundle: Achtung, {video} hat {ist} Bilder, die Quelle {soll} Pakete; bitte ansehen", file=sys.stderr)
+    return ist
 
 
 def beschnitten(quelle, ziel, beschnitt):
@@ -318,14 +328,10 @@ def befehl_build(args):
         elif not klar.exists():
             print(f"bundle: {v} beschneiden …", file=sys.stderr)
             beschnitten(quelle, klar, info["beschnitt"])
-        soll = bilder(quelle)
-        ist = bilder(klar)
-        if soll is not None and abs(ist - soll) > BILDER_SPIEL:
-            klar.unlink()
-            sys.exit(f"bundle: {v} hat {ist} Bilder, die Quelle {soll}: Kodierung verworfen, bitte neu starten")
+        zahl = bilder_der_kodierung(v, quelle, klar)
         groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
         videos.append({"video": v, "datei": datei, "groesse": groesse, "sha256": sha, "klar": klargroesse,
-                       "beschnitten": not args.ohne_kodieren, "bilder": soll})
+                       "beschnitten": not args.ohne_kodieren, "bilder": zahl})
     eintrag = {"id": b["id"], "version": version, "titel": b["titel"], "videos": videos, "hinweis": args.hinweis or ""}
     m["bundles"] = [x for x in m["bundles"] if x["id"] != b["id"]] + [eintrag]
     m["bundles"].sort(key=lambda x: list(definitionen()).index(x["id"]))
@@ -352,6 +358,7 @@ def ist_testbau(eintrag):
 
 def verifiziert(bundle_id):
     """Was an einem gebauten Bundle nicht stimmt: je Datei Größe, sha256, jeder Block entschlüsselt, wie die App."""
+    geheim_pruefen()
     m = manifest_lesen()
     eintrag = next((x for x in m["bundles"] if x["id"] == bundle_id), None)
     if not eintrag:
@@ -399,7 +406,7 @@ def _laenge_fehler(name, probe, soll):
         return []
     if ist == 0:
         return [f"{name}: kein spielbares Video"]
-    if soll and abs(ist - soll) > BILDER_SPIEL:
+    if soll and ist != soll:
         return [f"{name}: {ist} Bilder, beim Bauen {soll}"]
     return []
 
@@ -523,6 +530,10 @@ def befehl_hochladen(args):
         if pfad.exists():
             verschluesselt_pruefen(pfad)
     if not args.nur_manifest:
+        if not m["bundles"]:
+            sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
+        if not shutil.which("ffprobe"):
+            sys.exit("bundle: ohne ffprobe keine Prüfung der Videos, nichts wird hochgeladen")
         fehler = [f for b in m["bundles"] for f in verifiziert(b["id"])]
         if fehler:
             sys.exit("bundle: " + "; ".join(fehler) + "; nichts wird hochgeladen")
