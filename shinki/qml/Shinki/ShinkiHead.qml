@@ -38,7 +38,7 @@ Rectangle {
     readonly property string kanji: parts[1]
 
     function split(text) {
-        const at = text.search(/[　-鿿＀-￯]/)
+        const at = text.search(/[\u3000-\u9fff\uff00-\uffef]/)
         if (at < 0) {
             return [text, ""]
         }

@@ -6,8 +6,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
-
 ROOT = Path(__file__).resolve().parent.parent
 TOKENS = json.loads((ROOT / "shinki" / "tokens.json").read_text(encoding="utf-8"))
 AA = 4.5
@@ -98,35 +96,31 @@ def test_fonts_there():
     assert list(FONTS.glob("OFL-*.txt")), "the licences go with the fonts"
 
 
-def test_japanese_subset_covers_repo():
-    # Every kanji and kana of the data repo itself is in the subset
-    # (else: shinki_chars.py + tools/shinki_fonts.py).
-    # The subset is regenerated locally with `python3 tools/shinki_fonts.py <google-fonts>`
-    # (needs fontTools and the google/fonts checkout). Until someone runs that on this data
-    # revision, mark xfail so CI is not blocked by a stale subset.
+def test_japanese_subset_covers_chars():
+    # Every character of chars-full.txt is in the subset (else: tools/shinki_fonts.py).
     sys.path.insert(0, str(ROOT / "tools"))
     from shinki_fonts import japanese_chars
     missing = sorted(ch for ch in japanese_chars() if ord(ch) not in cmap(FONTS / "NotoSerifJP-Regular-Subset.ttf"))
-    if missing:
-        pytest.xfail(f"NotoSerifJP-Subset fehlt {len(missing)} Zeichen — `python3 tools/shinki_fonts.py <google-fonts>` regenerieren und shinki/fonts/NotoSerifJP-Regular-Subset.ttf einchecken")
+    assert not missing, "".join(missing)
 
 
-def test_chars_full_includes_repo():
-    """build/shinki/chars-full.txt includes every Japanese character in daten/, quellen/, tools/,
-    shinki/ and tests/. App and Heft liefern ihre Zeichen ebenfalls dorthin
-    (build/shinki/app-chars.txt und heft-chars.txt). Das Werkzeug shinki_chars.py sammelt."""
+def test_chars_full_covers_repo():
+    # Every Japanese character of the data and of Shinki's QML is listed. The app's own are
+    # checked in the app repo (tests/test_shinki_font.py).
     sys.path.insert(0, str(ROOT / "tools"))
     from shinki_chars import collect
-    zeichen = collect([
-        ROOT / "daten", ROOT / "quellen", ROOT / "tools",
-        ROOT / "shinki", ROOT / "tests",
-    ])
-    chars_file = ROOT / "build" / "shinki" / "chars-full.txt"
-    if not chars_file.exists():
-        return  # initial fehlend: das Werkzeug lief noch nicht; nicht zwingend
-    text = chars_file.read_text(encoding="utf-8")
-    fehlt = sorted(ch for ch in zeichen if ch not in text)
-    assert not fehlt, "".join(fehlt)
+    listed = (FONTS / "chars-full.txt").read_text(encoding="utf-8")
+    missing = sorted(set(collect([ROOT / "daten", ROOT / "shinki" / "qml"])) - set(listed))
+    assert not missing, "".join(missing)
+
+
+def test_chars_skips_binary(tmp_path):
+    # A PDF or a font read as text yields thousands of false kanji.
+    sys.path.insert(0, str(ROOT / "tools"))
+    from shinki_chars import collect
+    (tmp_path / "a.qml").write_text("見", encoding="utf-8")
+    (tmp_path / "b.pdf").write_text("取", encoding="utf-8")
+    assert collect([tmp_path]) == "見"
 
 
 def test_latin_covers_german():

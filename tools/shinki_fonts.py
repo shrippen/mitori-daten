@@ -12,11 +12,7 @@
       The whole font has 13 MB; tests/test_shinki.py checks that the subset still covers
       every character, so a new kanji in the data fails until this tool runs again.
 
-  Quelle der japanischen Zeichen: build/shinki/chars-full.txt (eine Zeile, alle Zeichen
-  sortiert und eindeutig). Wer Zeichen hinzufügt, muss diese Datei aktualisieren:
-  shinki_chars.py sammelt sie aus den Daten-, QML-, i18n- und C++-Dateien aller Repos
-  (mitori-daten, Mitori-App, mitori-heft), das Ergebnis konkateniert ein Schritt in
-  jedem Repo, die Vereinigung steht hier.
+  Quelle der Zeichen: shinki/fonts/chars-full.txt (tools/shinki_chars.py, README).
 
 Needs fontTools (pyftsubset); the CI does not, it reads the committed subsets.
 """
@@ -25,7 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "shinki" / "fonts"
-CHARS = ROOT / "build" / "shinki" / "chars-full.txt"
+CHARS = OUT / "chars-full.txt"
 
 # Latin, Latin-1, Latin Extended-A/B, general punctuation and €. Crimson Pro has no arrows (→);
 # Qt takes them from a fallback font.
@@ -43,11 +39,10 @@ JAPANESE_OUT = "NotoSerifJP-Regular-Subset.ttf"
 
 
 def japanese_chars():
-    """Every Japanese character collected in build/shinki/chars-full.txt."""
+    """Every Japanese character listed in shinki/fonts/chars-full.txt."""
     if not CHARS.exists():
-        sys.exit(f"shinki_fonts: {CHARS.relative_to(ROOT)} fehlt; shinki_chars.py in jedem Repo laufen")
+        sys.exit(f"shinki_fonts: {CHARS.relative_to(ROOT)} fehlt (tools/shinki_chars.py)")
     text = CHARS.read_text(encoding="utf-8")
-    # Eine Zeile, durch Whitespace getrennt; leere Zeichen ignorieren.
     return {ch for ch in text if ch.strip()}
 
 
