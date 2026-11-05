@@ -1,5 +1,6 @@
 """Checks of tools/daten.py and its output mitori-daten.json (the app's programme data)."""
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -27,6 +28,13 @@ def alle_ids(daten):
         for art in ("kamae", "kiriotoshi"):
             if art in d:
                 yield d[art]["id"]
+
+
+def test_stand_steht_in_den_daten_und_im_changelog(daten):
+    stand = (WURZEL / "STAND").read_text(encoding="utf-8").strip()
+    assert re.fullmatch(r"\d{4}\.\d{1,2}\.\d+", stand), stand
+    assert daten["stand"] == stand
+    assert f"## [{stand}] — " in (WURZEL / "CHANGELOG.md").read_text(encoding="utf-8")
 
 
 def test_format_und_disziplinen(daten):

@@ -22,8 +22,8 @@ enable_review_labels_security = false
 extra_instructions = """
 You review pull requests of mitori-daten: the exam programmes of Aikido Shinki
 Rengo, Daitoryu and Itto-den Shinki Toho (daten/*.yaml, checked and converted
-by tools/daten.py), their sources in quellen/, the video bundle encoder and the
-Shinki style. The booklet (mitori-heft) and the app (mitori-app) pin this repo
+by tools/daten.py), their sources in quellen/ and the video bundle encoder.
+The booklet (mitori-heft) and the app (mitori-app) pin this repo
 as a submodule. The PRs are written by an AI agent; review them as a careful
 second reader, not as their author.
 

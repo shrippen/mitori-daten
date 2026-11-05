@@ -1,3 +1,9 @@
+# Videos des Verbands kommen nie ins Repo (auch nicht verschlüsselt)
+*.mkv
+*.mp4
+*.webm
+*.m4v
+
 # Erzeugt
 build/
 

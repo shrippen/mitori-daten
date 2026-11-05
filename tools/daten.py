@@ -35,6 +35,7 @@ import yaml
 WURZEL = Path(__file__).resolve().parent.parent
 DATEN = WURZEL / "daten"
 FORMAT = 1  # Version des App-Formats; erhöhen, wenn sich mitori-daten.json inkompatibel ändert
+STAND = WURZEL / "STAND"  # Datenstand, den App und Heft anzeigen; das Tag dazu heißt v<Stand>
 
 fehler: list[str] = []
 fehlend: set[str] = set()
@@ -483,6 +484,13 @@ def videostellen(disziplinen):
     return gesetzt, {v: {"datei": i["datei"], "beschnitt": i["beschnitt"]} for v, i in alle.items()}
 
 
+def datenstand():
+    stand = STAND.read_text(encoding="utf-8").strip()
+    if not re.fullmatch(r"\d{4}\.\d{1,2}\.\d+", stand):
+        fehler.append(f"STAND: {stand!r} ist nicht JJJJ.M.N")
+    return stand
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--ausgabe", default=str(WURZEL / "build" / "daten"))
@@ -505,7 +513,11 @@ def main():
         + lua(st_heft) + "\n", encoding="utf-8")
 
     mit_video, videos = videostellen(disziplinen)
-    app = {"format": FORMAT, "disziplinen": disziplinen, "videos": videos,
+    stand = datenstand()
+    (ausgabe / "stand.lua").write_text(
+        "-- erzeugt von tools/daten.py aus STAND, nicht von Hand bearbeiten\nreturn " + lua(stand) + "\n",
+        encoding="utf-8")
+    app = {"format": FORMAT, "stand": stand, "disziplinen": disziplinen, "videos": videos,
            "glossar": glossar(ids)}
     (ausgabe / "mitori-daten.json").write_text(json.dumps(app, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     (ausgabe / "fehlende-kanji.txt").write_text(
@@ -513,7 +525,7 @@ def main():
         + "".join(f"{k}\n" for k in sorted(fehlend)), encoding="utf-8")
 
     techniken = sum(len(d.get("techniken", [])) for d in disziplinen)
-    print(f"daten: {techniken} Techniken, {len(st_app['odachi'])} Ô-dachi-Formen, "
+    print(f"daten {stand}: {techniken} Techniken, {len(st_app['odachi'])} Ô-dachi-Formen, "
           f"{mit_video} mit Videostelle, {len(fehlend)} Namen ohne Kanji → {ausgabe}")
     if fehler:
         print("\n".join(["Fehler in den Daten:"] + [f"  {f}" for f in fehler]), file=sys.stderr)

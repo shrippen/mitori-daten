@@ -3,8 +3,7 @@ name: Checks
 # The checks of every commit:
 #   generated YAML up to date (daten/shinki-toho-kommentare.yaml, daten/lexikon.yaml)
 #   Datenformat (tools/daten.py, pytest für daten, Bundle, Shinki)
-#   Shinki-Singleton ist up-to-date (tools/shinki_style.py --check)
-#   Schriften und Zeichenteilmenge vorhanden
+#   Ein Tag v<Stand> passt zur Datei STAND
 # Local only: tools/kapitel.py und das Packen echter Bundles (brauchen die Videos).
 #
 # Arch Linux container: same as on the developer machine.
@@ -19,6 +18,7 @@ name: Checks
 on:
   push:
     branches: ["**"]
+    tags: ["v*"]
   workflow_dispatch:
 
 # No concurrency group: every commit runs to the end and keeps its own
@@ -75,11 +75,10 @@ jobs:
           python3 tools/lexikon.py > /dev/null
           git diff --exit-code -- daten/
 
-      # ShinkiStyle.qml wird aus tokens.json erzeugt (tools/shinki_style.py).
-      # Eine Änderung an tokens.json ohne Werkzeug-Lauf bricht den Build der
-      # App und des Hefts. test_style_is_generated im Test deckt das mit ab.
-      - name: Shinki-Singleton up to date
-        run: python3 tools/shinki_style.py --check
+      # App und Heft zeigen STAND an; sie pinnen das Tag v<Stand>.
+      - name: Tag matches STAND
+        if: startsWith(github.ref, 'refs/tags/')
+        run: test "$GITHUB_REF_NAME" = "v$(cat STAND)"
 
   # Also runs when a check failed or was cancelled, so Gitea never keeps a
   # stale "pending". Success only when all checks passed.
