@@ -1,6 +1,6 @@
 # Programmdaten
 
-Eine Quelle für das Heft (`heft/`) und die App Mitori.
+Eine Quelle für das Heft (`mitori-heft`) und die App Mitori (`mitori-app`).
 
 | Datei | Inhalt |
 |---|---|
@@ -18,13 +18,13 @@ Eine Quelle für das Heft (`heft/`) und die App Mitori.
    mit offener Frage `"Nikyo (2 Arten) [A-K-03]"` (in Anführungszeichen).
 2. `python3 tools/daten.py` prüft die Daten (unbekannte Grade, Frage-IDs ohne Eintrag in
    `KORREKTUREN.md`, Tippfehler in Feldnamen) und schreibt `build/daten/`.
-3. `heft/build.sh` (oder `heft/build.sh entwurf`) baut das Heft; es ruft Schritt 2 selbst auf.
+3. Im Repo `mitori-heft` baut `heft/build.sh` (oder `heft/build.sh entwurf`) das Heft; es ruft Schritt 2 selbst auf.
 
 Ist eine Frage geklärt: Daten ändern, `[ID]` entfernen, in `KORREKTUREN.md` den Status setzen.
 
 ## Ausgabe für die App
 
-`build/daten/mitori-daten.json` (Feld `format` = Version): je Disziplin Grade, Gruppen und alle
+`build/daten/mitori-daten.json` (Feld `format` = Version, `stand` = Datenstand): je Disziplin Grade, Gruppen und alle
 Techniken einzeln mit fester ID (`aikido/kyu-grade/tachi-waza-mae-seme/katate-katate-dori-ai-hanmi/k5/ikkyo-1`),
 Angriff, Kanji und offenen Fragen; Shinki Toho mit Formen, Kamae und Suburi.
 Namen ohne Kanji stehen in `build/daten/fehlende-kanji.txt`.

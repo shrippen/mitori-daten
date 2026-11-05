@@ -14,8 +14,9 @@ Eingabe (daten/):
   ../KORREKTUREN.md            offene Fragen; jede Frage-ID der Daten muss dort stehen
 
 Ausgabe (build/daten/):
-  <disziplin>.lua              für das Heft (heft/lua/mitori-heft.lua), Kanji schon eingesetzt
-  mitori-daten.json            für die App: jede Technik einzeln mit fester ID, Videostellen,
+  <disziplin>.lua              für das Heft (mitori-heft, heft/lua/mitori-heft.lua), Kanji schon eingesetzt
+  stand.lua                    der Datenstand aus STAND, für den Titel des Hefts
+  mitori-daten.json            für die App: der Datenstand (stand), jede Technik einzeln mit fester ID, Videostellen,
                                je Video Datei (relativ zum Videoordner) und Beschnitt; das Glossar
                                (Lexikon und Begriffe ohne Lexikon-Eintrag, alphabetisch)
   fehlende-kanji.txt           Namen, zu denen es kein Kanji gibt

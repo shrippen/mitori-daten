@@ -1,8 +1,8 @@
 # Mitori Daten — eine Quelle für Heft, App und andere
 
 Die Programmdaten der Aikido-Shinki-Rengo-, Daitoryu- und Itto-den-Shinki-Toho-Prüfungsprogramme
-und alles, was eine Anwendung daraus macht: Heft (LuaLaTeX), App Mitori (Qt 6 / Kirigami) und andere
-Implementierungen des Datenformats.
+und die Werkzeuge, die sie prüfen und für Anwendungen aufbereiten: Heft (`mitori-heft`), App
+(`mitori-app`) und andere Implementierungen des Datenformats.
 
 Eine Quelle heißt: Daten, Validierung, Generatoren, Video-Bundle-Format und ihre Tests. Der Stil Shinki
 gehört zur App und liegt in `mitori-app/shinki/`. Die Videos liegen nie in einem Repo.

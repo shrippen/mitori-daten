@@ -2,7 +2,7 @@ name: Checks
 
 # The checks of every commit:
 #   generated YAML up to date (daten/shinki-toho-kommentare.yaml, daten/lexikon.yaml)
-#   Datenformat (tools/daten.py, pytest für daten, Bundle, Shinki)
+#   Datenformat (tools/daten.py, pytest für daten, Bundle)
 #   Ein Tag v<Stand> passt zur Datei STAND
 # Local only: tools/kapitel.py und das Packen echter Bundles (brauchen die Videos).
 #
