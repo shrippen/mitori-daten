@@ -269,14 +269,14 @@ MINDESTLAENGE = 0.9    # kürzer als so viel der Quelle: hält an
 GANZ = 0.98            # kürzer als so viel: ein Hinweis
 
 
-def videoende(pfad):
-    """Wo die Videospur endet, in Sekunden: die letzte Zeitmarke, nicht die Kopfdaten (dort die längste Spur,
-    bei einem Rest die ganze Länge). None, wenn die Datei fehlt oder kein Video hat."""
+def laufzeit(pfad):
+    """Wie lange die Videospur läuft, in Sekunden: von der ersten zur letzten Zeitmarke, nicht die Kopfdaten (dort
+    die längste Spur, bei einem Rest die ganze Länge). None, wenn die Datei fehlt oder keine Marken hat."""
     r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "packet=pts_time",
                         "-of", "csv=p=0", str(pfad)], capture_output=True, text=True)
     zeiten = [float(z) for z in (zeile.strip().strip(",") for zeile in r.stdout.splitlines())
               if z.replace(".", "", 1).isdigit()]
-    return max(zeiten) if zeiten else None
+    return max(zeiten) - min(zeiten) if zeiten else None
 
 
 def bilder_der_kodierung(video, quelle, klar, laenge_egal=False):
@@ -288,15 +288,16 @@ def bilder_der_kodierung(video, quelle, klar, laenge_egal=False):
         sys.exit(f"bundle: {video}: {klar} ist nicht lesbar; die Datei löschen, dann neu bauen")
     if laenge_egal or quelle == klar:
         return ist
-    soll = videoende(quelle)
+    soll = laufzeit(quelle)
     if soll is None:
-        sys.exit(f"bundle: {video}: Quelle {quelle} nicht lesbar (Ordner eingehängt?)")
-    reicht = videoende(klar) or 0
+        grund = "hat keine Zeitmarken" if Path(quelle).exists() else "fehlt (Ordner eingehängt?)"
+        sys.exit(f"bundle: {video}: Quelle {quelle} {grund}; prüfen, oder --laenge-egal")
+    reicht = laufzeit(klar) or 0
     if reicht < soll * MINDESTLAENGE:
-        sys.exit(f"bundle: {video}: {klar} läuft {reicht:.0f} s, die Quelle {soll:.0f} s; "
+        sys.exit(f"bundle: {video}: {klar} läuft {reicht:.1f} s, die Quelle {soll:.1f} s; "
                  "die Datei löschen und neu bauen, oder --laenge-egal")
     if reicht < soll * GANZ:
-        print(f"bundle: Achtung, {video} läuft {reicht:.0f} s, die Quelle {soll:.0f} s; bitte ansehen", file=sys.stderr)
+        print(f"bundle: Achtung, {video} läuft {reicht:.1f} s, die Quelle {soll:.1f} s; bitte ansehen", file=sys.stderr)
     return ist
 
 
@@ -323,8 +324,8 @@ def bilder(pfad):
         return None
     r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-count_packets", "-show_entries",
                         "stream=nb_read_packets", "-of", "csv=p=0", str(pfad)], capture_output=True, text=True)
-    zahl = r.stdout.strip().strip(",")
-    return int(zahl) if zahl.isdigit() else 0
+    zeilen = [z.strip().strip(",") for z in r.stdout.splitlines() if z.strip().strip(",")]
+    return int(zeilen[0]) if zeilen and zeilen[0].isdigit() else 0
 
 
 def befehl_build(args):

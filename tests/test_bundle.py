@@ -345,7 +345,7 @@ def _kodierung(tmp_path, monkeypatch, ist, klar_ende, quelle_ende):
     klar = tmp_path / "k.mkv"
     klar.write_bytes(b"x")
     monkeypatch.setattr(bundle, "bilder", lambda p: ist)
-    monkeypatch.setattr(bundle, "videoende", lambda p: klar_ende if p == klar else quelle_ende)
+    monkeypatch.setattr(bundle, "laufzeit", lambda p: klar_ende if p == klar else quelle_ende)
     return klar
 
 
@@ -384,14 +384,39 @@ def test_unlesbare_kodierung_nennt_die_datei(tmp_path, monkeypatch):
 
 
 @ffmpeg_da
-def test_videoende_nimmt_die_videospur(tmp_path):
-    """Längerer Ton und wechselnde Bildrate täuschen es nicht (die Kopfdaten schon)."""
+def test_laufzeit_nimmt_die_videospur(tmp_path):
+    """Längerer Ton täuscht sie nicht (die Kopfdaten schon)."""
     v = tmp_path / "v.mkv"
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "testsrc=size=64x48:rate=25:d=6",
                     "-f", "lavfi", "-i", "sine=d=20", "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac",
-                    "-shortest", "-t", "20", str(v)], check=True)
-    assert abs(bundle.videoende(v) - 6) < 0.2
-    assert bundle.videoende(tmp_path / "fehlt.mkv") is None
+                    str(v)], check=True)
+    assert abs(bundle.laufzeit(v) - 6) < 0.2
+    assert bundle.laufzeit(tmp_path / "fehlt.mkv") is None
+
+
+@ffmpeg_da
+def test_laufzeit_ab_dem_ersten_bild(tmp_path):
+    """Eine Datei, die nicht bei 0 beginnt (ein VOB aus der Titelmitte): die Kodierung beginnt bei 0."""
+    v = tmp_path / "v.mkv"
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "testsrc=size=64x48:rate=25:d=6",
+                    "-c:v", "libx264", "-preset", "ultrafast", "-output_ts_offset", "600", str(v)], check=True)
+    assert abs(bundle.laufzeit(v) - 6) < 0.2
+
+
+def test_quelle_ohne_zeitmarken_sagt_was_ist(tmp_path, monkeypatch):
+    q = tmp_path / "q.h264"
+    q.write_bytes(b"x")
+    klar = _kodierung(tmp_path, monkeypatch, 500, 20.0, None)
+    with pytest.raises(SystemExit, match="laenge-egal"):
+        bundle.bilder_der_kodierung("v", q, klar)
+    assert klar.exists()
+
+
+def test_bilder_nimmt_die_erste_zahl(monkeypatch):
+    """TS antwortet mit `250\\n\\n250`."""
+    monkeypatch.setattr(bundle.shutil, "which", lambda n: "ffprobe")
+    monkeypatch.setattr(bundle.subprocess, "run", lambda *a, **k: type("R", (), {"stdout": "250\n\n250\n"}))
+    assert bundle.bilder("x.ts") == 250
 
 
 def test_verifizieren_prueft_den_ordner(tmp_path, monkeypatch):
