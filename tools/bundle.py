@@ -2,16 +2,23 @@
 """Video-Bundles für Mitori: beschneiden, verschlüsseln, Codes je DVD, Manifest, Upload.
 
 Aufruf aus dem Projektordner:
+  python3 tools/bundle.py stand                              was gebaut ist, Größen, Codes
   python3 tools/bundle.py build aikido-kyu [--videos "../Mitori Videos"] [--version 2] [--ohne-kodieren]
-  python3 tools/bundle.py codes aikido-kyu --anzahl 50       Codes als CSV, Einträge im Manifest
+  python3 tools/bundle.py alle [--neu] [--videos …] [--ohne-kodieren]    alle Bundles, Gebautes bleibt
+  python3 tools/bundle.py verifizieren [aikido-kyu]          entschlüsselt alles, prüft Größe, sha256, Bilderzahl
+  python3 tools/bundle.py codes aikido-kyu --anzahl 50 --fuer "Dojo Köln"   Lizenzen: CSV, Einträge im Manifest
   python3 tools/bundle.py sperren 7KQ2M-X9HDV-3TAPR-WE6YC    Eintrag eines Codes aus dem Manifest
   python3 tools/bundle.py pruefen 7KQ2M-X9HDV-3TAPR-WE6YC    öffnet den Schlüssel wie die App
-  python3 tools/bundle.py hochladen [--nur-manifest]         als generische Pakete nach Gitea
+  python3 tools/bundle.py hochladen --probe                  zeigt, was hochginge
+  python3 tools/bundle.py hochladen --verband-stimmt-zu [--nur-manifest]   als generische Pakete nach Gitea
+
+Der Weg: build oder alle → verifizieren → codes → stand → hochladen. Nichts geht ohne
+--verband-stimmt-zu hinaus; hochgeladen wird nur Verschlüsseltes. Mit Code lädt die App das Bundle.
 
 Geheimes (Inhaltsschlüssel, Codes, die beschnittenen Videos) liegt nie im Repo, sondern im Ordner
 MITORI_BUNDLE_GEHEIM (Standard ../bundle-geheim):
   schluessel/<bundle>.key      32 Byte je Bundle, bleibt über Versionen (die Codes gelten weiter)
-  codes/<bundle>.csv           Code, Datum, Kennung im Manifest (für den Verband)
+  codes/<bundle>.csv           Code, Datum, Kennung im Manifest, für wen (die Lizenz; für den Verband)
   aus/<bundle>/<version>/      die verschlüsselten Dateien zum Hochladen
   manifest.json                das Manifest (öffentlich: verrät weder Codes noch Schlüssel)
   gitea-token                  Token für den Upload (Paket schreiben)
@@ -38,7 +45,7 @@ Formate (dieselben in app/store/bundlecrypto.cpp):
   {"format": 1,
    "bundles": [{"id": "aikido-kyu", "version": 2, "titel": "Aikido · alle Kyu", "videos": [
                   {"video": "aikido/k5", "datei": "aikido-k5.mvb", "groesse": 123, "sha256": "…",
-                   "klar": 120, "beschnitten": true}], "hinweis": "neu geschnitten …"}],
+                   "klar": 120, "beschnitten": true, "bilder": 3000}], "hinweis": "neu geschnitten …"}],
    "basis": "https://git.arianw.de/api/packages/shrippen/generic",
    "codes": {"<Kennung>": {"bundle": "aikido-kyu", "salz": "…", "t": 3, "m": 65536, "schluessel": "…"}}}
   Datei-URL: <basis>/mitori-<bundle>/<version>/<datei>; das Manifest: <basis>/mitori-manifest/1/manifest.json
@@ -54,9 +61,11 @@ import json
 import os
 import re
 import secrets
+import shutil
 import struct
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -180,6 +189,30 @@ def entschluesselt(quelle, ziel, schluessel):
 
 # ── Manifest und Geheimes ──
 
+def repo_von(pfad):
+    """Das Git-Repo, in dem pfad läge, oder None."""
+    for ordner in [pfad, *pfad.parents]:
+        if (ordner / ".git").exists():
+            return ordner
+    return None
+
+
+def geheim_pruefen():
+    """Schlüssel, Codes und Videos kommen nie in ein Repo: der Ordner liegt daneben, nur für den Besitzer."""
+    repo = repo_von(GEHEIM.resolve())
+    if repo:
+        sys.exit(f"bundle: {GEHEIM} liegt im Git-Repo {repo}; MITORI_BUNDLE_GEHEIM außerhalb setzen")
+    GEHEIM.mkdir(parents=True, exist_ok=True)
+    os.chmod(GEHEIM, 0o700)
+
+
+def verschluesselt_pruefen(pfad):
+    """Vor dem Upload: nur, was wirklich verschlüsselt ist, verlässt den Rechner."""
+    with open(pfad, "rb") as f:
+        if f.read(len(MAGIE)) != MAGIE:
+            sys.exit(f"bundle: {pfad} ist nicht verschlüsselt, nichts wird hochgeladen")
+
+
 def manifest_lesen():
     p = GEHEIM / "manifest.json"
     if p.exists():
@@ -188,7 +221,7 @@ def manifest_lesen():
 
 
 def manifest_schreiben(m):
-    GEHEIM.mkdir(parents=True, exist_ok=True)
+    geheim_pruefen()
     p = GEHEIM / "manifest.json"
     tmp = p.with_suffix(".tmp")
     tmp.write_text(json.dumps(m, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
@@ -196,12 +229,19 @@ def manifest_schreiben(m):
 
 
 def schluessel(bundle):
+    geheim_pruefen()
     p = GEHEIM / "schluessel" / f"{bundle}.key"
     if not p.exists():
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_bytes(secrets.token_bytes(32))
         os.chmod(p, 0o600)
     return p.read_bytes()
+
+
+def vorhandener_schluessel(bundle):
+    """Zum Prüfen: legt nie einen an (spätere Codes umhüllten sonst einen, der die Videos nicht öffnet)."""
+    p = GEHEIM / "schluessel" / f"{bundle}.key"
+    return p.read_bytes() if p.exists() else None
 
 
 # Ids werden Ordnernamen in der App (BundleShelf::validId): nur a-z, 0-9 und Bindestriche.
@@ -225,15 +265,71 @@ def videodaten():
 
 # ── Befehle ──
 
+MINDESTLAENGE = 0.9    # kürzer als so viel der Quelle: hält an
+GANZ = 0.98            # kürzer als so viel: ein Hinweis
+
+
+def laufzeit(pfad):
+    """Wie lange die Videospur läuft, in Sekunden: von der ersten zur letzten Zeitmarke, nicht die Kopfdaten (dort
+    die längste Spur, bei einem Rest die ganze Länge). None, wenn die Datei fehlt oder keine Marken hat."""
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "packet=pts_time",
+                        "-of", "csv=p=0", str(pfad)], capture_output=True, text=True)
+    zeiten = [float(z) for z in (zeile.strip().strip(",") for zeile in r.stdout.splitlines())
+              if z.replace(".", "", 1).isdigit()]
+    return max(zeiten) - min(zeiten) if zeiten else None
+
+
+def bilder_der_kodierung(video, quelle, klar, laenge_egal=False):
+    """Was `verifizieren` später wiederfinden muss, nach einem Vergleich mit der Quelle. Hält an, löscht nie."""
+    ist = bilder(klar)
+    if ist is None:
+        return None
+    if ist == 0:
+        sys.exit(f"bundle: {video}: {klar} ist nicht lesbar; die Datei löschen, dann neu bauen")
+    if laenge_egal or quelle == klar:
+        return ist
+    soll = laufzeit(quelle)
+    if soll is None:
+        grund = "hat keine Zeitmarken" if Path(quelle).exists() else "fehlt (Ordner eingehängt?)"
+        sys.exit(f"bundle: {video}: Quelle {quelle} {grund}; prüfen, oder --laenge-egal")
+    reicht = laufzeit(klar) or 0
+    if reicht < soll * MINDESTLAENGE:
+        sys.exit(f"bundle: {video}: {klar} läuft {reicht:.1f} s, die Quelle {soll:.1f} s; "
+                 "die Datei löschen und neu bauen, oder --laenge-egal")
+    if reicht < soll * GANZ:
+        print(f"bundle: Achtung, {video} läuft {reicht:.1f} s, die Quelle {soll:.1f} s; bitte ansehen", file=sys.stderr)
+    return ist
+
+
 def beschnitten(quelle, ziel, beschnitt):
     """Neu kodiert ohne die schwarzen Balken (HEVC, hohe Qualität), Kapitel und Ton bleiben."""
+    # Erst fertig unter dem Zielnamen: was dort liegt, nimmt der nächste Lauf ungeprüft als fertig.
+    teil = ziel.with_name(ziel.stem + ".teil.mkv")
     filtr = f"crop=iw:{beschnitt['h']}:0:{beschnitt['y']}" if beschnitt.get("h") != beschnitt.get("hoehe") else "null"
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(quelle), "-map", "0:v:0", "-map", "0:a?",
-                    "-map_chapters", "0", "-vf", filtr, "-c:v", "libx265", "-crf", "20", "-preset", "slow",
-                    "-tag:v", "hvc1", "-c:a", "copy", str(ziel)], check=True)
+                    "-map_chapters", "0", "-vf", filtr, "-fps_mode", "passthrough", "-c:v", "libx265", "-crf", "20", "-preset", "slow",
+                    "-tag:v", "hvc1", "-c:a", "copy", str(teil)], check=True)
+    teil.replace(ziel)
+
+
+def arbeitsname(video, beschnitt):
+    """Der Beschnitt im Namen: ändert er sich in den Daten, gilt die alte Kodierung nicht mehr."""
+    return f"{video.replace('/', '-')}.{beschnitt.get('h')}y{beschnitt.get('y')}.mkv"
+
+
+def bilder(pfad):
+    """Die Bilder der Videospur, wirklich gezählt: bei einem Rest stimmt die Länge in den Kopfdaten nicht.
+    0 bei einer Datei ohne Video, None ohne ffprobe."""
+    if not shutil.which("ffprobe"):
+        return None
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-count_packets", "-show_entries",
+                        "stream=nb_read_packets", "-of", "csv=p=0", str(pfad)], capture_output=True, text=True)
+    zeilen = [z.strip().strip(",") for z in r.stdout.splitlines() if z.strip().strip(",")]
+    return int(zeilen[0]) if zeilen and zeilen[0].isdigit() else 0
 
 
 def befehl_build(args):
+    geheim_pruefen()
     b = definitionen()[args.bundle]
     daten = videodaten()
     m = manifest_lesen()
@@ -249,15 +345,16 @@ def befehl_build(args):
         info = daten[v]
         quelle = Path(args.videos) / info["datei"]
         datei = v.replace("/", "-") + ".mvb"
-        klar = arbeit / (v.replace("/", "-") + ".mkv")
+        klar = arbeit / arbeitsname(v, info["beschnitt"])
         if args.ohne_kodieren:
             klar = quelle
         elif not klar.exists():
             print(f"bundle: {v} beschneiden …", file=sys.stderr)
             beschnitten(quelle, klar, info["beschnitt"])
+        zahl = bilder_der_kodierung(v, quelle, klar, getattr(args, "laenge_egal", False))
         groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
         videos.append({"video": v, "datei": datei, "groesse": groesse, "sha256": sha, "klar": klargroesse,
-                       "beschnitten": not args.ohne_kodieren})
+                       "beschnitten": not args.ohne_kodieren, "bilder": zahl})
     eintrag = {"id": b["id"], "version": version, "titel": b["titel"], "videos": videos, "hinweis": args.hinweis or ""}
     m["bundles"] = [x for x in m["bundles"] if x["id"] != b["id"]] + [eintrag]
     m["bundles"].sort(key=lambda x: list(definitionen()).index(x["id"]))
@@ -265,22 +362,131 @@ def befehl_build(args):
     print(f"bundle: {b['id']} Version {version}, {len(videos)} Dateien → {aus}", file=sys.stderr)
 
 
+def befehl_alle(args):
+    """Alle Bundles nacheinander; Gebautes bleibt (ein abgebrochener Lauf geht weiter), --neu baut neu."""
+    # Ein Testbau (Originale, --ohne-kodieren) zählt für den echten Lauf nicht.
+    gebaut = {x["id"] for x in manifest_lesen()["bundles"] if args.ohne_kodieren or not ist_testbau(x)}
+    args.version = None
+    for bundle_id in definitionen():
+        if bundle_id in gebaut and not args.neu:
+            print(f"bundle: {bundle_id} schon gebaut", file=sys.stderr)
+            continue
+        args.bundle = bundle_id
+        befehl_build(args)
+
+
+def ist_testbau(eintrag):
+    return not all(v.get("beschnitten") for v in eintrag["videos"])
+
+
+def verifiziert(bundle_id):
+    """Was an einem gebauten Bundle nicht stimmt: je Datei Größe, sha256, jeder Block entschlüsselt, wie die App."""
+    geheim_pruefen()
+    m = manifest_lesen()
+    eintrag = next((x for x in m["bundles"] if x["id"] == bundle_id), None)
+    if not eintrag:
+        return [f"{bundle_id}: nicht gebaut"]
+    k = vorhandener_schluessel(bundle_id)
+    if k is None:
+        return [f"{bundle_id}: Schlüssel fehlt"]
+    fehler = []
+    for v in eintrag["videos"]:
+        pfad = GEHEIM / "aus" / bundle_id / str(eintrag["version"]) / v["datei"]
+        if not pfad.exists():
+            fehler.append(f"{bundle_id}/{v['datei']}: fehlt")
+            continue
+        fehler += _datei_fehler(bundle_id, v, pfad, k)
+    return fehler
+
+
+def _datei_fehler(bundle_id, v, pfad, k):
+    name = f"{bundle_id}/{v['datei']}"
+    if pfad.stat().st_size != v["groesse"]:
+        return [f"{name}: Größe {pfad.stat().st_size}, im Manifest {v['groesse']}"]
+    h = hashlib.sha256()
+    with open(pfad, "rb") as f:
+        for stueck in iter(lambda: f.read(BLOCK), b""):
+            h.update(stueck)
+    if h.hexdigest() != v["sha256"]:
+        return [f"{name}: sha256 stimmt nicht"]
+    probe = GEHEIM / "arbeit" / f"probe-{os.getpid()}"
+    probe.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        entschluesselt(pfad, probe, k)
+        if probe.stat().st_size != v["klar"]:
+            return [f"{name}: Klartext {probe.stat().st_size}, im Manifest {v['klar']}"]
+        return _laenge_fehler(name, probe, v.get("bilder"))
+    except Exception as e:
+        return [f"{name}: lässt sich nicht entschlüsseln ({type(e).__name__})"]
+    finally:
+        probe.unlink(missing_ok=True)
+
+
+def _laenge_fehler(name, probe, soll):
+    """Spielbar und ganz? Dieselben Bilder wie beim Bauen gezählt (ffprobe, wo vorhanden)."""
+    ist = bilder(probe)
+    if ist is None:
+        return []
+    if ist == 0:
+        return [f"{name}: kein spielbares Video"]
+    if soll and ist != soll:
+        return [f"{name}: {ist} Bilder, beim Bauen {soll}"]
+    return []
+
+
+def befehl_verifizieren(args):
+    ids = [args.bundle] if args.bundle else [x["id"] for x in manifest_lesen()["bundles"]]
+    if not ids:
+        sys.exit(f"bundle: keine Bundles in {GEHEIM}")
+    fehler = [f for i in ids for f in verifiziert(i)]
+    for f in fehler:
+        print(f"bundle: {f}", file=sys.stderr)
+    if fehler:
+        sys.exit(1)
+    print(f"bundle: {len(ids)} Bundles in Ordnung", file=sys.stderr)
+
+
+def stand_zeilen():
+    """Je Bundle eine Zeile: gebaut oder nicht, Version, Dateien, Größe, ausgegebene Codes."""
+    m = manifest_lesen()
+    codes = {}
+    for c in m["codes"].values():
+        codes[c["bundle"]] = codes.get(c["bundle"], 0) + 1
+    gebaut = {x["id"]: x for x in m["bundles"]}
+    zeilen = []
+    for bundle_id in definitionen():
+        x = gebaut.get(bundle_id)
+        if not x:
+            zeilen.append(f"{bundle_id}: nicht gebaut")
+            continue
+        mib = sum(v["groesse"] for v in x["videos"]) / (1 << 20)
+        test = ", Testbau (unbeschnitten)" if ist_testbau(x) else ""
+        zeilen.append(f"{bundle_id}: Version {x['version']}, {len(x['videos'])} Dateien, {mib:.0f} MiB, "
+                      f"{codes.get(bundle_id, 0)} Codes{test}")
+    return zeilen
+
+
+def befehl_stand(args):
+    print("\n".join(stand_zeilen()))
+
+
 def befehl_codes(args):
     if args.bundle not in definitionen():
         sys.exit(f"bundle: unbekanntes Bundle {args.bundle}")
     m = manifest_lesen()
     k = schluessel(args.bundle)
+    fuer = getattr(args, "fuer", "") or ""
     datei = GEHEIM / "codes" / f"{args.bundle}.csv"
     datei.parent.mkdir(parents=True, exist_ok=True)
     neu = not datei.exists()
     with open(datei, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if neu:
-            w.writerow(["code", "datum", "kennung"])
+            w.writerow(["code", "datum", "kennung", "fuer"])
         for _ in range(args.anzahl):
             code = neuer_code()
             m["codes"][kennung(code)] = umhuellt(code, args.bundle, k)
-            w.writerow([gruppiert(code), datetime.date.today().isoformat(), kennung(code)])
+            w.writerow([gruppiert(code), datetime.date.today().isoformat(), kennung(code), fuer])
     os.chmod(datei, 0o600)
     manifest_schreiben(m)
     print(f"bundle: {args.anzahl} Codes für {args.bundle} → {datei}", file=sys.stderr)
@@ -304,11 +510,15 @@ def befehl_pruefen(args):
     eintrag = manifest_lesen()["codes"].get(kennung(code))
     if not eintrag:
         sys.exit("bundle: Code steht nicht im Manifest")
-    ok = ausgepackt(code, eintrag) == schluessel(eintrag["bundle"])
+    k = vorhandener_schluessel(eintrag["bundle"])
+    if k is None:
+        sys.exit(f"bundle: Schlüssel von {eintrag['bundle']} fehlt")
+    ok = ausgepackt(code, eintrag) == k
     print(f"bundle: {gruppiert(code)} öffnet {eintrag['bundle']}: {'ja' if ok else 'NEIN'}")
 
 
-def hochladen(paket, version, name, daten, token):
+def hochladen(paket, version, name, daten, token, laenge=None):
+    """daten: bytes oder eine offene Datei (ein Video kommt nicht in den Speicher)."""
     url = f"{BASIS}/{paket}/{version}/{name}"
     kopf = {"Authorization": f"token {token}"}
     try:   # eine Datei gleichen Namens zuerst löschen (das Manifest wird ersetzt)
@@ -316,18 +526,44 @@ def hochladen(paket, version, name, daten, token):
     except urllib.error.HTTPError as e:
         if e.code != 404:
             raise
+    if laenge is not None:
+        kopf["Content-Length"] = str(laenge)
     urllib.request.urlopen(urllib.request.Request(url, data=daten, method="PUT", headers=kopf), timeout=3600)
     print(f"bundle: hochgeladen {url}", file=sys.stderr)
 
 
 def befehl_hochladen(args):
-    token = (GEHEIM / "gitea-token").read_text().strip()
     m = manifest_lesen()
+    dateien = [] if args.nur_manifest else [
+        (f"mitori-{b['id']}", b["version"], v["datei"], GEHEIM / "aus" / b["id"] / str(b["version"]) / v["datei"])
+        for b in m["bundles"] for v in b["videos"]]
+    if args.probe:
+        for paket, version, name, pfad in dateien:
+            groesse = f"{pfad.stat().st_size / (1 << 20):.0f} MiB" if pfad.exists() else "FEHLT"
+            print(f"{BASIS}/{paket}/{version}/{name}  {groesse}")
+        print(f"{BASIS}/{'/'.join(MANIFEST_PAKET[:2])}/{MANIFEST_PAKET[2]}")
+        return
+    if not args.verband_stimmt_zu:
+        sys.exit("bundle: hochladen nur mit --verband-stimmt-zu (die Zustimmung des Verbands liegt vor)")
+    # Alles vor dem ersten Request: was hier scheitert, hat den Rechner nicht verlassen.
+    for b in m["bundles"]:
+        if ist_testbau(b):
+            sys.exit(f"bundle: {b['id']} ist ein Testbau (unbeschnittene Originale), nichts wird hochgeladen")
+    for _, _, _, pfad in dateien:
+        if pfad.exists():
+            verschluesselt_pruefen(pfad)
+    if not m["bundles"]:     # ein leeres Manifest nähme auf dem Server alle Codes und Bundles weg
+        sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
     if not args.nur_manifest:
-        for b in m["bundles"]:
-            for v in b["videos"]:
-                pfad = GEHEIM / "aus" / b["id"] / str(b["version"]) / v["datei"]
-                hochladen(f"mitori-{b['id']}", b["version"], v["datei"], pfad.read_bytes(), token)
+        if not shutil.which("ffprobe"):
+            sys.exit("bundle: ohne ffprobe keine Prüfung der Videos, nichts wird hochgeladen")
+        fehler = [f for b in m["bundles"] for f in verifiziert(b["id"])]
+        if fehler:
+            sys.exit("bundle: " + "; ".join(fehler) + "; nichts wird hochgeladen")
+    token = (GEHEIM / "gitea-token").read_text().strip()
+    for paket, version, name, pfad in dateien:
+        with open(pfad, "rb") as f:
+            hochladen(paket, version, name, f, token, pfad.stat().st_size)
     hochladen(*MANIFEST_PAKET, json.dumps(m, ensure_ascii=False, indent=1).encode(), token)
 
 
@@ -340,17 +576,31 @@ def main():
     b.add_argument("--version", type=int)
     b.add_argument("--hinweis", help="was die neue Version bringt (Update-Hinweis in der App)")
     b.add_argument("--ohne-kodieren", action="store_true", help="Originale verschlüsseln (Test)")
+    b.add_argument("--laenge-egal", action="store_true", help="auch eine viel kürzere Kodierung nehmen")
     c = sub.add_parser("codes")
     c.add_argument("bundle")
     c.add_argument("--anzahl", type=int, default=1)
+    c.add_argument("--fuer", default="", help="wer die Codes bekommt (nur in der privaten CSV)")
     for name in ("sperren", "pruefen"):
         s = sub.add_parser(name)
         s.add_argument("code")
     h = sub.add_parser("hochladen")
     h.add_argument("--nur-manifest", action="store_true")
+    h.add_argument("--probe", action="store_true", help="nur zeigen, was hochginge")
+    h.add_argument("--verband-stimmt-zu", action="store_true", help="die Zustimmung liegt vor")
+    a = sub.add_parser("alle")
+    a.add_argument("--neu", action="store_true", help="auch schon Gebautes neu bauen")
+    a.add_argument("--videos", default=str(WURZEL.parent / "Mitori Videos"))
+    a.add_argument("--hinweis")
+    a.add_argument("--ohne-kodieren", action="store_true")
+    a.add_argument("--laenge-egal", action="store_true")
+    r = sub.add_parser("verifizieren")
+    r.add_argument("bundle", nargs="?")
+    sub.add_parser("stand")
     args = p.parse_args()
     {"build": befehl_build, "codes": befehl_codes, "sperren": befehl_sperren, "pruefen": befehl_pruefen,
-     "hochladen": befehl_hochladen}[args.befehl](args)
+     "hochladen": befehl_hochladen, "alle": befehl_alle, "verifizieren": befehl_verifizieren,
+     "stand": befehl_stand}[args.befehl](args)
 
 
 if __name__ == "__main__":
