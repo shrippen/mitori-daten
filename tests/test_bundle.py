@@ -341,18 +341,50 @@ def test_alle_hat_keine_version():
     assert "--version" not in teil
 
 
-def test_bilderzahl_loescht_nie(tmp_path, monkeypatch, capsys):
-    """Weicht die Zahl von der Quelle ab (Vorlauf, fehlender Ordner), bleibt die Kodierung: nur ein Hinweis."""
+def _kodierung(tmp_path, monkeypatch, ist, quelle_dauer):
     klar = tmp_path / "k.mkv"
     klar.write_bytes(b"x")
-    quelle = tmp_path / "q.mkv"
-    zahlen = {klar: 252, quelle: 435}
-    monkeypatch.setattr(bundle, "bilder", lambda p: zahlen[p])
-    assert bundle.bilder_der_kodierung("v", quelle, klar) == 252
-    assert klar.exists() and "435" in capsys.readouterr().err
-    zahlen[quelle] = 0
-    assert bundle.bilder_der_kodierung("v", quelle, klar) == 252
+    monkeypatch.setattr(bundle, "bilder", lambda p: ist)
+    monkeypatch.setattr(bundle, "bilder_je_sekunde", lambda p: 25.0)
+    monkeypatch.setattr(bundle, "dauer", lambda p: quelle_dauer)
+    return klar
+
+
+def test_kurze_kodierung_stoppt_ohne_zu_loeschen(tmp_path, monkeypatch):
+    """Ein Rest (199 von 500 Bildern) geht nicht ins Bundle; gelöscht wird nichts, die Meldung nennt die Datei."""
+    klar = _kodierung(tmp_path, monkeypatch, 199, 20.0)
+    with pytest.raises(SystemExit, match="k.mkv"):
+        bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar)
     assert klar.exists()
+    assert bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar, laenge_egal=True) == 199
+
+
+def test_vorlauf_der_quelle_stoert_nicht(tmp_path, monkeypatch):
+    """Ein per Stream-Copy geschnittenes mp4 hat mehr Pakete als Bilder: die Dauer entscheidet."""
+    klar = _kodierung(tmp_path, monkeypatch, 127, 5.22)
+    assert bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar) == 127
+
+
+def test_fehlende_quelle_stoppt_ohne_zu_loeschen(tmp_path, monkeypatch):
+    klar = _kodierung(tmp_path, monkeypatch, 500, None)
+    with pytest.raises(SystemExit, match="Quelle"):
+        bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar)
+    assert klar.exists()
+
+
+def test_unlesbare_kodierung_nennt_die_datei(tmp_path, monkeypatch):
+    klar = _kodierung(tmp_path, monkeypatch, 0, 20.0)
+    with pytest.raises(SystemExit, match="k.mkv"):
+        bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar)
+
+
+@ffmpeg_da
+def test_dauer_echt(tmp_path):
+    v = tmp_path / "v.mkv"
+    _video(v, 8)
+    assert abs(bundle.dauer(v) - 8) < 0.2
+    assert bundle.bilder_je_sekunde(v) == 25
+    assert bundle.dauer(tmp_path / "fehlt.mkv") is None
 
 
 def test_verifizieren_prueft_den_ordner(tmp_path, monkeypatch):
@@ -381,6 +413,16 @@ def test_upload_ohne_ffprobe_geht_nicht(geheim, tmp_path, monkeypatch):
     monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: pytest.fail("nichts darf hinaus"))
     args = type("A", (), {"nur_manifest": False, "verband_stimmt_zu": True, "probe": False})
     with pytest.raises(SystemExit, match="ffprobe"):
+        bundle.befehl_hochladen(args)
+
+
+def test_leeres_manifest_geht_nie_hinaus(geheim, monkeypatch):
+    """Es nähme auf dem Server alle Codes und Bundles weg."""
+    geheim.mkdir()
+    (geheim / "gitea-token").write_text("t")
+    monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: pytest.fail("nichts darf hinaus"))
+    args = type("A", (), {"nur_manifest": True, "verband_stimmt_zu": True, "probe": False})
+    with pytest.raises(SystemExit, match="keine Bundles"):
         bundle.befehl_hochladen(args)
 
 

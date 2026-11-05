@@ -265,16 +265,44 @@ def videodaten():
 
 # ── Befehle ──
 
-BILDER_SPIEL = 2    # so viele Bilder Unterschied zur Quelle sind keinen Hinweis wert
+MINDESTLAENGE = 0.9    # so viel der Quelle muss eine Kodierung lang sein
 
 
-def bilder_der_kodierung(video, quelle, klar):
-    """Was `verifizieren` später wiederfinden muss. Die Quelle nur als Hinweis: ihre Pakete sind nicht ihre
-    Bilder (ein per Stream-Copy geschnittenes mp4 hat Vorlauf), und was hier liegt, ist fertig kodiert."""
-    soll = bilder(quelle)
+def _ffprobe(pfad, *felder):
+    return subprocess.run(["ffprobe", "-v", "error", *felder, "-of", "csv=p=0", str(pfad)],
+                          capture_output=True, text=True).stdout.strip().strip(",")
+
+
+def dauer(pfad):
+    """Die Länge laut Kopfdaten, in Sekunden; None, wenn die Datei fehlt oder keine nennt."""
+    try:
+        return float(_ffprobe(pfad, "-show_entries", "format=duration"))
+    except ValueError:
+        return None
+
+
+def bilder_je_sekunde(pfad):
+    zaehler, _, nenner = _ffprobe(pfad, "-select_streams", "v:0", "-show_entries", "stream=avg_frame_rate").partition("/")
+    return float(zaehler) / float(nenner) if zaehler and nenner and float(nenner) else None
+
+
+def bilder_der_kodierung(video, quelle, klar, laenge_egal=False):
+    """Was `verifizieren` später wiederfinden muss, nach einem Vergleich mit der Quelle: über die Dauer, denn
+    ihre Pakete sind nicht ihre Bilder (ein per Stream-Copy geschnittenes mp4 hat Vorlauf). Hält an, löscht nie."""
     ist = bilder(klar)
-    if soll and ist is not None and abs(ist - soll) > BILDER_SPIEL:
-        print(f"bundle: Achtung, {video} hat {ist} Bilder, die Quelle {soll} Pakete; bitte ansehen", file=sys.stderr)
+    if ist is None:
+        return None
+    if ist == 0:
+        sys.exit(f"bundle: {video}: {klar} ist nicht lesbar; die Datei löschen, dann neu bauen")
+    if laenge_egal or quelle == klar:
+        return ist
+    soll = dauer(quelle)
+    if soll is None:
+        sys.exit(f"bundle: {video}: Quelle {quelle} nicht lesbar (Ordner eingehängt?)")
+    je_sekunde = bilder_je_sekunde(klar)
+    if je_sekunde and ist / je_sekunde < soll * MINDESTLAENGE:
+        sys.exit(f"bundle: {video}: {klar} läuft {ist / je_sekunde:.0f} s, die Quelle {soll:.0f} s; "
+                 "die Datei löschen und neu bauen, oder --laenge-egal")
     return ist
 
 
@@ -328,7 +356,7 @@ def befehl_build(args):
         elif not klar.exists():
             print(f"bundle: {v} beschneiden …", file=sys.stderr)
             beschnitten(quelle, klar, info["beschnitt"])
-        zahl = bilder_der_kodierung(v, quelle, klar)
+        zahl = bilder_der_kodierung(v, quelle, klar, getattr(args, "laenge_egal", False))
         groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
         videos.append({"video": v, "datei": datei, "groesse": groesse, "sha256": sha, "klar": klargroesse,
                        "beschnitten": not args.ohne_kodieren, "bilder": zahl})
@@ -529,9 +557,9 @@ def befehl_hochladen(args):
     for _, _, _, pfad in dateien:
         if pfad.exists():
             verschluesselt_pruefen(pfad)
+    if not m["bundles"]:     # ein leeres Manifest nähme auf dem Server alle Codes und Bundles weg
+        sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
     if not args.nur_manifest:
-        if not m["bundles"]:
-            sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
         if not shutil.which("ffprobe"):
             sys.exit("bundle: ohne ffprobe keine Prüfung der Videos, nichts wird hochgeladen")
         fehler = [f for b in m["bundles"] for f in verifiziert(b["id"])]
@@ -553,6 +581,7 @@ def main():
     b.add_argument("--version", type=int)
     b.add_argument("--hinweis", help="was die neue Version bringt (Update-Hinweis in der App)")
     b.add_argument("--ohne-kodieren", action="store_true", help="Originale verschlüsseln (Test)")
+    b.add_argument("--laenge-egal", action="store_true", help="auch eine viel kürzere Kodierung nehmen")
     c = sub.add_parser("codes")
     c.add_argument("bundle")
     c.add_argument("--anzahl", type=int, default=1)
@@ -569,6 +598,7 @@ def main():
     a.add_argument("--videos", default=str(WURZEL.parent / "Mitori Videos"))
     a.add_argument("--hinweis")
     a.add_argument("--ohne-kodieren", action="store_true")
+    a.add_argument("--laenge-egal", action="store_true")
     r = sub.add_parser("verifizieren")
     r.add_argument("bundle", nargs="?")
     sub.add_parser("stand")
