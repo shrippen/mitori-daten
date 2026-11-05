@@ -341,50 +341,57 @@ def test_alle_hat_keine_version():
     assert "--version" not in teil
 
 
-def _kodierung(tmp_path, monkeypatch, ist, quelle_dauer):
+def _kodierung(tmp_path, monkeypatch, ist, klar_ende, quelle_ende):
     klar = tmp_path / "k.mkv"
     klar.write_bytes(b"x")
     monkeypatch.setattr(bundle, "bilder", lambda p: ist)
-    monkeypatch.setattr(bundle, "bilder_je_sekunde", lambda p: 25.0)
-    monkeypatch.setattr(bundle, "dauer", lambda p: quelle_dauer)
+    monkeypatch.setattr(bundle, "videoende", lambda p: klar_ende if p == klar else quelle_ende)
     return klar
 
 
 def test_kurze_kodierung_stoppt_ohne_zu_loeschen(tmp_path, monkeypatch):
-    """Ein Rest (199 von 500 Bildern) geht nicht ins Bundle; gelöscht wird nichts, die Meldung nennt die Datei."""
-    klar = _kodierung(tmp_path, monkeypatch, 199, 20.0)
+    """Ein Rest (8 von 20 s) geht nicht ins Bundle; gelöscht wird nichts, die Meldung nennt die Datei."""
+    klar = _kodierung(tmp_path, monkeypatch, 199, 8.0, 20.0)
     with pytest.raises(SystemExit, match="k.mkv"):
         bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar)
     assert klar.exists()
     assert bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar, laenge_egal=True) == 199
 
 
-def test_vorlauf_der_quelle_stoert_nicht(tmp_path, monkeypatch):
-    """Ein per Stream-Copy geschnittenes mp4 hat mehr Pakete als Bilder: die Dauer entscheidet."""
-    klar = _kodierung(tmp_path, monkeypatch, 127, 5.22)
-    assert bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar) == 127
+def test_knapp_kurz_ist_ein_hinweis(tmp_path, monkeypatch, capsys):
+    klar = _kodierung(tmp_path, monkeypatch, 460, 18.4, 20.0)
+    assert bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar) == 460
+    assert "Achtung" in capsys.readouterr().err
+
+
+def test_ganze_kodierung_still(tmp_path, monkeypatch, capsys):
+    klar = _kodierung(tmp_path, monkeypatch, 500, 19.96, 20.0)
+    assert bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar) == 500
+    assert capsys.readouterr().err == ""
 
 
 def test_fehlende_quelle_stoppt_ohne_zu_loeschen(tmp_path, monkeypatch):
-    klar = _kodierung(tmp_path, monkeypatch, 500, None)
+    klar = _kodierung(tmp_path, monkeypatch, 500, 20.0, None)
     with pytest.raises(SystemExit, match="Quelle"):
         bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar)
     assert klar.exists()
 
 
 def test_unlesbare_kodierung_nennt_die_datei(tmp_path, monkeypatch):
-    klar = _kodierung(tmp_path, monkeypatch, 0, 20.0)
+    klar = _kodierung(tmp_path, monkeypatch, 0, None, 20.0)
     with pytest.raises(SystemExit, match="k.mkv"):
         bundle.bilder_der_kodierung("v", tmp_path / "q.mkv", klar)
 
 
 @ffmpeg_da
-def test_dauer_echt(tmp_path):
+def test_videoende_nimmt_die_videospur(tmp_path):
+    """Längerer Ton und wechselnde Bildrate täuschen es nicht (die Kopfdaten schon)."""
     v = tmp_path / "v.mkv"
-    _video(v, 8)
-    assert abs(bundle.dauer(v) - 8) < 0.2
-    assert bundle.bilder_je_sekunde(v) == 25
-    assert bundle.dauer(tmp_path / "fehlt.mkv") is None
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "testsrc=size=64x48:rate=25:d=6",
+                    "-f", "lavfi", "-i", "sine=d=20", "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac",
+                    "-shortest", "-t", "20", str(v)], check=True)
+    assert abs(bundle.videoende(v) - 6) < 0.2
+    assert bundle.videoende(tmp_path / "fehlt.mkv") is None
 
 
 def test_verifizieren_prueft_den_ordner(tmp_path, monkeypatch):

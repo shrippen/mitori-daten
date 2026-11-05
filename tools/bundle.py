@@ -265,30 +265,22 @@ def videodaten():
 
 # ── Befehle ──
 
-MINDESTLAENGE = 0.9    # so viel der Quelle muss eine Kodierung lang sein
+MINDESTLAENGE = 0.9    # kürzer als so viel der Quelle: hält an
+GANZ = 0.98            # kürzer als so viel: ein Hinweis
 
 
-def _ffprobe(pfad, *felder):
-    return subprocess.run(["ffprobe", "-v", "error", *felder, "-of", "csv=p=0", str(pfad)],
-                          capture_output=True, text=True).stdout.strip().strip(",")
-
-
-def dauer(pfad):
-    """Die Länge laut Kopfdaten, in Sekunden; None, wenn die Datei fehlt oder keine nennt."""
-    try:
-        return float(_ffprobe(pfad, "-show_entries", "format=duration"))
-    except ValueError:
-        return None
-
-
-def bilder_je_sekunde(pfad):
-    zaehler, _, nenner = _ffprobe(pfad, "-select_streams", "v:0", "-show_entries", "stream=avg_frame_rate").partition("/")
-    return float(zaehler) / float(nenner) if zaehler and nenner and float(nenner) else None
+def videoende(pfad):
+    """Wo die Videospur endet, in Sekunden: die letzte Zeitmarke, nicht die Kopfdaten (dort die längste Spur,
+    bei einem Rest die ganze Länge). None, wenn die Datei fehlt oder kein Video hat."""
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "packet=pts_time",
+                        "-of", "csv=p=0", str(pfad)], capture_output=True, text=True)
+    zeiten = [float(z) for z in (zeile.strip().strip(",") for zeile in r.stdout.splitlines())
+              if z.replace(".", "", 1).isdigit()]
+    return max(zeiten) if zeiten else None
 
 
 def bilder_der_kodierung(video, quelle, klar, laenge_egal=False):
-    """Was `verifizieren` später wiederfinden muss, nach einem Vergleich mit der Quelle: über die Dauer, denn
-    ihre Pakete sind nicht ihre Bilder (ein per Stream-Copy geschnittenes mp4 hat Vorlauf). Hält an, löscht nie."""
+    """Was `verifizieren` später wiederfinden muss, nach einem Vergleich mit der Quelle. Hält an, löscht nie."""
     ist = bilder(klar)
     if ist is None:
         return None
@@ -296,13 +288,15 @@ def bilder_der_kodierung(video, quelle, klar, laenge_egal=False):
         sys.exit(f"bundle: {video}: {klar} ist nicht lesbar; die Datei löschen, dann neu bauen")
     if laenge_egal or quelle == klar:
         return ist
-    soll = dauer(quelle)
+    soll = videoende(quelle)
     if soll is None:
         sys.exit(f"bundle: {video}: Quelle {quelle} nicht lesbar (Ordner eingehängt?)")
-    je_sekunde = bilder_je_sekunde(klar)
-    if je_sekunde and ist / je_sekunde < soll * MINDESTLAENGE:
-        sys.exit(f"bundle: {video}: {klar} läuft {ist / je_sekunde:.0f} s, die Quelle {soll:.0f} s; "
+    reicht = videoende(klar) or 0
+    if reicht < soll * MINDESTLAENGE:
+        sys.exit(f"bundle: {video}: {klar} läuft {reicht:.0f} s, die Quelle {soll:.0f} s; "
                  "die Datei löschen und neu bauen, oder --laenge-egal")
+    if reicht < soll * GANZ:
+        print(f"bundle: Achtung, {video} läuft {reicht:.0f} s, die Quelle {soll:.0f} s; bitte ansehen", file=sys.stderr)
     return ist
 
 
@@ -312,7 +306,7 @@ def beschnitten(quelle, ziel, beschnitt):
     teil = ziel.with_name(ziel.stem + ".teil.mkv")
     filtr = f"crop=iw:{beschnitt['h']}:0:{beschnitt['y']}" if beschnitt.get("h") != beschnitt.get("hoehe") else "null"
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(quelle), "-map", "0:v:0", "-map", "0:a?",
-                    "-map_chapters", "0", "-vf", filtr, "-c:v", "libx265", "-crf", "20", "-preset", "slow",
+                    "-map_chapters", "0", "-vf", filtr, "-fps_mode", "passthrough", "-c:v", "libx265", "-crf", "20", "-preset", "slow",
                     "-tag:v", "hvc1", "-c:a", "copy", str(teil)], check=True)
     teil.replace(ziel)
 
