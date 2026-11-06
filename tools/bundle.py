@@ -696,8 +696,10 @@ def befehl_hochladen(args):
             verschluesselt_pruefen(pfad)
     if not m["bundles"]:     # ein leeres Manifest nähme auf dem Server alle Codes und Bundles weg
         sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
+    # Die Techniken nur für neue Dateien: Das Manifest allein (eine Sperre) darf nicht am Datenstand hängen.
     fehler = [f for b in m["bundles"] for v in b["videos"]
-              for f in schnitt_fehler(v["video"], v.get("kapitel"), None) + schnitt_ids_fehler(v["video"], v.get("kapitel") or [])]
+              for f in schnitt_fehler(v["video"], v.get("kapitel"), None)
+              + ([] if args.nur_manifest else schnitt_ids_fehler(v["video"], v.get("kapitel") or []))]
     if fehler:
         sys.exit("bundle: " + "; ".join(fehler) + "; neu bauen, nichts wird hochgeladen")
     if not args.nur_manifest:

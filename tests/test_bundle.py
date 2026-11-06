@@ -798,13 +798,32 @@ def test_fertig_erkennt_die_originale_in_jeder_schreibweise(geheim, tmp_path, mo
         bundle.befehl_build(args)
 
 
-def test_hochladen_prueft_die_techniken_gegen_die_daten(geheim, tmp_path, monkeypatch):
-    """Ändern sich die Daten nach dem Bau, passt das Manifest nicht mehr."""
+def _daten_nach_dem_bau_geaendert(geheim, tmp_path, monkeypatch):
     _gebaut(geheim, tmp_path)
     _echt(geheim)
     m = bundle.manifest_lesen()
     m["bundles"][0]["videos"][0]["kapitel"].pop()
     bundle.manifest_schreiben(m)
+    monkeypatch.setattr(bundle, "_laenge_fehler", lambda *a: [])
+    monkeypatch.setattr(bundle.shutil, "which", lambda name: "/usr/bin/" + name)
+
+
+def test_hochladen_prueft_die_techniken_gegen_die_daten(geheim, tmp_path, monkeypatch):
+    """Ändern sich die Daten nach dem Bau, gehen die Videos nicht hinaus."""
+    _daten_nach_dem_bau_geaendert(geheim, tmp_path, monkeypatch)
+    monkeypatch.setattr(bundle, "videos_kopieren", lambda *a, **k: pytest.fail("nichts darf hinaus"))
     monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: pytest.fail("nichts darf hinaus"))
     with pytest.raises(SystemExit, match="Schnittpunkt fehlt"):
-        bundle.befehl_hochladen(type("A", (), {"nur_manifest": True, "verband_stimmt_zu": True, "probe": False}))
+        bundle.befehl_hochladen(HOCH)
+
+
+def test_sperre_haengt_nicht_an_den_daten(geheim, tmp_path, monkeypatch):
+    """Eine Sperre muss sofort wirken: Die Schnittpunkte gehören zur Datei, nicht zum Datenstand."""
+    _daten_nach_dem_bau_geaendert(geheim, tmp_path, monkeypatch)
+    (geheim / "gitea-token").write_text("t")
+    (geheim / "video-basis").write_text("https://v.example/m")
+    monkeypatch.setattr(bundle, "adressen_fehler", lambda *a: [])
+    gesendet = []
+    monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: gesendet.append(a))
+    bundle.befehl_hochladen(type("A", (), {"nur_manifest": True, "verband_stimmt_zu": True, "probe": False}))
+    assert len(gesendet) == 1
