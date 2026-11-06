@@ -4,16 +4,28 @@
 Aufruf aus dem Projektordner:
   python3 tools/bundle.py stand                              was gebaut ist, Größen, Codes
   python3 tools/bundle.py build aikido-kyu [--videos "../Mitori Videos"] [--version 2] [--ohne-kodieren]
-  python3 tools/bundle.py alle [--neu] [--videos …] [--ohne-kodieren]    alle Bundles, Gebautes bleibt
+  python3 tools/bundle.py build aikido-kyu --videos "../Remaster" --fertig [--schnitt schnitt.yaml]
+                                                             von Hand fertige Videos, nur verschlüsseln
+  python3 tools/bundle.py alle [--neu] [--videos …] [--ohne-kodieren|--fertig] [--schnitt …]    alle Bundles, Gebautes bleibt
   python3 tools/bundle.py verifizieren [aikido-kyu]          entschlüsselt alles, prüft Größe, sha256, Bilderzahl
   python3 tools/bundle.py codes aikido-kyu --anzahl 50 --fuer "Dojo Köln"   Lizenzen: CSV, Einträge im Manifest
   python3 tools/bundle.py sperren 7KQ2M-X9HDV-3TAPR-WE6YC    Eintrag eines Codes aus dem Manifest
   python3 tools/bundle.py pruefen 7KQ2M-X9HDV-3TAPR-WE6YC    öffnet den Schlüssel wie die App
   python3 tools/bundle.py hochladen --probe                  zeigt, was hochginge
-  python3 tools/bundle.py hochladen --verband-stimmt-zu [--nur-manifest]   als generische Pakete nach Gitea
+  python3 tools/bundle.py hochladen --verband-stimmt-zu [--nur-manifest]   Videos zu Caddy, Manifest zu Gitea
 
 Der Weg: build oder alle → verifizieren → codes → stand → hochladen. Nichts geht ohne
 --verband-stimmt-zu hinaus; hochgeladen wird nur Verschlüsseltes. Mit Code lädt die App das Bundle.
+
+Auslieferung: Die Videos liegen als statische Dateien auf dem Server (Caddy, ohne `browse`), immer nur
+die aktuelle Version. Das Manifest liegt auf Gitea und nennt ihre Adressen. Reihenfolge beim Hochladen:
+
+  neue Dateien kopieren → Adressen prüfen → Manifest ersetzen → alte Versionen löschen
+
+Scheitert ein Schritt vor dem Manifest, gilt das alte mit seinen Dateien weiter. Gitea kann ein Paket nur
+löschen und neu anlegen: Scheitert das auch nach drei Versuchen, kann das Manifest dort fehlen, bis
+`hochladen --verband-stimmt-zu --nur-manifest` es nachholt. Die alten Dateien bleiben dann liegen, bis
+ein voller Lauf sie löscht. Der Server braucht kurz Platz für beide Fassungen.
 
 Geheimes (Inhaltsschlüssel, Codes, die beschnittenen Videos) liegt nie im Repo, sondern im Ordner
 MITORI_BUNDLE_GEHEIM (Standard ../bundle-geheim):
@@ -21,11 +33,16 @@ MITORI_BUNDLE_GEHEIM (Standard ../bundle-geheim):
   codes/<bundle>.csv           Code, Datum, Kennung im Manifest, für wen (die Lizenz; für den Verband)
   aus/<bundle>/<version>/      die verschlüsselten Dateien zum Hochladen
   manifest.json                das Manifest (öffentlich: verrät weder Codes noch Schlüssel)
-  gitea-token                  Token für den Upload (Paket schreiben)
+  gitea-token                  Token für den Upload des Manifests (Paket schreiben)
+  video-basis                  Adresse des Video-Ordners: https://videos.example.org/mitori
+  video-ziel                   derselbe Ordner für rsync: user@server:/srv/mitori-videos
 
 Welche Videos ein Bundle hat: tools/bundles.yaml. Beschnitt wie in mitori-daten.json
 (`beschnitt`: Schwarz oben und unten mit den eingebrannten Titeln fällt weg), HEVC hoher Qualität;
-Kapitel bleiben, die Zeiten stimmen weiter.
+Kapitel bleiben, die Zeiten stimmen weiter. Mit --fertig bleibt die Datei, wie sie ist; sie gilt als
+beschnitten. Die Schnittpunkte kommen aus daten/videos.yaml oder, wenn sich die Zeitlinie geändert
+hat, aus --schnitt (dasselbe Format). Sie stehen je Datei im Manifest: Die App merkt sie sich mit der
+geladenen Version, so passen sie immer zur Datei auf dem Gerät.
 
 Formate (dieselben in app/store/bundlecrypto.cpp):
 
@@ -42,13 +59,16 @@ Formate (dieselben in app/store/bundlecrypto.cpp):
             Geheimtext + Tag (16 Byte). Ein abgeschnittener oder umgestellter Download fällt auf.
 
   manifest.json
-  {"format": 1,
+  {"format": 2,
    "bundles": [{"id": "aikido-kyu", "version": 2, "titel": "Aikido · alle Kyu", "videos": [
                   {"video": "aikido/k5", "datei": "aikido-k5.mvb", "groesse": 123, "sha256": "…",
-                   "klar": 120, "beschnitten": true, "bilder": 3000}], "hinweis": "neu geschnitten …"}],
-   "basis": "https://git.arianw.de/api/packages/shrippen/generic",
+                   "url": "https://videos.example.org/mitori/aikido-kyu/2/aikido-k5.mvb",
+                   "klar": 120, "beschnitten": true, "bilder": 3000,
+                   "kapitel": [{"id": "aikido/…/ikkyo-1", "von": 302.32, "bis": 343.64}]}],
+                "hinweis": "neu geschnitten …"}],
    "codes": {"<Kennung>": {"bundle": "aikido-kyu", "salz": "…", "t": 3, "m": 65536, "schluessel": "…"}}}
-  Datei-URL: <basis>/mitori-<bundle>/<version>/<datei>; das Manifest: <basis>/mitori-manifest/1/manifest.json
+  Das Manifest: <GITEA>/mitori-manifest/1/manifest.json. `url` kommt erst beim Hochladen dazu
+  (<video-basis>/<bundle>/<version>/<datei>).
 
 Braucht PyNaCl (libsodium), PyYAML; build braucht ffmpeg.
 """
@@ -65,6 +85,7 @@ import shutil
 import struct
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -74,7 +95,14 @@ from nacl import bindings, pwhash
 
 WURZEL = Path(__file__).resolve().parent.parent
 GEHEIM = Path(os.environ.get("MITORI_BUNDLE_GEHEIM", WURZEL.parent / "bundle-geheim"))
-BASIS = "https://git.arianw.de/api/packages/shrippen/generic"
+GITEA = "https://git.arianw.de/api/packages/shrippen/generic"
+MANIFEST_FORMAT = 2
+VIDEO_BASIS = "video-basis"
+VIDEO_ZIEL = "video-ziel"
+ORIGINALE = str(WURZEL.parent / "Mitori Videos")
+MANIFEST_VERSUCHE = 3
+MANIFEST_PAUSE = 10                             # Sekunden zwischen zwei Versuchen
+SCHNITT_SPIEL = 1.0                             # Sekunden, die ein Schnittpunkt hinter dem Ende liegen darf
 MANIFEST_PAKET = ("mitori-manifest", "1", "manifest.json")
 
 ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"   # Crockford-Base32
@@ -216,8 +244,11 @@ def verschluesselt_pruefen(pfad):
 def manifest_lesen():
     p = GEHEIM / "manifest.json"
     if p.exists():
-        return json.loads(p.read_text(encoding="utf-8"))
-    return {"format": 1, "bundles": [], "basis": BASIS, "codes": {}}
+        m = json.loads(p.read_text(encoding="utf-8"))
+        m["format"] = MANIFEST_FORMAT   # ein älterer Stand: die Adressen kommen beim Hochladen dazu
+        m.pop("basis", None)
+        return m
+    return {"format": MANIFEST_FORMAT, "bundles": [], "codes": {}}
 
 
 def manifest_schreiben(m):
@@ -261,6 +292,37 @@ def videodaten():
     if not p.exists():
         subprocess.run([sys.executable, str(WURZEL / "tools" / "daten.py")], check=True)
     return json.loads(p.read_text(encoding="utf-8"))["videos"]
+
+
+def schnittpunkte(video, quelle=None):
+    """Die Stellen der Techniken in einem Video: [{id, von, bis}], aus daten/videos.yaml oder `quelle`.
+    Eine Technik mit `fehlt: true` ist nicht im Video und hat keine Stelle."""
+    pfad = Path(quelle) if quelle else WURZEL / "daten" / "videos.yaml"
+    alle = yaml.safe_load(pfad.read_text(encoding="utf-8"))
+    kapitel = (alle.get(video) or {}).get("kapitel", [])
+    return [{"id": k["id"], "von": k["von"], "bis": k["bis"]} for k in kapitel if not k.get("fehlt")]
+
+
+def schnitt_fehler(video, kapitel, laenge):
+    """Was an den Schnittpunkten nicht zur Datei passt; `laenge` in Sekunden, None ohne ffprobe."""
+    if not kapitel:
+        return [f"{video}: keine Schnittpunkte"]
+    fehler = [f"{video}: {k['id']}: von {k['von']} bis {k['bis']}" for k in kapitel if not 0 <= k["von"] < k["bis"]]
+    if laenge is not None:
+        fehler += [f"{video}: {k['id']} endet bei {k['bis']} s, die Datei bei {laenge:.1f} s"
+                   for k in kapitel if k["bis"] > laenge + SCHNITT_SPIEL]
+    return fehler
+
+
+def schnitt_ids_fehler(video, kapitel):
+    """Eigene Schnittpunkte müssen dieselben Techniken nennen wie die Daten. Für eine fehlende nähme die
+    App die Stelle der alten Zeitlinie, eine unbekannte fände sie nie."""
+    soll = {k["id"] for k in schnittpunkte(video)}
+    ids = [k["id"] for k in kapitel]
+    ist = set(ids)
+    return ([f"{video}: {i} steht doppelt" for i in sorted({i for i in ids if ids.count(i) > 1})]
+            + [f"{video}: Schnittpunkt fehlt für {i}" for i in sorted(soll - ist)]
+            + [f"{video}: unbekannte Technik {i}" for i in sorted(ist - soll)])
 
 
 # ── Befehle ──
@@ -330,11 +392,16 @@ def bilder(pfad):
 
 def befehl_build(args):
     geheim_pruefen()
+    fertig = getattr(args, "fertig", False)
+    if fertig and Path(args.videos).resolve() == Path(ORIGINALE).resolve():
+        sys.exit("bundle: --fertig braucht --videos mit den gemasterten Dateien, sonst gälten die Originale als beschnitten")
     b = definitionen()[args.bundle]
     daten = videodaten()
     m = manifest_lesen()
     alt = next((x for x in m["bundles"] if x["id"] == b["id"]), None)
     version = args.version or ((alt["version"] + 1) if alt else 1)
+    if alt and version <= alt["version"]:     # die gleiche Nummer ersetzte auf dem Server die geltende Datei
+        sys.exit(f"bundle: {b['id']} hat schon Version {alt['version']}, eine neue braucht eine höhere")
     aus = GEHEIM / "aus" / b["id"] / str(version)
     arbeit = GEHEIM / "arbeit" / b["id"]
     aus.mkdir(parents=True, exist_ok=True)
@@ -346,15 +413,20 @@ def befehl_build(args):
         quelle = Path(args.videos) / info["datei"]
         datei = v.replace("/", "-") + ".mvb"
         klar = arbeit / arbeitsname(v, info["beschnitt"])
-        if args.ohne_kodieren:
+        if args.ohne_kodieren or fertig:
             klar = quelle
         elif not klar.exists():
             print(f"bundle: {v} beschneiden …", file=sys.stderr)
             beschnitten(quelle, klar, info["beschnitt"])
         zahl = bilder_der_kodierung(v, quelle, klar, getattr(args, "laenge_egal", False))
+        kapitel = schnittpunkte(v, getattr(args, "schnitt", None))
+        fehler = schnitt_fehler(v, kapitel, laufzeit(klar) if shutil.which("ffprobe") else None)
+        fehler += schnitt_ids_fehler(v, kapitel)
+        if fehler:
+            sys.exit("bundle: " + "; ".join(fehler))
         groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
         videos.append({"video": v, "datei": datei, "groesse": groesse, "sha256": sha, "klar": klargroesse,
-                       "beschnitten": not args.ohne_kodieren, "bilder": zahl})
+                       "beschnitten": fertig or not args.ohne_kodieren, "bilder": zahl, "kapitel": kapitel})
     eintrag = {"id": b["id"], "version": version, "titel": b["titel"], "videos": videos, "hinweis": args.hinweis or ""}
     m["bundles"] = [x for x in m["bundles"] if x["id"] != b["id"]] + [eintrag]
     m["bundles"].sort(key=lambda x: list(definitionen()).index(x["id"]))
@@ -365,7 +437,9 @@ def befehl_build(args):
 def befehl_alle(args):
     """Alle Bundles nacheinander; Gebautes bleibt (ein abgebrochener Lauf geht weiter), --neu baut neu."""
     # Ein Testbau (Originale, --ohne-kodieren) zählt für den echten Lauf nicht.
-    gebaut = {x["id"] for x in manifest_lesen()["bundles"] if args.ohne_kodieren or not ist_testbau(x)}
+    # Ein Bau ohne Schnittpunkte auch nicht: `hochladen` nähme ihn nicht.
+    gebaut = {x["id"] for x in manifest_lesen()["bundles"] if (args.ohne_kodieren or not ist_testbau(x))
+              and all(v.get("kapitel") for v in x["videos"])}
     args.version = None
     for bundle_id in definitionen():
         if bundle_id in gebaut and not args.neu:
@@ -518,8 +592,8 @@ def befehl_pruefen(args):
 
 
 def hochladen(paket, version, name, daten, token, laenge=None):
-    """daten: bytes oder eine offene Datei (ein Video kommt nicht in den Speicher)."""
-    url = f"{BASIS}/{paket}/{version}/{name}"
+    """Nach Gitea. daten: bytes oder eine offene Datei."""
+    url = f"{GITEA}/{paket}/{version}/{name}"
     kopf = {"Authorization": f"token {token}"}
     try:   # eine Datei gleichen Namens zuerst löschen (das Manifest wird ersetzt)
         urllib.request.urlopen(urllib.request.Request(url, method="DELETE", headers=kopf), timeout=60)
@@ -532,16 +606,84 @@ def hochladen(paket, version, name, daten, token, laenge=None):
     print(f"bundle: hochgeladen {url}", file=sys.stderr)
 
 
+def einstellung(name):
+    p = GEHEIM / name
+    if not p.exists():
+        sys.exit(f"bundle: {p} fehlt (siehe tools/bundle.py), nichts wird hochgeladen")
+    return p.read_text(encoding="utf-8").strip().rstrip("/")
+
+
+def video_url(basis, bundle, datei):
+    return f"{basis}/{bundle['id']}/{bundle['version']}/{datei}"
+
+
+def videos_kopieren(b, ziel, aufraeumen=False):
+    """rsync nur der Dateien aus dem Manifest, nichts anderes aus dem Ordner. Mit `aufraeumen` verschwinden
+    auf dem Server die anderen Versionen des Bundles."""
+    filter_ = [f"--filter=+ /{b['version']}/"] + [f"--filter=+ /{b['version']}/{v['datei']}" for v in b["videos"]]
+    aufruf = ["rsync", "-a", "--partial", "--chmod=D755,F644", *filter_, "--filter=- *"]
+    if aufraeumen:
+        aufruf += ["--delete", "--delete-excluded"]
+    aufruf += [f"{GEHEIM / 'aus' / b['id']}/", f"{ziel}/{b['id']}/"]
+    if subprocess.run(aufruf).returncode == 0:
+        return
+    if aufraeumen:
+        sys.exit(f"bundle: Das neue Manifest gilt, aber alte Versionen ab {b['id']} bleiben liegen; ein voller Lauf löscht sie")
+    sys.exit(f"bundle: rsync von {b['id']} ist gescheitert; das Manifest bleibt, wie es ist")
+
+
+def adressen_fehler(m, basis):
+    """Liefert der Server jede Datei des Manifests in der richtigen Größe? Vor dem Ersetzen des Manifests."""
+    fehler = []
+    for b in m["bundles"]:
+        for v in b["videos"]:
+            url = video_url(basis, b, v["datei"])
+            try:
+                with urllib.request.urlopen(urllib.request.Request(url, method="HEAD"), timeout=60) as r:
+                    laenge = r.headers.get("Content-Length")
+            except (urllib.error.URLError, OSError) as e:
+                fehler.append(f"{url}: {e}")
+                continue
+            if laenge != str(v["groesse"]):
+                fehler.append(f"{url}: {laenge} Byte, im Manifest {v['groesse']}")
+    return fehler
+
+
+def veroeffentlichtes_manifest(m, basis):
+    """Das Manifest für den Server: mit der Adresse jeder Datei."""
+    aus = json.loads(json.dumps(m))
+    for b in aus["bundles"]:
+        for v in b["videos"]:
+            v["url"] = video_url(basis, b, v["datei"])
+    return aus
+
+
+def manifest_ersetzen(daten, token):
+    """Mit Wiederholung: Nach dem DELETE in `hochladen` fehlt es sonst auf Gitea."""
+    for versuch in range(1, MANIFEST_VERSUCHE + 1):
+        try:
+            hochladen(*MANIFEST_PAKET, daten, token)
+            return
+        except OSError as e:     # auch URLError, HTTPError
+            print(f"bundle: Manifest, Versuch {versuch}: {e}", file=sys.stderr)
+            if versuch < MANIFEST_VERSUCHE:
+                time.sleep(MANIFEST_PAUSE)
+    sys.exit("bundle: Das Manifest ging nicht hinaus und kann auf Gitea fehlen. Nachholen mit "
+             "`hochladen --verband-stimmt-zu --nur-manifest`; die alten Videos bleiben bis zum nächsten vollen Lauf.")
+
+
 def befehl_hochladen(args):
     m = manifest_lesen()
     dateien = [] if args.nur_manifest else [
-        (f"mitori-{b['id']}", b["version"], v["datei"], GEHEIM / "aus" / b["id"] / str(b["version"]) / v["datei"])
+        (b, v["datei"], GEHEIM / "aus" / b["id"] / str(b["version"]) / v["datei"])
         for b in m["bundles"] for v in b["videos"]]
     if args.probe:
-        for paket, version, name, pfad in dateien:
+        p = GEHEIM / VIDEO_BASIS
+        basis = einstellung(VIDEO_BASIS) if p.exists() else "<video-basis fehlt>"
+        for b, name, pfad in dateien:
             groesse = f"{pfad.stat().st_size / (1 << 20):.0f} MiB" if pfad.exists() else "FEHLT"
-            print(f"{BASIS}/{paket}/{version}/{name}  {groesse}")
-        print(f"{BASIS}/{'/'.join(MANIFEST_PAKET[:2])}/{MANIFEST_PAKET[2]}")
+            print(f"{video_url(basis, b, name)}  {groesse}")
+        print(f"{GITEA}/{'/'.join(MANIFEST_PAKET[:2])}/{MANIFEST_PAKET[2]}")
         return
     if not args.verband_stimmt_zu:
         sys.exit("bundle: hochladen nur mit --verband-stimmt-zu (die Zustimmung des Verbands liegt vor)")
@@ -549,22 +691,41 @@ def befehl_hochladen(args):
     for b in m["bundles"]:
         if ist_testbau(b):
             sys.exit(f"bundle: {b['id']} ist ein Testbau (unbeschnittene Originale), nichts wird hochgeladen")
-    for _, _, _, pfad in dateien:
+    for _, _, pfad in dateien:
         if pfad.exists():
             verschluesselt_pruefen(pfad)
     if not m["bundles"]:     # ein leeres Manifest nähme auf dem Server alle Codes und Bundles weg
         sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
+    # Die Techniken nur für neue Dateien: Das Manifest allein (eine Sperre) darf nicht am Datenstand hängen.
+    fehler = [f for b in m["bundles"] for v in b["videos"]
+              for f in schnitt_fehler(v["video"], v.get("kapitel"), None)
+              + ([] if args.nur_manifest else schnitt_ids_fehler(v["video"], v.get("kapitel") or []))]
+    if fehler:
+        sys.exit("bundle: " + "; ".join(fehler) + "; neu bauen, nichts wird hochgeladen")
     if not args.nur_manifest:
         if not shutil.which("ffprobe"):
             sys.exit("bundle: ohne ffprobe keine Prüfung der Videos, nichts wird hochgeladen")
+        if not shutil.which("rsync"):
+            sys.exit("bundle: ohne rsync gehen die Videos nicht hinaus, nichts wird hochgeladen")
         fehler = [f for b in m["bundles"] for f in verifiziert(b["id"])]
         if fehler:
             sys.exit("bundle: " + "; ".join(fehler) + "; nichts wird hochgeladen")
+    basis = einstellung(VIDEO_BASIS)
+    ziel = None if args.nur_manifest else einstellung(VIDEO_ZIEL)
     token = (GEHEIM / "gitea-token").read_text().strip()
-    for paket, version, name, pfad in dateien:
-        with open(pfad, "rb") as f:
-            hochladen(paket, version, name, f, token, pfad.stat().st_size)
-    hochladen(*MANIFEST_PAKET, json.dumps(m, ensure_ascii=False, indent=1).encode(), token)
+
+    if not args.nur_manifest:
+        for b in m["bundles"]:
+            videos_kopieren(b, ziel)
+    # Auch bei --nur-manifest: Es darf keine Datei nennen, die der Server nicht hat.
+    fehler = adressen_fehler(m, basis)
+    if fehler:
+        sys.exit("bundle: " + "; ".join(fehler) + "; das Manifest bleibt, wie es ist")
+    daten = json.dumps(veroeffentlichtes_manifest(m, basis), ensure_ascii=False, indent=1).encode()
+    manifest_ersetzen(daten, token)
+    if not args.nur_manifest:
+        for b in m["bundles"]:
+            videos_kopieren(b, ziel, aufraeumen=True)
 
 
 def main():
@@ -572,10 +733,13 @@ def main():
     sub = p.add_subparsers(dest="befehl", required=True)
     b = sub.add_parser("build")
     b.add_argument("bundle")
-    b.add_argument("--videos", default=str(WURZEL.parent / "Mitori Videos"))
+    b.add_argument("--videos", default=ORIGINALE)
     b.add_argument("--version", type=int)
     b.add_argument("--hinweis", help="was die neue Version bringt (Update-Hinweis in der App)")
-    b.add_argument("--ohne-kodieren", action="store_true", help="Originale verschlüsseln (Test)")
+    art = b.add_mutually_exclusive_group()
+    art.add_argument("--ohne-kodieren", action="store_true", help="Originale verschlüsseln (Test)")
+    art.add_argument("--fertig", action="store_true", help="von Hand fertige, beschnittene Videos nur verschlüsseln")
+    b.add_argument("--schnitt", help="Schnittpunkte im Format von daten/videos.yaml")
     b.add_argument("--laenge-egal", action="store_true", help="auch eine viel kürzere Kodierung nehmen")
     c = sub.add_parser("codes")
     c.add_argument("bundle")
@@ -590,9 +754,12 @@ def main():
     h.add_argument("--verband-stimmt-zu", action="store_true", help="die Zustimmung liegt vor")
     a = sub.add_parser("alle")
     a.add_argument("--neu", action="store_true", help="auch schon Gebautes neu bauen")
-    a.add_argument("--videos", default=str(WURZEL.parent / "Mitori Videos"))
+    a.add_argument("--videos", default=ORIGINALE)
     a.add_argument("--hinweis")
-    a.add_argument("--ohne-kodieren", action="store_true")
+    art = a.add_mutually_exclusive_group()
+    art.add_argument("--ohne-kodieren", action="store_true")
+    art.add_argument("--fertig", action="store_true")
+    a.add_argument("--schnitt")
     a.add_argument("--laenge-egal", action="store_true")
     r = sub.add_parser("verifizieren")
     r.add_argument("bundle", nargs="?")
