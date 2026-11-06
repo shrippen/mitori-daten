@@ -318,8 +318,10 @@ def schnitt_ids_fehler(video, kapitel):
     """Eigene Schnittpunkte müssen dieselben Techniken nennen wie die Daten. Für eine fehlende nähme die
     App die Stelle der alten Zeitlinie, eine unbekannte fände sie nie."""
     soll = {k["id"] for k in schnittpunkte(video)}
-    ist = {k["id"] for k in kapitel}
-    return ([f"{video}: Schnittpunkt fehlt für {i}" for i in sorted(soll - ist)]
+    ids = [k["id"] for k in kapitel]
+    ist = set(ids)
+    return ([f"{video}: {i} steht doppelt" for i in sorted({i for i in ids if ids.count(i) > 1})]
+            + [f"{video}: Schnittpunkt fehlt für {i}" for i in sorted(soll - ist)]
             + [f"{video}: unbekannte Technik {i}" for i in sorted(ist - soll)])
 
 
@@ -391,7 +393,7 @@ def bilder(pfad):
 def befehl_build(args):
     geheim_pruefen()
     fertig = getattr(args, "fertig", False)
-    if fertig and args.videos == ORIGINALE:
+    if fertig and Path(args.videos).resolve() == Path(ORIGINALE).resolve():
         sys.exit("bundle: --fertig braucht --videos mit den gemasterten Dateien, sonst gälten die Originale als beschnitten")
     b = definitionen()[args.bundle]
     daten = videodaten()
@@ -694,7 +696,8 @@ def befehl_hochladen(args):
             verschluesselt_pruefen(pfad)
     if not m["bundles"]:     # ein leeres Manifest nähme auf dem Server alle Codes und Bundles weg
         sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
-    fehler = [f for b in m["bundles"] for v in b["videos"] for f in schnitt_fehler(v["video"], v.get("kapitel"), None)]
+    fehler = [f for b in m["bundles"] for v in b["videos"]
+              for f in schnitt_fehler(v["video"], v.get("kapitel"), None) + schnitt_ids_fehler(v["video"], v.get("kapitel") or [])]
     if fehler:
         sys.exit("bundle: " + "; ".join(fehler) + "; neu bauen, nichts wird hochgeladen")
     if not args.nur_manifest:

@@ -176,7 +176,7 @@ def _gebaut(geheim, tmp_path):
     m["bundles"] = [{"id": "aikido-kyu", "version": 1, "titel": "t", "hinweis": None,
                      "videos": [{"video": "aikido/k5", "datei": "aikido-k5.mvb", "groesse": g, "sha256": sha,
                                  "klar": klar, "beschnitten": False,
-                                 "kapitel": [{"id": "aikido/x", "von": 1.0, "bis": 2.0}]}]}]
+                                 "kapitel": bundle.schnittpunkte("aikido/k5")}]}]
     bundle.manifest_schreiben(m)
     return aus / "aikido-k5.mvb"
 
@@ -512,7 +512,7 @@ def test_videos_vor_dem_manifest(geheim, tmp_path, monkeypatch):
     assert m["format"] == 2 and "basis" not in m
     v = m["bundles"][0]["videos"][0]
     assert v["url"] == "https://v.example/m/aikido-kyu/1/aikido-k5.mvb"
-    assert v["kapitel"] == [{"id": "aikido/x", "von": 1.0, "bis": 2.0}]
+    assert v["kapitel"] == bundle.schnittpunkte("aikido/k5")
     assert "url" not in bundle.manifest_lesen()["bundles"][0]["videos"][0]    # die Adresse hängt am Server
 
 
@@ -646,6 +646,7 @@ def test_fertig_verschluesselt_und_gilt_nicht_als_testbau(geheim, tmp_path, monk
     monkeypatch.setattr(bundle, "videodaten", lambda: daten)
     monkeypatch.setattr(bundle, "bilder", lambda p: 100)
     monkeypatch.setattr(bundle, "laufzeit", lambda p: 1e6)
+    monkeypatch.setattr(bundle.shutil, "which", lambda name: "/usr/bin/" + name)    # auch ohne ffprobe in der CI
     monkeypatch.setattr(bundle, "beschnitten", lambda *a: pytest.fail("nichts wird kodiert"))
     args = type("A", (), {"bundle": "aikido-kyu", "videos": str(ordner), "version": None, "hinweis": "",
                           "ohne_kodieren": False, "fertig": True, "schnitt": str(schnitt)})
@@ -760,3 +761,50 @@ def test_alle_baut_bauten_ohne_schnittpunkte_neu(geheim, tmp_path, monkeypatch):
     bundle.manifest_schreiben(m)
     bundle.befehl_alle(type("A", (), {"neu": False, "ohne_kodieren": False}))
     assert "aikido-kyu" in gebaut
+
+
+def _fertig_args(ordner, schnitt):
+    return type("A", (), {"bundle": "aikido-kyu", "videos": str(ordner), "version": None, "hinweis": "",
+                          "ohne_kodieren": False, "fertig": True, "schnitt": str(schnitt)})
+
+
+def test_build_stoppt_bei_falscher_technik(geheim, tmp_path, monkeypatch):
+    ordner = tmp_path / "remaster"
+    ordner.mkdir()
+    (ordner / "v.mkv").write_bytes(b"gemastert")
+    monkeypatch.setattr(bundle, "videodaten", lambda: {v: {"datei": "v.mkv", "beschnitt": {}} for v in bundle.definitionen()["aikido-kyu"]["videos"]})
+    monkeypatch.setattr(bundle, "bilder", lambda p: 100)
+    monkeypatch.setattr(bundle.shutil, "which", lambda name: None)
+    schnitt = tmp_path / "schnitt.yaml"
+    schnitt.write_text("aikido/k5:\n  kapitel:\n  - {id: aikido/tippfehler, von: 1, bis: 2}\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="unbekannte Technik"):
+        bundle.befehl_build(_fertig_args(ordner, schnitt))
+    assert not list((geheim / "aus").rglob("*.mvb"))
+
+
+def test_doppelte_technik_stoppt():
+    echt = bundle.schnittpunkte("aikido/k5")
+    fehler = bundle.schnitt_ids_fehler("aikido/k5", echt + [{**echt[0], "von": 1, "bis": 2}])
+    assert "doppelt" in fehler[0]
+
+
+@pytest.mark.parametrize("schreibweise", ["{o}/", "{o}/../{n}"])
+def test_fertig_erkennt_die_originale_in_jeder_schreibweise(geheim, tmp_path, monkeypatch, schreibweise):
+    o = tmp_path / "Mitori Videos"
+    o.mkdir()
+    monkeypatch.setattr(bundle, "ORIGINALE", str(o))
+    args = _fertig_args(schreibweise.format(o=o, n=o.name), "x")
+    with pytest.raises(SystemExit, match="--videos"):
+        bundle.befehl_build(args)
+
+
+def test_hochladen_prueft_die_techniken_gegen_die_daten(geheim, tmp_path, monkeypatch):
+    """Ändern sich die Daten nach dem Bau, passt das Manifest nicht mehr."""
+    _gebaut(geheim, tmp_path)
+    _echt(geheim)
+    m = bundle.manifest_lesen()
+    m["bundles"][0]["videos"][0]["kapitel"].pop()
+    bundle.manifest_schreiben(m)
+    monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: pytest.fail("nichts darf hinaus"))
+    with pytest.raises(SystemExit, match="Schnittpunkt fehlt"):
+        bundle.befehl_hochladen(type("A", (), {"nur_manifest": True, "verband_stimmt_zu": True, "probe": False}))
