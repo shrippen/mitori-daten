@@ -1,0 +1,665 @@
+# Texte, die englisch gleich bleiben: japanische Namen, Zahlen. Von Hand gepflegt; prüft tools/daten.py
+- -nage
+- '1. Ichi-ban/ Ippon-me: Hitotsu-gachi (1. Hidari-gote)'
+- '10. Jû-ban/ Norimi-Hitotsu-kachi (-gachi): (13. Migi-gote)'
+- '11. Jûichi-ban/ Gedan-no-tsuke-Chûseigan: (14. Migi-gote / 15. Hidarigote)'
+- '12. Jûni-ban/ Orimi: (16. Mizo''ochi / 17. Migi-gote)'
+- '13. Jûsan-ban/ Suriage: (18. Migi-gote / 19. Hidari-gote)'
+- 14. Jûyon-ban/ Wakigamae no Uchiotoshi (20. Migi-gote)
+- 15. Jûgo-ban/ Honshô (21. Hidari-gote)
+- 16. Jûroku-ban/ Jôdan-gasumi (22. Mizo'ochi)
+- 17. Jûnana-ban/ Kobushi no Harai (23. Hidari-gote / 24. Hidari-gote)
+- 18. Jûhachi-ban/ Uki (25. Hidari-gote)
+- '19. Jûkyû-ban : Kirikaeshi (26. Migi-gote)'
+- '2. Ni-ban/ Nihon-me: Age-uke (2. Migi-gote)'
+- '20. Nijûban : Sayû no Harai (27. Nodo / 28. Migi-gote)'
+- '21. Nijûichi-ban : Gyaku no Harai (29. Hidari-gote / 30. Dô)'
+- '23. Nijûsan-ban : Chishô no Ai-Gedan (32. Mizo''ochi)'
+- '24. Nijûyon-ban : Seigan-barai (33. Hidari-gote)'
+- '25. Nijûgo-ban : Maki-gasumi (34. Hidari-gote / 35. Migi-gote)'
+- '26. Nijûroku-ban : Maki-kaeshi (36. Hidari-gote / 37. Mizo''ochi / 38.'
+- '27. Nijûnana-ban : Hikimi no Hongaku (39. Dô)'
+- '28. Nijûhachi-ban : Ai-Gedan Kesa-gawashi (40. Hidari-gote)'
+- '29. Nijûkyû-ban : Hotsu (41. Mizo''ochi / 42. Dô)'
+- '3. San-ban/ Sanbon-me: Uchi-komi-Inashi (3. Migi-gote)'
+- '30. Sanjû-ban : Uragiri (43. Men)'
+- '31. Sanjûichi-ban : Kasumi-nagashi (44. Migi-gote)'
+- '32. Sanjûni-ban : Haya-Kirikaeshi (45. Migi-Dô)'
+- '33. Sanjûsan-ban : Junpi (46. Hidari-gote)'
+- '34. Sanjûyon-ban : Nuke-Junpi (47. Dô / 48. Migi-gote)'
+- '35. Sanjûgo-ban : Tsumari (49. Nodo)'
+- '36. Sanjûroku-ban : Jûji-kuzushi (50. Migi-gote / 51 Hidari-gote)'
+- '37. Sanjûnana-ban : Renzoku Kiriotoshi Shin (52. Migi-gote)'
+- '38. Sanjûhachi-ban : Renzoku Kiriotoshi Gyô (53. Migi-gote)'
+- '39. Sanjûkyû-ban : Renzoku Kiriotoshi Sô (54. Men / 55. Men)'
+- '4. Yon-ban/ Yonhon-me: Kasumi-fuji (4. Migi-gote)'
+- '40. Yonjû-ban : Yorimi (56. Migi-gote)'
+- '41. Yonjûichi-ban : Koshimi (57. Ushiro-Kubi)'
+- '42. Yonjûni-ban : Aiba (58. Migi-gote / 59. Hidari-gote)'
+- '43. Yonjûsan-ban : Hari-Aiba (60. Nodo)'
+- '5. Go-ban/ Gohon-me: Tsuki-komi Seigan-yaburi (5. Hidari-gote)'
+- '6. Roku-ban/ Futatsu-gachi (Futatsu-kachi): (6. Hidari-gote / 7. Migigote)'
+- '7. Nana-ban/ Into: (8. Hidari-gote / 9. Hidari-gote)'
+- '8. Hachi-ban/ Gedan no Uchi-otoshi: (10. Hidari-gote)'
+- '9. Kyû-ban/ Norimi: (11. Migi-gote / 12. Hidari-gote)'
+- Ago
+- Agura
+- Ai
+- Ai-hanmi
+- Aiki-age-aiki-sage
+- Aiki-age-nage
+- Aiki-kôhô-otoshi
+- Aiki-nage
+- Aiki-otoshi
+- Aikido
+- Aikido Shinki Rengo
+- Aikidoka
+- Arigato gozaimashita
+- Arigato gozaimasu
+- Ashi
+- Ashi-gatame
+- Ashi-kakae-otoshi
+- Ashi-sabaki
+- Ashikubi
+- Atama
+- Ate-ikkyo
+- Ate-jujinage
+- Atemi
+- Awase-otoshi
+- Ayumi
+- Battô
+- Battô Seigan
+- Bokken
+- Bokuyo
+- Bokuyokan Europa
+- Budo
+- Chi
+- Chudan
+- Chudan Kasumi
+- Chudan Ura-gasumi
+- Chudan-yoko-tsuki
+- Chuden
+- Chûdan-gasumi
+- Chûdan-kasumi
+- Chûdan-ura-gasumi
+- Chûden
+- Daisharin
+- Daitoryu
+- Daitoryu Aiki Jujutsu
+- Dan
+- Deshi
+- Do
+- Docho
+- Dogi (>keikogi)
+- Dozo
+- Dô
+- Dô / Migi-gote
+- Eri
+- Eri-dori
+- Fuki-age
+- Fukiage
+- Futari-gake
+- Gasshô-nage
+- Gedan
+- Gedan-kasumi
+- Gohon-me · Tsukikomi Seigan-yaburi
+- Gokajô-kime-osae
+- Gokurousamadeshita
+- Gokyo
+- Gyaku
+- Gyaku-hanmi
+- Ha
+- Hachi-ban · Gedan no Uchiotoshi
+- Hagai-jime
+- Haimen-ude-gatame-otoshi
+- Hajimemasu
+- Hakama
+- Hako-gime
+- Hana
+- Hanmi
+- Hanmi-handachi
+- Hantachi (handachi)
+- Hanza-handachi · Mae-seme
+- Hanza-handachi · Ushiro-seme
+- Hara
+- Hidari
+- Hidari Jodan
+- Hidari-gote
+- Hidari-gote / Dô
+- Hidari-gote / Hidari-gote
+- Hidari-gote / Migi-gote
+- Hidari-gote / Mizo'ochi / Hidari-gote
+- Hidari-jôdan
+- Hidari-jôdan katate
+- Hidari-kamae
+- Hidari-katate-jôdan
+- Hiji
+- Hiji-awase-otoshi
+- Hiji-domoe
+- Hiji-gaeshi
+- Hiji-gaeshi-otoshi
+- Hiji-garami-yoko-domoe
+- Hiji-gatame
+- Hiji-gime-ippon-zeoi
+- Hiji-gime-nage
+- Hiji-gime-otoshi
+- Hiji-gime-shihô-nage
+- Hiji-kime-tomoe
+- Hiji-otoshi
+- Hiji-otoshi-yoko-nage
+- Hikari
+- Hiki-aiki-nage
+- Hiki-otoshi
+- Hikikomi-nodo-zuki
+- Hineri
+- Hineri-nage
+- Hineri-otoshi
+- Hiraki-dachi
+- Hiza
+- Hiza-aiki-nage
+- Hiza-gime
+- Hiza-giri
+- Hiza-ori
+- Hizadate-shômen-uchi
+- Ho
+- Hon-Menkyo
+- Hongaku
+- Hoshu
+- Hô-daoshi
+- Hôshu
+- Ikkajô
+- Ikkajô-kime-osae
+- Ikkyo
+- Ikkyo-kote-gaeshi
+- Ikkyo-shiho-nage
+- In
+- Ippon-me · Hitotsu-gachi
+- Irimi
+- Irimi-kubi-gatame
+- Irimi-nage
+- Irimi-uke / Uke-nagashi = sukui
+- Itto-den Shinki Toho
+- Jiyu (adj. jiyuna)
+- Jiyu-seme
+- Jiyu-waza
+- Jizuri-gedan
+- Jo
+- Jo-dori
+- Jo-gaeshi
+- Jo-kata
+- Jo-suburi 1
+- Jo-suburi 2
+- Jodan
+- Jodan Kasumi
+- Jodan Ura-gasumi
+- Juji
+- Juji-garami
+- Juji-irimi-nage
+- Juji-nage
+- Jun-Menkyo
+- Jô-dori
+- Jô-gaeshi-zuki
+- Jôdan
+- Jôdan-gasumi
+- Jôdan-kasumi
+- Jôdan-ura-gasumi
+- Jôdan-zuki
+- Jû-ban · Norimi Hitotsu-gachi
+- Jûgo-ban · Honshô
+- Jûhachi-ban · Uki
+- Jûichi-ban · Gedan no Tsuke Chû-seigan
+- Jûji-garami
+- Jûji-garami-nage
+- Jûji-kiri-otoshi
+- Jûji-uke
+- Jûji-yari
+- Jûkyû-ban · Kirikaeshi
+- Jûnana-ban · Kobushi no Harai
+- Jûni-ban · Orimi
+- Jûroku-ban · Jôdan-gasumi
+- Jûsan-ban · Suriage
+- Jûyon-ban · Wakigamae no Uchiotoshi
+- Kabuse-irimi
+- Kaeshi-goshi (-koshinage)
+- Kaeshi-koshi-nage
+- Kaeshi-waza
+- Kaiten
+- Kaiten-nage
+- Kaji-mawashi
+- Kakae-gime-nage
+- Kakae-goshi
+- Kakae-jime-nage
+- Kakae-nage
+- Kakae-otoshi
+- Kakae-tori
+- Kakari-geiko
+- Kamae-undo
+- Kan
+- Karami-hiji-gatame-nage
+- Karami-nage
+- Karami-otoshi
+- Karimata-hiji-otoshi
+- Kashiwade-soto-gime-nage
+- Kata
+- Kata-aiki-nage
+- Kata-dori
+- Kata-dori-shômen-uchi
+- Kata-gime-nage
+- Kata-guruma
+- Kata-otoshi
+- Kata-yari
+- Kataire-guruma
+- Katame-waza
+- Katana
+- Katate
+- Katate-dori diagonal
+- Katate-kata-dori
+- Katate-katate-dori
+- Katate-maeeri-dori
+- Katate-muna-dori
+- Katate-tori
+- Kataude-shibori-kime-nage
+- Kaze
+- Keikogi
+- Kenshou
+- Kesa-gake
+- Kesa-gime
+- Kesagake
+- Ki
+- Ki-ai
+- Kime (-gime)
+- Kime-mawashi
+- Kime-mawashi-otoshi
+- Kime-modoshi
+- Kiri-otoshi
+- Kiriotoshi
+- Kogarashi
+- Kokyu
+- Kokyu-ho
+- Kokyu-nage
+- Kokyu-ryoku
+- Koshi
+- Koshi-guruma
+- Koshi-nage
+- Koshi-nage-hiji-garami
+- Koshi-nage-kote-hineri
+- Kote
+- Kote-barai
+- Kote-gaeshi
+- Kote-osae
+- Kote-otoshi
+- Kubi
+- Kubi-gatame
+- Kubi-gime
+- Kubi-hineri
+- Kubi-jime
+- Kubi-kakae-nage
+- Kubi-shime (-jime)
+- Kuchi
+- Kuden
+- Kuguri-jûji-nage
+- Kumidachi
+- Kyu
+- Kyû-ban · Norimi
+- Kôbe-gaeshi
+- Ma
+- Ma-ai
+- Mae-fuse
+- Mae-geri
+- Mae-kaiten
+- Mae-sasae-tobi
+- Mae-seme
+- Mae-tobi
+- Mae-ukemi
+- Maki-arashi
+- Maki-otoshi
+- Makikomi-yoko-nage
+- Massugu
+- Me
+- Men
+- Men / Men
+- Menkyo-Kaiden
+- Migi
+- Migi Harai-dachi
+- Migi-Jodan
+- Migi-dô
+- Migi-gote
+- Migi-gote / Hidari-gote
+- Migi-jôdan
+- Migi-kamae
+- Mimi
+- Mizo'ochi
+- Mizo'ochi / Dô
+- Mizo'ochi / Migi-gote
+- Mizu
+- Modoshi
+- Monjin
+- Morote-dori
+- Morote-yokomen-uchi
+- Mu
+- Muga
+- Muna-dori-shômen-uchi
+- Muna-dori-yokomen-uchi
+- Muna-jûji-nage
+- Mune
+- Mune-jûji-nage
+- Mune-suso-dori
+- Mune-tori (Muna-dori)
+- Mune-ude-dori
+- Mushin
+- Nagashi
+- Nage
+- Nage-waza
+- Nana-ban · Intô
+- Narabi-juji
+- Narabi-juji-nage
+- Nihon-me · Age-uke
+- Nijû-ban · Sayû no Harai
+- Nijûgo-ban · Maki-gasumi
+- Nijûhachi-ban · Ai-gedan Kesa-gawashi
+- Nijûichi-ban · Gyaku no Harai
+- Nijûkyû-ban · Hotsu
+- Nijûnana-ban · Hikimi no Hongaku
+- Nijûni-ban · Chishô
+- Nijûroku-ban · Maki-kaeshi
+- Nijûsan-ban · Chishô no Ai-gedan
+- Nijûyon-ban · Seigan-barai
+- Nikajô-kime-osae
+- Nikajô-ryôte-kime-nage
+- Nikyo
+- Nikyo-yokodomoe
+- Niô-daoshi
+- Nodo
+- Nodo / Migi-gote
+- Nodo-gime
+- Nuki-garami
+- Nuki-yari
+- Nôtô
+- O-guruma
+- O-hineri
+- Okuden
+- Okugi
+- Okuri-dashi
+- Omote
+- Onegai-shimasu
+- Onken
+- Oo-guruma
+- Oo-hineri
+- Orochi-gatame
+- Owarimasu
+- Rei
+- Rengo
+- Ritsurei
+- Roku-ban · Futatsu-gachi
+- Ryo-kata-dori
+- Ryo-nikyo
+- Ryokata
+- Ryote
+- Ryote-dori
+- Ryote-katate-dori
+- Ryote-kubi-jime
+- Ryote-muna-dori
+- Ryote-ryote-dori
+- Ryote-tori (-dori)
+- Ryu
+- Ryô-eri-jime
+- Ryô-hiji-gaeshi
+- Ryô-irimi-nage
+- Ryô-kata-gime
+- Ryô-morote-dori
+- Ryô-nikajô-gime
+- Ryô-nikajô-tomoe-nage
+- Ryô-sotote-dori
+- Ryô-tekubi-gime-yoko-nage
+- Ryô-uchite-dori
+- Ryô-uchite-kata-dori + Ryôte-muna-dori
+- Ryô-yokomen-uchi
+- Ryô-yonkajô-gime
+- Ryôkata-dori
+- Ryôte-dori
+- Ryôte-katate-dori
+- Ryôte-kubi-jime
+- Ryôte-muna-dori
+- Ryôte-ryôkata-dori
+- Ryôude-shibori-kime-nage
+- Sabaki
+- San'nin-gake
+- Sanbon-me · Uchikomi-inashi
+- Sanjû-ban · Uragiri
+- Sanjûgo-ban · Tsumari
+- Sanjûhachi-ban · Renzoku Kiriotoshi Gyô
+- Sanjûichi-ban · Kasumi-nagashi
+- Sanjûkyû-ban · Renzoku Kiriotoshi Sô
+- Sanjûnana-ban · Renzoku Kiriotoshi Shin
+- Sanjûni-ban · Haya-kirikaeshi
+- Sanjûroku-ban · Jûji-kuzushi
+- Sanjûsan-ban · Junpi
+- Sanjûyon-ban · Nuke-junpi
+- Sankajô-kime-nage
+- Sankajô-kime-osae
+- Sankajô-kime-osae / -nage
+- Sankajô-ushiro-gime
+- Sankyo
+- Sasage-dachi
+- Satori
+- Sayû-kôsa-nage
+- Seigan
+- Seito
+- Senaka
+- Sensei
+- Seoi-nage
+- Seori
+- Shibori-nage
+- Shidachi
+- Shihan
+- Shiho-gaeshi
+- Shiho-nage
+- Shihô-gaeshi
+- Shihô-kakae-nage
+- Shihô-nage
+- Shihô-otoshi
+- Shikata
+- Shikkoh
+- Shinki
+- Shinki Toho
+- Shite
+- Shizentai
+- Shoden
+- Shomen
+- Shomen-tsuki
+- Shomen-uchi
+- Shunpu
+- Shômen-uchi
+- Shômen-uchikomi
+- Shômen-uchioroshi
+- Soto
+- Soto-gake
+- Soto-kaiten-nage
+- Soto-nikajô-kime-aiki-nage
+- Soto-nikajô-kime-osae
+- Sotote-dori
+- Sotote-dori-shômen-uchi
+- Souke
+- Suburi
+- Sumi
+- Sumi-otoshi
+- Suriage
+- Suriage-Men
+- Suso-barai
+- Suwari
+- Suwari-waza
+- Suwari-waza · Mae-seme
+- Suwari-waza · Ushiro-seme
+- Suwaru
+- Tachi-dori
+- Tachi-kata
+- Tachi-suburi 1
+- Tachi-suburi 2
+- Tachi-waza
+- Tachi-waza · Mae-seme
+- Tachi-waza · Ushiro-seme
+- Tachiai · Mae-seme · Keri
+- Tachiai · Mae-seme · Torite
+- Tachiai · Mae-seme · Uchite
+- Tachiai · Ushiro-seme
+- Tachiai · Ushiro-seme · Torite
+- Tai
+- Tai-azuke
+- Tai-sabaki
+- Tani-otoshi
+- Tanto
+- Tanto-dori
+- Tantô-dori
+- Tatami
+- Te no uchi
+- Tegatana
+- Tekubi
+- Tekubi-gime
+- Tekubi-gime-kiri-otoshi
+- Tekubi-gime-modoshi
+- Tekubi-gime-nage
+- Tekubi-gime-o-guruma
+- Tekubi-gime-otoshi
+- Tekubi-gime-yoko-nage
+- Tekubi-osae
+- Tekô-awase
+- Tekô-awase-hiza-basami
+- Tekô-osae
+- Ten
+- Ten-gaeshi
+- Tenchi
+- Tenchi-nage
+- Tenkan
+- Tenzashi
+- Tobi
+- Tori-ude
+- Tsubasa-gaeshi
+- Tsuchi
+- Tsugi-ashi
+- Tsuki
+- Tsuki – Kote-gaeshi – Ikkajô-kime-osae
+- Tsuki – Kote-gaeshi – Kote-gaeshi
+- Tsuki – Shihô-nage – Hiji-gime-seoi-nage
+- Tsuki – Shihôgage – Shihô-nage
+- Tsumuji
+- Uchi
+- Uchi-kaiten-nage
+- Uchi-sankajô-kime-osae
+- Uchi-sankyo
+- Uchidachi
+- Uchikote-otoshi
+- Uchioroshi
+- Uchite-dori
+- Uchite-kata-dori
+- Ude
+- Ude-gaeshi
+- Ude-garami
+- Ude-gatame
+- Ude-gatame-nage
+- Ude-gatame-otoshi
+- Ude-gime-aiki-nage
+- Ude-gime-nage
+- Ude-guruma
+- Ude-kakae-nage
+- Udekime-nage
+- Uke
+- Ukemi
+- Ura
+- Ura-Seigan
+- Ura-Waki
+- Ura-irimi-nodo-zuki
+- Ura-seigan
+- Ura-waki
+- Ushiro
+- Ushiro-aiki-nage
+- Ushiro-eri-tori
+- Ushiro-hineri
+- Ushiro-kaiten
+- Ushiro-katate-tori
+- Ushiro-kubi
+- Ushiro-ryokata-tori
+- Ushiro-ryote-tori
+- Ushiro-seme
+- Ushiro-tobi
+- Ushiro-ude-gime-kubi-jime
+- Ushiro-ukemi
+- Uzushio
+- Waki
+- Waki-basami-kata-otoshi
+- Wakigamae
+- Waza
+- Yame!
+- Yari
+- Yo
+- Yobi-modoshi
+- Yoko
+- Yoko-domoe
+- Yoko-kaiten
+- Yoko-kubi-shime (-jime)
+- Yoko-nage
+- Yoko-otoshi
+- Yoko-suberi
+- Yoko-tobi
+- Yoko-ukemi
+- Yokomen
+- Yokomen-uchi
+- Yokomenuchi
+- Yonhon-me · Kasumi-fûji
+- Yonjû-ban · Yorimi
+- Yonjûichi-ban · Koshimi
+- Yonjûni-ban · Aiba
+- Yonjûsan-ban · Hari-aiba
+- Yonkajô-kime-nage
+- Yonkajô-kime-osae
+- Yonkyo
+- Yonkyo-nage
+- Yô
+- Zagi
+- Zaho
+- Zarei
+- Zatori · Mae-seme
+- Zatori · Yoko-seme
+- Zori
+- atemi
+- atemi-uchi-tenkan / sukui
+- diagonal
+- harai-te
+- hineri
+- ikkyo
+- ikkyo-ura
+- irimi
+- irimi-tenkan
+- kirikaeshi
+- kote-hineri
+- kote-hineri / sukui
+- mae
+- mae, omote
+- mae, ura = nukido
+- nukite
+- nukite / hineri
+- omote
+- soto
+- soto-irimi
+- soto-tenkan
+- soto-tenkan / uchi-irimi-tenkan
+- sukui-age-uchi = upper cut
+- tegatana
+- tegatana / sukui
+- tenkan
+- uchi + soto
+- uchi / soto
+- uchi- + soto-tenkan
+- uchi- / soto-irimi
+- uchi- / soto-tenkan
+- uchi-irimi
+- uchi-tenkan
+- uchi-tenkan-kirikaeshi
+- uchi-tenkan-kote-hineri
+- ude-gaeshi
+- ura
+- ushiro
+- ushiro / irimi
+- Ô-dachi
+- Ô-dachi 1–21
+- Ô-dachi 1–32
+- Ô-dachi 1–43

@@ -1,0 +1,256 @@
+# Englisch zu den Programmen, daten/lexikon.yaml (Wörter, Quelle) und der Vorbemerkung: je Text ein Paar. Von Hand gepflegt; prüft tools/daten.py, Glossar: tools/uebersetzung-glossar.md
+- de: 1 Jahr
+  en: 1 year
+- de: 2 Jahre
+  en: 2 years
+- de: 3 Jahre
+  en: 3 years
+- de: 4 Jahre
+  en: 4 years
+- de: 5 Jahre
+  en: 5 years
+- de: 2 Jahre nach Trainingsbeginn
+  en: 2 years after starting training
+- de: 1. Kyu
+  en: 1st Kyu
+- de: 2. Kyu
+  en: 2nd Kyu
+- de: 3. Kyu
+  en: 3rd Kyu
+- de: 4. Kyu
+  en: 4th Kyu
+- de: 5. Kyu
+  en: 5th Kyu
+- de: 1. Dan
+  en: 1st Dan
+- de: 2. Dan
+  en: 2nd Dan
+- de: 3. Dan
+  en: 3rd Dan
+- de: 4. Dan
+  en: 4th Dan
+- de: Okugi 3. Dan
+  en: Okugi 3rd Dan
+- de: Kyu-Grade
+  en: Kyu grades
+- de: Dan-Grade
+  en: Dan grades
+- de: 2 Angreifer
+  en: 2 attackers
+- de: 3 Angreifer
+  en: 3 attackers
+- de: Futari-gake · 2 Angreifer
+  en: Futari-gake · 2 attackers
+- de: San'nin-gake · 3 Angreifer
+  en: San'nin-gake · 3 attackers
+- de: 2 Arten
+  en: 2 variants
+- de: soto-irimi, 2 Arten
+  en: soto-irimi, 2 variants
+- de: Alle Tori-te
+  en: All Tori-te
+- de: Alle Uchi-te
+  en: All Uchi-te
+- de: atemi, Ukete führen
+  en: atemi, lead Ukete
+- de: Aufsatz über Aikido, mind. 1 Seite
+  en: Essay on aikido, at least 1 page
+- de: Aufsatz über Aikido, mind. 2 Seiten
+  en: Essay on aikido, at least 2 pages
+- de: Aufsatz über Aikido, mind. 3 Seiten
+  en: Essay on aikido, at least 3 pages
+- de: 'Aufsätze: DIN A4, Schriftgröße 12 pt, Zeilenabstand 1,5.'
+  en: 'Essays: DIN A4, font size 12 pt, line spacing 1.5.'
+- de: beide Hände hoch
+  en: both hands up
+- de: Hände hoch
+  en: hands up
+- de: beide von vorne
+  en: both from the front
+- de: dazu Mutô 12 (je 4 gegen Ô-dachi, Ko-dachi, Tantô)
+  en: plus Mutô 12 (4 each against Ô-dachi, Ko-dachi, Tantô)
+- de: Diplom
+  en: Diploma
+- de: Vor-Diplom
+  en: Pre-diploma
+- de: direkt
+  en: direct
+- de: drehend zwischen die Arme des Angreifers eintreten
+  en: enter turning between the attacker's arms
+- de: eine Hand an die Hüfte
+  en: one hand on the hip
+- de: erst Sankyo wirken lassen
+  en: apply Sankyo first
+- de: sankyo-ura wirken lassen
+  en: apply sankyo-ura
+- de: Erste Überlieferung
+  en: First transmission
+- de: Mittlere Überlieferung
+  en: Middle transmission
+- de: Vertiefte Überlieferung
+  en: Deepened transmission
+- de: Lizenz, volle Überlieferung
+  en: Licence, full transmission
+- de: Haupt der Schule
+  en: Head of the school
+- de: freier Angriff
+  en: free attack
+- de: greifende Angriffe
+  en: grabbing attacks
+- de: schlagende Angriffe
+  en: striking attacks
+- de: Frontales Abwärtsschlagen aus parallelem Stand; die Füße bleiben am Platz.
+  en: Frontal downward strike from a parallel stance; the feet stay in place.
+- de: Frontales Hineinschlagen mit Schritt, im Wechsel aus In und Yô.
+  en: Frontal striking-in with a step, alternating from In and Yô.
+- de: ganze Drehung
+  en: full turn
+- de: gerade
+  en: straight
+- de: Katate-dori gerade
+  en: Katate-dori straight
+- de: 'Grade prüft und verleiht der Hôshu. Mit seinem Einverständnis prüfen Jun-Menkyo bis Shoden, Hon-Menkyo bis
+    Chûden, Menkyo-Kaiden bis Okuden; Bedingung: mindestens 10 Stunden Training beim Hôshu im Jahr.'
+  en: 'Grades are examined and awarded by the Hôshu. With his consent, Jun-Menkyo may examine up to Shoden, Hon-Menkyo
+    up to Chûden, Menkyo-Kaiden up to Okuden; condition: at least 10 hours of training with the Hôshu per year.'
+- de: 'Grundübung in drei Stufen: Shin 真 bis zum Mizo''ochi, Gyô 行 bis zum Hals, Sô 草 auf den Kopf.'
+  en: 'Basic exercise in three stages: Shin 真 down to the Mizo''ochi, Gyô 行 down to the neck, Sô 草 at the head.'
+- de: Itto-den Shinki Toho, Beschreibung der Formen (shinkiryu.de)
+  en: Itto-den Shinki Toho, description of the forms (shinkiryu.de)
+- de: Kamae-Übung
+  en: Kamae exercise
+- de: Kopf runter
+  en: head down
+- de: mae, knien
+  en: mae, kneeling
+- de: Migi-gote von unten
+  en: Migi-gote from below
+- de: Mindestabstände gelten bei mindestens einem Training pro Woche.
+  en: Minimum intervals apply with at least one training session per week.
+- de: 'Mindestalter für Shoden: 16 Jahre.'
+  en: 'Minimum age for Shoden: 16 years.'
+- de: mit Aiki-age
+  en: with Aiki-age
+- de: Mitglied im Shinkiryu-Verband spätestens ein Jahr vor der Shoden-Prüfung.
+  en: Member of the Shinkiryu association at least one year before the Shoden examination.
+- de: mündliche Prüfung
+  en: oral examination
+- de: nach hinten werfen
+  en: throw backwards
+- de: Prüfungen grundsätzlich auf Shinki-Toho-Lehrgängen; Ausnahmen mit Zustimmung des Hôshu, dann mindestens 10
+    Trainingsstunden beim Hôshu im Jahr davor (die Hälfte davon bei Helmut Theobald möglich).
+  en: Examinations generally take place at Shinki Toho courses; exceptions with the consent of the Hôshu, then at
+    least 10 training hours with the Hôshu in the year before (half of them possible with Helmut Theobald).
+- de: Rei-ho, Suburi, Kiriotoshi und Kamae; Ô-dachi 1–11
+  en: Rei-ho, Suburi, Kiriotoshi and Kamae; Ô-dachi 1–11
+- de: Salto
+  en: Somersault
+- de: 'Schnitt auf den Unterarm: mae (vorne, aus den Handgelenken) und oku (hinten, schräg).'
+  en: 'Cut to the forearm: mae (front, from the wrists) and oku (rear, diagonal).'
+- de: Sonstige Techniken
+  en: Other techniques
+- de: soto-tenkan-makikomi, dann mit der freien Hand werfen
+  en: soto-tenkan-makikomi, then throw with the free hand
+- de: Stand 01.01.2022 · überarbeitet 2026
+  en: As of 1 January 2022 · revised 2026
+- de: Stand 01.04.2008 · überarbeitet 2026
+  en: As of 1 April 2008 · revised 2026
+- de: Stand 2026
+  en: As of 2026
+- de: tagai-te, gegenüberliegende Hand
+  en: tagai-te, opposite hand
+- de: Theorie
+  en: Theory
+- de: Tsuki (linker Fuß vorn)
+  en: Tsuki (left foot forward)
+- de: Tsuki (rechter Fuß vorn)
+  en: Tsuki (right foot forward)
+- de: uchi- / soto-tenkan, mae und ushiro
+  en: uchi- / soto-tenkan, mae and ushiro
+- de: uchi- und soto-tenkan
+  en: uchi- and soto-tenkan
+- de: vom Stand
+  en: from standing
+- de: von hinten, gleiche Seite
+  en: from behind, same side
+- de: Waffen
+  en: Weapons
+- de: Ô-dachi 43, Ko-dachi 5, Tantô 5 (alle gegen Ô-dachi)
+  en: Ô-dachi 43, Ko-dachi 5, Tantô 5 (all against Ô-dachi)
+- de: 'Übungsformen zu zweit: Rollen, Rei-ho, Ansage'
+  en: 'Partner practice forms: roles, Rei-ho, announcement'
+- de: Kumidachi · Übungsformen zu zweit
+  en: Kumidachi · Partner practice forms
+- de: 'Fuse (Verb: fuseru)'
+  en: 'Fuse (verb: fuseru)'
+- de: 'Sasae (Verb: sasaeru=stützen)'
+  en: 'Sasae (verb: sasaeru=to support)'
+- de: 'Seme (Verb: semeru=angreifen)'
+  en: 'Seme (verb: semeru=to attack)'
+- de: Sukui (vom Verb sukuu)
+  en: Sukui (from the verb sukuu)
+- de: Katate-ryote-tori(bzw. -dori)
+  en: Katate-ryote-tori(or -dori)
+- de: Lexikon der Aiki-Budo-Begriffe, Japanisch–Deutsch, shinkiryu.de, Stand 20. März 2018
+  en: Lexicon of Aiki-Budo terms, Japanese–German, shinkiryu.de, as of 20 March 2018
+- de: Aikido-Techniken müssen kampfwirksam sein, damit man bei ihrer Ausführung nicht einer Selbsttäuschung erliegt.
+    Das Ziel ist zwar nicht, unbedingt gewinnen zu wollen, aber es gehört doch zur Selbstschulung, wenn man soweit
+    als möglich nach der Wirksamkeit der Techniken strebt.
+  en: Aikido techniques must be effective in combat, so that one does not fall prey to self-deception when performing
+    them. The goal is not to want to win at all costs, but it does belong to self-training to strive as far as possible
+    for the effectiveness of the techniques.
+- de: Die Bewegung muss aber natürlich bleiben, was dadurch gewährleistet wird, dass man sich vom Bauch als der
+    Mitte des Körpers her bewegt (Hara-Prinzip), während die Gliedmaßen, besonders die Arme, locker bewegt werden.
+    Bildlich gesprochen, soll die Bewegung wie Bambus oder wie eine Weide im Wind sein.
+  en: The movement must nevertheless remain natural, which is ensured by moving from the belly as the centre of
+    the body (Hara principle), while the limbs, especially the arms, are moved loosely. Figuratively speaking, the
+    movement should be like bamboo or a willow in the wind.
+- de: Die Durchführung der Aikido-Techniken sollte schließlich von Ki (= Urlebenskraft) beseelt sein. Was eigentlich
+    in allen Budo-Arten – und sogar in allen guten Bewegungskünsten – gilt, ist im Ki-Budo, also auch im Aikido,
+    besonders wichtig. Die weiche Bewegung muss einen Kern haben. Es geht nicht hauptsächlich um den gewollt explosionsartigen
+    Ki-Ausbruch, sondern um das Ausströmen des Ki, was durch intensiv-hingebungsvolles Üben in uns entsteht. Schlussendlich
+    sollen wir uns gegenüber dem Shinki (göttlichen Ki) öffnen.
+  en: Finally, the performance of aikido techniques should be animated by Ki (= primal life force). What actually
+    holds true in all kinds of Budo – and even in all good arts of movement – is especially important in Ki-Budo,
+    and thus also in aikido. The soft movement must have a core. It is not mainly about the deliberately explosive
+    outburst of Ki, but about the outflow of Ki, which arises in us through intensive and devoted practice. Ultimately
+    we should open ourselves to Shinki (divine Ki).
+- de: Zu Anfang ist es besonders wichtig, dass man nicht auf eine Vielzahl von Techniken aus ist, sondern wenige
+    Grundtechniken gut beherrscht. Eine Haltung, der es darum geht, sich möglichst schnell viele Techniken anzueignen
+    und dadurch zügig zu höheren Graden kommen zu wollen, passt nicht zu den Prinzipien des Shinkiryu Aiki Budo
+    / Aikido Shinki Rengo.
+  en: At the beginning it is especially important not to be after a multitude of techniques, but to master a few
+    basic techniques well. An attitude that is concerned with acquiring many techniques as quickly as possible,
+    and thereby wanting to reach higher grades swiftly, does not fit the principles of Shinkiryu Aiki Budo / Aikido
+    Shinki Rengo.
+- de: Zunächst sollen eine standfeste Grundhaltung und sichere Schritte (Sabaki) erlangt werden. Sodann soll gelernt
+    werden, den Abstand (Maai) zum Angreifer (Seme oder Uke als Partner in der Angreiferrolle) abzuschätzen sowie
+    auch das Timing beim Einsatz der Technik. Mit der Zeit sollen die Bewegungen immer fließender und die Details
+    der Technik immer genauer werden. Auch die Zahl der Techniken muss kontinuierlich steigen, damit Schmalspurigkeit
+    vermieden wird. Die Prüfungen zu höheren Graden setzen auch die Techniken der niedrigeren Grade voraus. Deswegen
+    werden bei Prüfungen immer Stichproben von Techniken unterhalb des eigentlich zu prüfenden Grades gemacht.
+  en: First, a stable basic posture and sure steps (Sabaki) should be attained. Next, one should learn to judge
+    the distance (Maai) to the attacker (Seme, or Uke as the partner in the attacker's role) as well as the timing
+    in applying the technique. Over time, the movements should become ever more flowing and the details of the technique
+    ever more precise. The number of techniques must also rise continuously, so that narrowness is avoided. Examinations
+    for higher grades also presuppose the techniques of the lower grades. For this reason, examinations always include
+    samples of techniques below the grade actually being examined.
+- de: Es ist darauf zu achten, dass die Technik nicht wild, grob und hektisch, sondern genau, weich und dynamisch
+    durchgeführt wird. Mit der Zeit soll dann die wahre, beherrschte Schärfe der Technik gefördert werden. Bei der
+    Übung sollte man immer auf den Partner / die Partnerin je nach dem Fortschrittsgrad, der körperlichen Beschaffenheit,
+    dem Alter usw. Rücksicht nehmen.
+  en: Care must be taken that the technique is performed not wildly, roughly and hectically, but precisely, softly
+    and dynamically. Over time, the true, controlled sharpness of the technique should then be cultivated. In practice
+    one should always show consideration for the partner according to their level of progress, physical condition,
+    age and so on.
+- de: Bei der Dan-Graduierung werden darüber hinaus die Beherrschung des Ki, die meditative innere Haltung in Schlichtheit,
+    Bescheidenheit und Unverzagtheit des Herzens und das Engagement für Aikido im Allgemeinen und für Aikido Shinki
+    Rengo im Besonderen berücksichtigt.
+  en: For Dan grading, the mastery of Ki, the meditative inner attitude in simplicity, modesty and undaunted heart,
+    and the commitment to aikido in general and to Aikido Shinki Rengo in particular are also taken into account.
+- de: Zur Dan-Graduierung gehört auch, dass man nicht nur selber gut Techniken beherrscht, sondern auch anderen
+    zur Entwicklung verhelfen und sie gut beurteilen kann. Dies ist eben die Voraussetzung, dass die Dan-Graduierung
+    zugleich zur selbständigen Graduierungsbefugnis führt.
+  en: Dan grading also requires that one not only masters techniques well oneself, but can also help others to develop
+    and assess them well. This is precisely the condition for Dan grading also leading to the independent authority
+    to award grades.
