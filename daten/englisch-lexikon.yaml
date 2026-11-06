@@ -1,0 +1,429 @@
+# Englisch zu daten/lexikon.yaml: je Text ein Paar. Von Hand gepflegt; prüft tools/daten.py, Glossar: tools/uebersetzung-glossar.md
+- de: Kin
+  en: chin
+- de: Schneidersitz
+  en: cross-legged sitting
+- de: 'je nach dem Zeichen: Liebe od. Harmonie, Begegnung'
+  en: 'depending on the character: love or harmony, encounter'
+- de: gleiche Fußstellung der Partner
+  en: same foot position of the partners
+- de: Ausheber
+  en: lifting throw
+- de: Weg des aiki
+  en: way of aiki
+- de: (eigentlich beruflich) Aikidoausübender
+  en: (actually professional) person practising aikido
+- de: vielen Dank (Vergangenheit)
+  en: thank you very much (past)
+- de: vielen Dank (Gegenwart)
+  en: thank you very much (present)
+- de: Fuß
+  en: foot
+- de: Fußgelenk
+  en: ankle
+- de: Grundschritte
+  en: basic steps
+- de: Kopf
+  en: head
+- de: Ikkyo mit Atemi (ateru=treffen, stoßen)
+  en: Ikkyo with Atemi (ateru=to hit, to thrust)
+- de: Jujinage mit Atemi
+  en: Jujinage with Atemi
+- de: leichter Schlag
+  en: light strike
+- de: 'Gang: ayumu=gehen'
+  en: 'walk: ayumu=to walk'
+- de: Holzschwert
+  en: wooden sword
+- de: Schafe weiden
+  en: to graze sheep
+- de: Weg des Samurai
+  en: way of the samurai
+- de: Erde
+  en: earth
+- de: Mittlere Höhe (z.B. bei Schwerthaltung)
+  en: middle height (e.g. in sword posture)
+- de: seitlicher Stoß
+  en: sideways thrust
+- de: '"großes Rad"'
+  en: '"great wheel"'
+- de: Schüler, Jünger
+  en: student, disciple
+- de: bitteschön
+  en: please, here you are
+- de: Stufe; Meister-Grad
+  en: level; master grade
+- de: Weg
+  en: way
+- de: Wegältester (cho=Leiter)
+  en: elder of the way (cho=leader)
+- de: Übungskleidung
+  en: training clothes
+- de: Kragen
+  en: collar
+- de: fuku=wehen, ageru=von unten heraufführen
+  en: fuku=to blow, ageru=to bring up from below
+- de: sich hinlegen
+  en: to lie down
+- de: untere Höhe (z.B. bei Schwerthaltung)
+  en: lower height (e.g. in sword posture)
+- de: Sie haben sich Mühe gegeben.
+  en: You have taken great trouble.
+- de: fünfte Regel (des Festhaltens)
+  en: fifth principle (of holding down)
+- de: gegensätzlich, ungleich
+  en: opposed, unequal
+- de: ungleiche Fußstellung der Partner (rechts/links)
+  en: unequal foot position of the partners (right/left)
+- de: Zahn
+  en: tooth
+- de: Blatt des Baumes (Konoha)
+  en: leaf of a tree (Konoha)
+- de: fangen wir an
+  en: let us begin
+- de: Hosenrock
+  en: divided skirt trousers
+- de: 'Nase (bei einem anderen Zeichen: Blume)'
+  en: 'nose (with a different character: flower)'
+- de: Halbstellung, Schrittstellung
+  en: half stance, stepping stance
+- de: einseitig knien, Halbstand
+  en: kneeling on one side, half stand
+- de: Bauch, Körpermitte
+  en: belly, centre of the body
+- de: links
+  en: left
+- de: Grundstellung linker Fuß vorn
+  en: basic stance with the left foot forward
+- de: Ellbogen
+  en: elbow
+- de: Ellbogen blockierend festhalten
+  en: holding the elbow in a lock
+- de: Licht
+  en: light
+- de: Drehung, Verdrehung
+  en: turn, twist
+- de: Knie
+  en: knee
+- de: Methode
+  en: method
+- de: Richtung
+  en: direction
+- de: erste Regel (des Festhaltens) beim Aikido (Nikyo, Sankyo, …)
+  en: first principle (of holding down) in aikido (Nikyo, Sankyo, …)
+- de: erste Stufe bim Daitoryu (Nikajo, Sankajo, Yonkajo, …)
+  en: first level in Daitoryu (Nikajo, Sankajo, Yonkajo, …)
+- de: direktes Eintreten
+  en: direct entering
+- de: Innen- oder Eingangswurf
+  en: inside or entering throw
+- de: frei, Freiheit
+  en: free, freedom
+- de: Stock
+  en: staff
+- de: Stockformen (ohne Partner)
+  en: staff forms (without a partner)
+- de: obere Höhe (z.B. bei Schwerthaltung)
+  en: upper height (e.g. in sword posture)
+- de: Kreuzform
+  en: cross shape
+- de: Armkreuz-Drehwurf
+  en: arm-cross twisting throw
+- de: eingehend "zudecken"
+  en: entering and "covering"
+- de: Wende-Hüftwurf
+  en: turning hip throw
+- de: Drehung (allgemein)
+  en: turn (general)
+- de: Schleuderwurf
+  en: sling throw
+- de: '"Lenkrad drehen"'
+  en: '"turning the steering wheel"'
+- de: von hinten umfassen
+  en: embracing from behind
+- de: großes Gebäude (z.B. Bokuyokan, Kodokan)
+  en: large building (e.g. Bokuyokan, Kodokan)
+- de: karamu= schlingen, einhaken
+  en: karamu=to entwine, to hook
+- de: Übung mit mehreren Angreifern
+  en: practice with several attackers
+- de: formaler Bewegungsablauf ohne Partner
+  en: formal movement sequence without a partner
+- de: Schulter
+  en: shoulder
+- de: Festhaltetechnik
+  en: holding technique
+- de: Schwert
+  en: sword
+- de: eine Hand
+  en: one hand
+- de: eine Hand mit beiden Händen greifen
+  en: grabbing one hand with both hands
+- de: eine Hand greift eine Hand
+  en: one hand grabs one hand
+- de: Wind
+  en: wind
+- de: Wesensschau, Erleuchtung
+  en: seeing into one's nature, enlightenment
+- de: schräg schneiden
+  en: cutting diagonally
+- de: universelle Lebenskraft
+  en: universal life force
+- de: Kampfschrei
+  en: battle cry
+- de: Block; kimeru=blockieren
+  en: lock; kimeru=to lock
+- de: '"Baumverderber",kalter Spätherbstwind'
+  en: '"tree spoiler", cold late-autumn wind'
+- de: Atem
+  en: breath
+- de: Atem-übung
+  en: breath exercise
+- de: Atem-wurf
+  en: breath throw
+- de: Atem-Kraft
+  en: breath power
+- de: Hüfte
+  en: hip
+- de: Hüftwurf
+  en: hip throw
+- de: Armkreuzdreh-Hüftwurf
+  en: arm-cross twisting hip throw
+- de: Handdrehhebel-Hüftwurf
+  en: hand-twist lever hip throw
+- de: Unterarm
+  en: forearm
+- de: Handgelenk-Drehhebel
+  en: wrist-twist lever
+- de: Hals
+  en: neck
+- de: Würgen am Hals
+  en: choking at the neck
+- de: Mund
+  en: mouth
+- de: mündliche Überlieferung
+  en: oral transmission
+- de: Klasse; Schülergrad
+  en: class; student grade
+- de: Raum, zeitlicher Abstand
+  en: space, interval in time
+- de: räumlicher oder zeitlicher Abstand
+  en: distance in space or time
+- de: Rolle vorwärts
+  en: forward roll
+- de: maku=einwickeln, arashi=Sturm
+  en: maku=to wrap, arashi=storm
+- de: gerade
+  en: straight
+- de: Auge
+  en: eye
+- de: rechts
+  en: right
+- de: Grundstellung rechter Fuß vorn
+  en: basic stance with the right foot forward
+- de: Ohr
+  en: ear
+- de: Wasser
+  en: water
+- de: modosu=zurückbringen, -geben
+  en: modosu=to bring back, to give back
+- de: Schüler
+  en: student
+- de: mit den beiden Händen ein Unterarm des Gegners greifen
+  en: grabbing one of the opponent's forearms with both hands
+- de: nichts
+  en: nothing
+- de: „ego“-loser Zustand
+  en: '"ego"-less state'
+- de: Brust, Revers
+  en: chest, lapel
+- de: Griff am Revers
+  en: grab at the lapel
+- de: leeres Herz
+  en: empty heart
+- de: Nomen von nagasu=fließenlassen
+  en: noun of nagasu=to let flow
+- de: Wurf, auch derjenige, der wirft
+  en: throw, also the person who throws
+- de: Wurftechniken
+  en: throwing techniques
+- de: Kreuzwurf in Stellung nebeneinander
+  en: cross throw standing side by side
+- de: zweite Regel (des Festhaltens)
+  en: second principle (of holding down)
+- de: nuku=herausziehen, yari=Lanze
+  en: nuku=to pull out, yari=lance
+- de: großes Rad
+  en: great wheel
+- de: großes Drehen ("Wringen")
+  en: great twisting ("wringing")
+- de: Vorderseite des Angreifers
+  en: front side of the attacker
+- de: ich bitte Sie...(um Unterricht)
+  en: I ask you...(for instruction)
+- de: orochi=große Schlange, katameru=festhalten
+  en: orochi=great serpent, katameru=to hold down
+- de: wir beenden...
+  en: we finish...
+- de: Gruß; innere Achtung
+  en: greeting; inner respect
+- de: Föderation
+  en: federation
+- de: Verneigung im Stand
+  en: bow while standing
+- de: beide Hände
+  en: both hands
+- de: beide Hände greifen
+  en: grabbing both hands
+- de: beide Schultern
+  en: both shoulders
+- de: Stilrichtung
+  en: style
+- de: dritte Regel des Festhaltens
+  en: third principle of holding down
+- de: von unten stützen
+  en: supporting from below
+- de: Erleuchtung
+  en: enlightenment
+- de: Angriff
+  en: attack
+- de: Rücken
+  en: back
+- de: Lehrer (wörtl.:der zuerst Geborene)
+  en: 'teacher (literally: the one born first)'
+- de: seou= auf dem Rücken tragen
+  en: seou=to carry on the back
+- de: Großmeister
+  en: grandmaster
+- de: '"Vier-Richtungen-Wurf"'
+  en: '"four-directions throw"'
+- de: die Technik Ausführender
+  en: the person performing the technique
+- de: Kniegang
+  en: knee walking
+- de: göttliches Ki
+  en: divine Ki
+- de: die Technik Ausführender beim Schwert
+  en: the person performing the technique, with the sword
+- de: die Technik Ausführender = Nage
+  en: the person performing the technique = Nage
+- de: natürliche Stellung
+  en: natural stance
+- de: Gesichtsfront
+  en: front of the face
+- de: gerader Stoß nach vorne
+  en: straight thrust forward
+- de: gerader Schlag von vorn zum Kopf
+  en: straight strike from the front to the head
+- de: Frühlingswind
+  en: spring wind
+- de: Leiter einer Stilrichtung
+  en: head of a style
+- de: außen
+  en: outside
+- de: ausschöpfende Bewegung (z.B. das Wasser)
+  en: scooping movement (e.g. water)
+- de: Ecke
+  en: corner
+- de: in die Ecke fallenlassen
+  en: letting fall into the corner
+- de: Saumfeger
+  en: hem sweeper
+- de: Sitzhaltung
+  en: sitting posture
+- de: Sitztechnik
+  en: seated technique
+- de: sitzen
+  en: to sit
+- de: Standtechnik
+  en: standing technique
+- de: Körper(-haltung)
+  en: body (posture)
+- de: Grundbewegung
+  en: basic movement
+- de: ins Tal fallenlassen
+  en: letting fall into the valley
+- de: Messer
+  en: knife
+- de: Matte, Reisstrohmatte
+  en: mat, rice straw mat
+- de: Schwerthand
+  en: sword hand
+- de: Handgelenk
+  en: wrist
+- de: Handgelenk-Haltegriff
+  en: wrist hold
+- de: Himmel
+  en: heaven
+- de: Himmel und Erde
+  en: heaven and earth
+- de: Himmel-und-Erde-Wurf
+  en: heaven-and-earth throw
+- de: ausweichende Drehung
+  en: evading turn
+- de: in den Himmel stechen (sasu=stechen)
+  en: stabbing into heaven (sasu=to stab)
+- de: tobu= springen, fliegen
+  en: tobu=to jump, to fly
+- de: greifende Hand
+  en: grabbing hand
+- de: gleitender Schritt
+  en: gliding step
+- de: Stoß, Stich
+  en: thrust, stab
+- de: '"Flügel"-Wenden (kaesu=wenden)'
+  en: '"wing" turning (kaesu=to turn)'
+- de: '"Wirbel"'
+  en: '"whirl"'
+- de: innen
+  en: inside
+- de: Angreifer beim Schwert
+  en: attacker with the sword
+- de: Arm
+  en: arm
+- de: Den Arm blockierend festhalten
+  en: holding the arm in a lock
+- de: Angreifer (den Wurf emfpfangender)
+  en: attacker (the one receiving the throw)
+- de: Falltechnik
+  en: falling technique
+- de: hintere Seite
+  en: rear side
+- de: hinten
+  en: behind
+- de: Griff von hinten an den Kragen
+  en: grab from behind at the collar
+- de: von hinten eine Hand greifen
+  en: grabbing one hand from behind
+- de: von hinten mit zwei Händen greifen
+  en: grabbing with two hands from behind
+- de: von hinten beide Schultern greifen
+  en: grabbing both shoulders from behind
+- de: Rolle rückwärts
+  en: backward roll
+- de: Technik, Wurf
+  en: technique, throw
+- de: Halt! yameru=beenden
+  en: Stop! yameru=to finish
+- de: Speer, Lanze
+  en: spear, lance
+- de: seitwärts, Seite
+  en: sideways, side
+- de: (ein trad. chines. Muster); seitl. Tomoenage
+  en: (a traditional Chinese pattern); sideways Tomoenage
+- de: würgen von der Seite
+  en: choking from the side
+- de: seitwärts Fallen o. Rollen
+  en: falling or rolling sideways
+- de: Gesichtsseite
+  en: side of the face
+- de: seitlicher Schlag zum Gesicht
+  en: sideways strike to the face
+- de: vierte Lehre des Festhaltens
+  en: fourth teaching of holding down
+- de: Sitzmethode
+  en: sitting method
+- de: Verneigung im Kniesitz
+  en: bow while kneeling
+- de: Sandalen, Strohslipper
+  en: sandals, straw slippers

@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Neu
+
+- Alle Texte der Programmdaten auf Englisch: Bezeichnungen, Kommentare zu Shinki Toho, Glossar.
+  `mitori-daten.json` trägt sie als zusätzliche Felder (`x_en`), die Namen der Techniken bleiben japanisch.
+- `tools/uebersetzung.py` schreibt eine Seite mit beiden Sprachen nebeneinander zum Gegenprüfen.
+
 ## [2026.11.0] — 2026-11-05
 
 Der erste getaggte Datenstand, seit die Daten in einem eigenen Repo liegen. Die Programme selbst sind

@@ -11,6 +11,7 @@ Eine Quelle für das Heft (`mitori-heft`) und die App Mitori (`mitori-app`).
 | `begriffe.yaml` | Kanji für Aikido und Shinki Toho (gesichert) |
 | `daitoryu-begriffe.yaml` | Kanji-Bausteine für Daitoryu (Vorschlag, ungeprüft) |
 | `aikido-vorbemerkung.tex` | Vorbemerkung der Aikido-Prüfungsordnung |
+| `englisch-*.yaml` | Englisch zu jedem deutschen Text, von Hand gepflegt, auch für die erzeugten Dateien; siehe `README.md` im Projektordner |
 
 ## Ändern
 
@@ -18,7 +19,8 @@ Eine Quelle für das Heft (`mitori-heft`) und die App Mitori (`mitori-app`).
    mit offener Frage `"Nikyo (2 Arten) [A-K-03]"` (in Anführungszeichen).
 2. `python3 tools/daten.py` prüft die Daten (unbekannte Grade, Frage-IDs ohne Eintrag in
    `KORREKTUREN.md`, Tippfehler in Feldnamen) und schreibt `build/daten/`.
-3. Im Repo `mitori-heft` baut `heft/build.sh` (oder `heft/build.sh entwurf`) das Heft; es ruft Schritt 2 selbst auf.
+3. Geänderter deutscher Text: sein Paar in `englisch-*.yaml` mitändern (Schritt 2 meldet es).
+4. Im Repo `mitori-heft` baut `heft/build.sh` (oder `heft/build.sh entwurf`) das Heft; es ruft Schritt 2 selbst auf.
 
 Ist eine Frage geklärt: Daten ändern, `[ID]` entfernen, in `KORREKTUREN.md` den Status setzen.
 

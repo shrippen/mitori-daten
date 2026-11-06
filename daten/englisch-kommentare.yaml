@@ -1,0 +1,950 @@
+# Englisch zu daten/shinki-toho-kommentare.yaml: je Text ein Paar. Von Hand gepflegt; prüft tools/daten.py, Glossar: tools/uebersetzung-glossar.md
+- de: |-
+    斬り落し
+
+    Das Verb kiriotosu bedeutet hinunter schneiden. Kiriotoshi ist die Nomenbildung des Verbs. Um das große Kiriotoshi, das im Shinki-Toho oft vorkommt, gut zu meistern, gibt es eine Grundübung namens Kiriotoshi.
+
+    Uchidachi (U) 打 太 刀 : In 陰
+
+    Shidachi (S) 仕 太 刀 :
+
+    Seigan 正 眼
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend hebt U sein Schwert hoch und schlägt, wahlweise entweder mit dem linken oder dem rechten Fuß vorne, das Shomen von S. S hebt ebenfalls sein Schwert und schlägt - unbeeindruckt vom Schlag des U – mit dem rechten Fuß vorne über das Schwert in die Mitte des U.
+
+    Isshoku-Sokuhatsu heißt der höchst angespannte Moment der Begegnung kurz vor der "Explosion": nur noch eine kleine Bewegung - und Angriff und Verteidigung kommen sofort zur Ausführung. "Isshoku" bedeutet "eine Berührung", "Sokuhatsu" ist "eine sofortige Explosion". Mit dem Ausdruck beschreibt man eine angespannte Situation "vor dem Sturm". "Maai" ist der Abstand. Shomen ist eigentlich das vordere Gesicht, die Frontseite des Gesichts. Gemeint ist im Zusammenhang des Schwertkampfs ein gerader Schlag von oben über den Kopf. Shomen kann im allgemeinen auch die Frontseite bedeuten, z.B. die Frontseite des Dojos. Hierbei gibt es 3 Varianten:
+
+    Shin 真 : S schlägt bis zum Mizoochi (Solarplexus) des U hinunter.
+
+    Gyo 行 : Beide kommen etwas schneller aufeinander zu und S schlägt bis zum Hals des U. So 草 : Beide kommen sehr schnell aufeinander zu und S schlägt auf den Kopf des U zu. Shin, Gyo, So sind eigentlich drei Schreibweisen des chinesischen Zeichens. Shin ist die Druckschrift, Gyo ist die etwas fließendere Schreibweise, So ist eine ganz freie, kunstvolle Schreibweise. Diese Ausdrücke wurden auf die Bewegungsarten des Schwertes übertragen. Im Fall von Shin und Gyo kann man die Bewegung weiterführen: U gleitet mit dem hinteren Fuß zurück und hebt sein Schwert zu Hidari- oder Migi-Jodan. S folgt mit zwei Schritten (links - rechts) und schlägt das Hidari- oder Migi-gote des U (die Seite des vorderen Fußes des U), geht zwei Schritte (rechts - links) zurück und wechselt zu Gedan. Auch U senkt sein Schwert zu Gedan (Gedan- Awase). Beide (erst U dann S) kippen ihre Schwerter nach rechts (die Schneiden liegen gegeneinander) und senken die Schwerter nach rechts unten. Mit dem linken Fuß beginnend gehen sie zurück zur Ausgangsposition.
+
+    Sun-dome 寸 止 め : Wenn man ohne Onigote übt, muss S den entscheidenden Schlag 3 cm oberhalb des eigentlichen Ziels stoppen. Ein Sun ist ca. 3 cm. Das Verb "tomeru" bedeutet "stoppen".
+  en: |-
+    斬り落し
+
+    The verb kiriotosu means to cut downward. Kiriotoshi is the noun formed from the verb. To master well the great Kiriotoshi, which occurs often in Shinki-Toho, there is a basic exercise called Kiriotoshi.
+
+    Uchidachi (U) 打 太 刀 : In 陰
+
+    Shidachi (S) 仕 太 刀 :
+
+    Seigan 正 眼
+
+    Entering Isshoku-Sokuhatsu-no-Maai, U raises his sword and, with either the left or the right foot forward as he chooses, strikes the Shomen of S. S likewise raises his sword and – unimpressed by U's strike – with the right foot forward strikes over the sword into the centre of U.
+
+    Isshoku-Sokuhatsu is the name for the highly tense moment of the encounter just before the "explosion": only one more small movement – and attack and defence are carried out at once. "Isshoku" means "one touch", "Sokuhatsu" is "an immediate explosion". The expression describes a tense situation "before the storm". "Maai" is the distance. Shomen is actually the front of the face. In the context of swordsmanship it refers to a straight strike from above over the head. Shomen can also mean the front side in general, e.g. the front side of the dojo. There are 3 variants here:
+
+    Shin 真 : S strikes down to the Mizoochi (solar plexus) of U.
+
+    Gyo 行 : Both come towards each other somewhat faster and S strikes down to the neck of U. So 草 : Both come towards each other very fast and S strikes at the head of U. Shin, Gyo, So are actually three ways of writing a Chinese character. Shin is the printed style, Gyo the somewhat more flowing style, So a completely free, artistic style. These terms were transferred to the ways of moving the sword. In the case of Shin and Gyo the movement can be continued: U glides back with the rear foot and raises his sword to Hidari- or Migi-Jodan. S follows with two steps (left - right) and strikes the Hidari- or Migi-gote of U (the side of U's front foot), goes back two steps (right - left) and changes to Gedan. U also lowers his sword to Gedan (Gedan- Awase). Both (first U, then S) tilt their swords to the right (the cutting edges lie against each other) and lower the swords to the lower right. Starting with the left foot they go back to the starting position.
+
+    Sun-dome 寸 止 め : When practising without Onigote, S must stop the decisive strike 3 cm above the actual target. One Sun is about 3 cm. The verb "tomeru" means "to stop".
+- de: |-
+    Kumidachi sind Übungsformen zu zweit, in denen typische Kampfsituationen wiederholt und langsam geübt werden. Ziel der Kumidachi ist aber nicht nur das Üben der Techniken in typischen Kampfsituationen, sondern wieder die Förderung des Ki. Deswegen sollen die Übungen nicht hektisch durchgeführt werden, auch wenn manch schnelle Bewegungen enthalten sind. Derjenige, der die Angreiferrolle übernimmt, heißt Uchi-dachi (abgekürzt "U": das schlagende Schwert). Derjenige, der dem Angriff entgegentritt und gewinnt, heißt Shi-dachi (abgekürzt "S": das agierende Schwert, das Haupt-Schwert).
+
+    Eigentlich ist U der Lehrer, und S der Schüler. Wenn U und S etwa auf gleichem Niveau stehen und sie wechselseitig sowohl die U-Seite als auch die S-Seite üben, muss U sich immer dessen bewusst sein, dass er eigentlich die Lehrerrolle spielt. Das heißt, U muss immer versuchen, eine gute Angreiferrolle zu spielen, damit S sich ernsthaft dem Angriff stellen muss und dadurch seine Schwertkunst verbessert wird. Bei allen Bewegungen ergreift U die Initiative und fängt an. S folgt sofort. Es kommt auch vor, dass ein Fortgeschrittener gegenüber einem Nicht-Fortgeschrittenen die Shidachi -Rolle übernimmt. In diesem Fall versucht der erstere die Uchidachi-Kunst des letzteren zu erhöhen.
+
+    Kumidachi im Shinki Toho besteht aus verschiedenen Waffenkombinationen:
+
+    Ô-dachi tai Ô-dachi: U mit Ô-dachi, S mit Ô-dachi
+    Ko-dachi tai Ô-dachi: U mit Ô-dachi, S mit Ko-dachi
+    Tanto tai Ô-dachi: U mit Ô-dachi, S mit Tanto
+    Muto tai Ô-dachi: U mit Ô-dachi, S ohne Waffen
+    Muto tai Ko-dachi: U mit Ko-dachi, S ohne Waffen
+    Muto tai Tanto: U mit Tanto, S ohne Waffen
+
+    ## Rei-ho 礼法 (Begrüßungsform) zu Beginn
+
+    Alle Schüler sitzen in einer Reihe gegenüber dem Kamiza. Der Lehrer sitzt vorne, aber etwas seitlich und nicht auf der mittleren Linie vor dem Kamiza. Die Schüler sollen möglichst direkte Sicht zum Kamiza haben. Wenn nur wenige Übungsteilnehmer anwesend sind, verbeugt sich zuerst wortlos der Übungsleiter/Lehrer zum Kamiza; die anderen folgen. Danach wendet sich der Lehrer den Schülern zu. Der Lehrer und die Schüler verbeugen sich gegenseitig mit den Worten "Onegai shimasu" ("Ich bitte um das Training"). Wenn viele Teilnehmer da sind, sagt zuerst der Schüler, der ganz rechts sitzt, "Kamiza ni Rei", und alle verbeugen sich gegenüber dem Kamiza. Danach wendet sich der Lehrer den Schülern zu und Lehrer und Schüler verbeugen sich gegenseitig mit den Worten "Onegai shimasu". (Kamiza 上座 ist die Frontseite, wo ein Platz für das "Höhere" eingeräumt ist. "Kamiza" bedeutet etwa "der Sitz für den Höheren" oder "der höhere Sitz". Normalerweise wird dieser Platz durch eine Kalligraphie, ein Photo oder/und Blumen hervorgehoben. Da Kami phonetisch auch Gott bedeutet, kann man den Höheren für göttlich halten.)
+
+    Wenn das Kumidachi beginnt, stehen Uchidachi und Shidachi einander mit weitem Abstand (wenn möglich mindestens 6 m Abstand) gegenüber. U trägt Onigote unter der linken Achsel (die rechte Hand des Onigote unten), wobei die Fingerseite nach vorne zeigt und die Handrücken nach außen. U und S tragen das Schwert mit der linken Hand. Die Schwertspitze (= "Kissaki") richtet sich (mit der Schneide nach oben) nach hinten und zeigt schräg nach unten, und zwar beim Shidachi etwas mehr, weil er die Onigote nicht halten muss. Weil das Schwert nach unten weist, muss der Daumen die Tsuba nicht festhalten, kann aber leicht darauf gelegt werden. Beide verbeugen sich (etwa 30 Grad) mit geradem Oberkörper. Dabei darf der Kopf nicht nach unten gebeugt werden; der Blick geht folglich auch nicht zu den eigenen Füßen, sondern schräg nach vorne. Umgekehrt sollte man aber auch das Gesicht nicht heben und den Partner anschauen.
+
+    (Onigote 鬼篭手: "Kote" ist ursprünglich die Außenseite des Unterarms, ist aber auch ein stabiler Schutz-Handschuh des Samurai, der fast den ganzen Unterarm schützt, ohne die Bewegungsfreiheit des Ellbogens zu beeinträchtigen. "Oni" ist ursprünglich ein muskulöser Teufel, aber man verwendet diesen Ausdruck auch im Sinne von "extra-groß" oder "extra-stark". Man hat den dick gepolsterten Kote erfunden, damit man mit dem Bokuto ( = Bokken: Holzschwert) richtig zuschlagen kann. Aus hygienischen Gründen sollte idealerweise jeder ein eigenes Onigote-Paar besitzen. Da dies aber sehr kostspielig sind, werden sie oft gemeinsam verwendet. In diesem Fall sollte man je eigene dünne baumwollene Handschuhe unter dem Onigote tragen. Tsuba 鍔: "Tsuba" ist das Stichblatt der japanischen Schwerter für den Schutz der Hände. Es bestand ursprünglich aus Metall und war kunstvoll verziert. Das Tsuba des Ittoryu-Bokuto besteht aus gehärtetem Leder, seit einiger Zeit auch aus einem speziellem Kunststoff.)
+
+    Anschließend stehen beide wieder aufrecht. Nun wird das Kissaki erhoben, so dass das Schwert zu Boden horizontal liegt. Hier berührt der linke Daumen den oberen Teil und der Zeigefinger den unteren Teil des Tsuba. Das Tsukagashira (= Griffkopf) befindet sich vor der Körpermitte, so dass das Kissaki etwas nach außen zeigt. Beide gehen nun gleichzeitig, mit dem rechten Fuß beginnend, zur Mitte hin vor und ziehen dabei das Schwert, das in direkter Bewegung zu Ai-Gedan (= U und S beide Gedan) geführt wird, wobei die Schwertspitzen etwa 9 cm (alte jap. Maßeinheit: 3 Sun) parallel zueinander stehen, während die Schneiden nach unten zeigen ("Gedan-Awase" = beide Schwerter zu Gedan zusammenführen). Dies bedeutet, dass die beiden Schwertspitzen etwa 4,5 cm über die Mittellinie hinaus ragen. U hält das Schwert mit der rechten Hand allein (wenn ohne Onigote, dann mit beiden Händen), S mit beiden Händen. U und S drehen das Schwert nun in eine waagerechte Position, wobei die beiden Schneiden einander gegenüber liegen. Shidachi löst seine linke Hand vom Schwert, und beide knien nun zuerst mit dem linken Bein ab, während zuerst das Kissaki gesenkt und auf den Boden aufgesetzt wird. Bei der gesamten Bewegung bleiben die Schwerter in Kontakt mit einander und werden dann parallel am Boden gerade vor den Kämpfern abgelegt, während zugleich auch das rechte Bein abkniet.
+
+    U legt seine Onigote rechts und links (in dieser Reihenfolge) vom eigenen Schwert ab, wobei die Onigote-Vorderteile schräg (ca. 90° zu einander bzw. 135°zum Schwert) und direkt an der Tsuba angelegt werden. Beide verbeugen sich, wobei zuerst die rechte und dann die linke Hand auf den Boden geführt wird. Die beiden Zeigefinger und Daumen bilden ein Dreieck (die Daumenspitzen berühren sich gerade). Diese Verbeugung ist tief, und die Nase steht oberhalb des Dreiecks, aber der Blick soll vorne außerhalb des Dreiecks sein, d.h. man darf den Kopf nicht hängen lassen. Zuerst hebt U seinen Kopf, bis die Arme gerade gestreckt werden, aber die Hände bleiben noch auf dem Boden. Danach hebt auch S den Kopf in der gleichen Weise wie U, und die beiden schauen sich einen kurzen Moment in die Augen. Wieder von U beginnend zieht man erst die linke und dann die rechte Hand zurück auf den Schoß. Während U die Onigote anzieht (rechts zuerst) wartet S. Dann ergreifen beide mit der linken Hand das Schwert von oben. Der kleine Finger liegt am Rand des Schwertgriffs ("Tsuka-gashira"). Jetzt steht man mit dem linken Bein zuerst auf und danach mit dem rechten, wobei man versucht, sich möglichst nicht nach vorne zu bewegen, sondern am Platz zu bleiben. Das Schwert wird dann in weiterhin paralleler Ausrichtung ("Schneide zu Schneide") bis Gedan erhoben. Dabei ergreift auch die rechte Hand das Schwert. Mit dem linken Fuß beginnend geht man zurück zur Ausgangsposition, wobei die Schwerter horizontal gehalten werden. (Tsuka-gashira 柄頭: "Tsuka" ist der Griff des Schwertes, "Kashira" ist der Kopf. Also ist der Tsuka-gashira der Kopfteil des Schwertgriffs, d.h. das dem Kissaki = Schwertspitze entgegen gesetzte Ende.)
+
+    An der Ausgangsposition angekommen, lösen beide die rechte Hand vom Schwert und senken das Kissaki, aber so, dass es vorne und in der Körpermitte bleibt. Danach gehen beide zu Seigan über, wobei U mit der Bewegung beginnt. Danach beginnt das einzelne Kumidachi.
+
+    ## Rei-ho 礼法 (Begrüßungsform) am Ende
+
+    In der Startposition hält man das Schwert auf der linken Seite (Spitze vorne vor der Körpermitte), verbeugt sich, geht in die Mitte und hebt das Kissaki zu Gedan-Awase. Dann folgt der gleiche Vorgang wie zu Beginn. U legt nach dem Abknien die Onigote wie am Anfang rechts und links ab. Beide verbeugen sich. Danach zieht U beide Onigote etwas zu sich, ergreift mit der rechten Hand die Daumen der beiden Onigote, wobei der Zeigefinger zwischen sie kommt, und führt die Onigote unter die linke Achsel (rechtes Onigote unten, Fingerteil vorne). U drückt das Tsuka mit der rechten Hand leicht nach unten, so dass das Kissaki etwas erhoben wird, damit S sein Kissaki darunter hindurch nach links führen kann. Dann führt er das Bokuto auf die linke Seite, um es mit der linken Hand zu übernehmen. Dabei wird das Bokuto gewendet, damit die Schneide nach oben kommt. Das Tsukagashira von U und S ist bei dieser Bewegung vorne in der Körpermitte. Beide erheben sich nun, wobei diesmal das rechte Bein beginnt, und stehen mit dem rechten Bein vorne im Gegensatz zum Anfang. Mit dem linken Fuß beginnend gehen sie zurück bis zur Startposition, wobei das Schwert auf Gürtelhöhe angehoben bleibt. An der Startposition angekommen lassen beide ihre Schwerter sinken wie zu Beginn und verbeugen sich.
+
+    ## Anfang des Kumidachi und Ansage
+
+    Nach der kurzen Vorbeugung ziehen U und S ihre Schwerter und stehen in Seigan (Ai-Seigan). Dann sagt U die kommende Technik an. Am Anfang jedes Grades wird auch unsere Stilrichtung und anschließend der Grad genannt: (z.B. Itto-den Shinki Toho, Shoden). Danach wird die jeweilige Technik genannt (z.B. O-dachi Ippon-me Hitotsugachi). Während der Ansage des technischen Teils geht U von Seigan zum Start-Kamae der jeweiligen Nummer über (z.B. beim Ippon-me von Seigan zu In).
+  en: |-
+    Kumidachi are partner practice forms in which typical combat situations are practised repeatedly and slowly. The goal of Kumidachi, however, is not only to practise the techniques in typical combat situations, but again to develop Ki. For this reason the exercises should not be performed hectically, even though some fast movements are included. The one who takes the attacker's role is called Uchi-dachi (abbreviated "U": the striking sword). The one who meets the attack and wins is called Shi-dachi (abbreviated "S": the acting sword, the main sword).
+
+    Actually U is the teacher, and S the student. If U and S are at about the same level and practise both the U side and the S side in turn, U must always be aware that he is actually playing the teacher's role. That is, U must always try to play a good attacker's role, so that S has to face the attack seriously and his swordsmanship is thereby improved. In all movements U takes the initiative and begins. S follows immediately. It also happens that an advanced student takes the Shidachi role opposite a less advanced one. In this case the former tries to raise the latter's Uchidachi skill.
+
+    Kumidachi in Shinki Toho consists of various weapon combinations:
+
+    Ô-dachi tai Ô-dachi: U with Ô-dachi, S with Ô-dachi
+    Ko-dachi tai Ô-dachi: U with Ô-dachi, S with Ko-dachi
+    Tanto tai Ô-dachi: U with Ô-dachi, S with Tanto
+    Muto tai Ô-dachi: U with Ô-dachi, S without weapons
+    Muto tai Ko-dachi: U with Ko-dachi, S without weapons
+    Muto tai Tanto: U with Tanto, S without weapons
+
+    ## Rei-ho 礼法 (form of greeting) at the beginning
+
+    All students sit in a row facing the Kamiza. The teacher sits at the front, but somewhat to the side and not on the middle line in front of the Kamiza. The students should have as direct a view of the Kamiza as possible. If only a few participants are present, the practice leader/teacher first bows silently to the Kamiza; the others follow. Then the teacher turns to the students. The teacher and the students bow to each other with the words "Onegai shimasu" ("I ask for the training"). If many participants are there, the student sitting furthest to the right first says "Kamiza ni Rei", and everyone bows towards the Kamiza. Then the teacher turns to the students, and teacher and students bow to each other with the words "Onegai shimasu". (Kamiza 上座 is the front side, where a place is set aside for the "higher". "Kamiza" means roughly "the seat for the higher one" or "the higher seat". This place is normally emphasised by a calligraphy, a photo and/or flowers. Since Kami phonetically also means God, the higher one can be taken to be divine.)
+
+    When the Kumidachi begins, Uchidachi and Shidachi stand facing each other at a wide distance (if possible at least 6 m apart). U carries the Onigote under the left armpit (the right hand of the Onigote below), with the finger side pointing forward and the backs of the hands outward. U and S carry the sword in the left hand. The sword tip (= "Kissaki") points (with the cutting edge up) backward and diagonally downward, somewhat more so for Shidachi, because he does not have to hold the Onigote. Because the sword points downward, the thumb does not have to hold the Tsuba firmly, but can be laid on it lightly. Both bow (about 30 degrees) with a straight upper body. The head must not be bent downward in doing so; consequently the gaze does not go to one's own feet either, but diagonally forward. Conversely, one should not raise the face and look at the partner either.
+
+    (Onigote 鬼篭手: "Kote" is originally the outer side of the forearm, but is also a sturdy protective glove of the samurai, which protects almost the entire forearm without restricting the freedom of movement of the elbow. "Oni" is originally a muscular devil, but the expression is also used in the sense of "extra large" or "extra strong". The thickly padded Kote was invented so that one can really strike with the Bokuto ( = Bokken: wooden sword). For hygienic reasons everyone should ideally own their own pair of Onigote. But since these are very expensive, they are often shared. In this case everyone should wear their own thin cotton gloves under the Onigote. Tsuba 鍔: "Tsuba" is the guard of Japanese swords, which protects the hands. It was originally made of metal and artfully decorated. The Tsuba of the Ittoryu Bokuto is made of hardened leather, for some time now also of a special plastic.)
+
+    Then both stand upright again. Now the Kissaki is raised so that the sword lies horizontal to the floor. Here the left thumb touches the upper part and the index finger the lower part of the Tsuba. The Tsukagashira (= head of the grip) is in front of the centre of the body, so that the Kissaki points slightly outward. Both now go forward at the same time towards the centre, starting with the right foot, and in doing so draw the sword, which is brought in a direct movement to Ai-Gedan (= U and S both Gedan), with the sword tips about 9 cm (old Japanese unit of measure: 3 Sun) parallel to each other and the cutting edges pointing downward ("Gedan-Awase" = bringing both swords together to Gedan). This means that the two sword tips project about 4.5 cm beyond the centre line. U holds the sword with the right hand alone (without Onigote, then with both hands), S with both hands. U and S now turn the sword into a horizontal position, with the two cutting edges facing each other. Shidachi releases his left hand from the sword, and both now kneel down, first with the left leg, while the Kissaki is first lowered and placed on the floor. Throughout the movement the swords stay in contact with each other and are then laid down parallel on the floor straight in front of the fighters, while at the same time the right leg also kneels down.
+
+    U lays his Onigote to the right and left (in this order) of his own sword, with the front parts of the Onigote placed diagonally (about 90° to each other or 135° to the sword) and directly against the Tsuba. Both bow, bringing first the right and then the left hand to the floor. The two index fingers and thumbs form a triangle (the thumb tips just touch). This bow is deep, and the nose is above the triangle, but the gaze should be forward, outside the triangle, i.e. one must not let the head hang. U first raises his head until the arms are stretched straight, but the hands stay on the floor. Then S too raises his head in the same way as U, and the two look each other in the eyes for a short moment. Again beginning with U, one draws back first the left and then the right hand onto the lap. While U puts on the Onigote (right first), S waits. Then both grasp the sword with the left hand from above. The little finger lies at the end of the sword grip ("Tsuka-gashira"). Now one stands up with the left leg first and then with the right, trying as far as possible not to move forward but to stay in place. The sword is then raised to Gedan, still in parallel alignment ("edge to edge"). In doing so the right hand also grasps the sword. Starting with the left foot one goes back to the starting position, with the swords held horizontally. (Tsuka-gashira 柄頭: "Tsuka" is the grip of the sword, "Kashira" is the head. So the Tsuka-gashira is the head part of the sword grip, i.e. the end opposite the Kissaki = sword tip.)
+
+    Having arrived at the starting position, both release the right hand from the sword and lower the Kissaki, but in such a way that it stays in front and in the centre of the body. Then both go over to Seigan, with U beginning the movement. Then the individual Kumidachi begins.
+
+    ## Rei-ho 礼法 (form of greeting) at the end
+
+    In the starting position one holds the sword on the left side (tip forward in front of the centre of the body), bows, goes to the centre and raises the Kissaki to Gedan-Awase. Then the same procedure follows as at the beginning. After kneeling down, U lays the Onigote to the right and left as at the beginning. Both bow. Then U draws both Onigote slightly towards himself, grasps the thumbs of the two Onigote with the right hand, with the index finger coming between them, and brings the Onigote under the left armpit (right Onigote below, finger part forward). U presses the Tsuka slightly downward with the right hand, so that the Kissaki is raised somewhat, so that S can pass his Kissaki underneath it to the left. Then he brings the Bokuto to the left side, to take it over with the left hand. In doing so the Bokuto is turned so that the cutting edge comes up. The Tsukagashira of U and S is in front in the centre of the body during this movement. Both now rise, this time beginning with the right leg, and stand with the right leg forward, in contrast to the beginning. Starting with the left foot they go back to the starting position, with the sword kept raised at belt height. Having arrived at the starting position, both let their swords sink as at the beginning and bow.
+
+    ## Beginning of the Kumidachi and announcement
+
+    After the short bow, U and S draw their swords and stand in Seigan (Ai-Seigan). Then U announces the coming technique. At the beginning of each grade, our style and then the grade are also named: (e.g. Itto-den Shinki Toho, Shoden). Then the technique in question is named (e.g. O-dachi Ippon-me Hitotsugachi). During the announcement of the technical part, U goes from Seigan to the starting Kamae of the number in question (e.g. for Ippon-me from Seigan to In).
+- de: Shomen-Uchioroshi ("Frontales Abwärtsschlagen")
+  en: Shomen-Uchioroshi ("Frontal downward strike")
+- de: Man steht, die Füße etwas mehr als hüftbreit nebeneinander und parallel nach vorne. Die Füße bewegen sich
+    bei der Übung nicht. Die Knie sind nicht ganz durchgestreckt, sondern ein wenig gebeugt. Man hebt das Schwert
+    zum Ausholen hoch über den Kopf. Die Neigung des Schwertes kann man variieren, aber man soll hauptsächlich mit
+    einem Winkel von 45 Grad üben. Arme und Schultern sollen auf jeden Fall locker bleiben. Dann schwingt man das
+    Schwert ganz gerade hinunter, während man in beiden Knien locker federt. Das Schwert stoppt vor dem Bauch in
+    horizontaler Position. Man sollte darauf achten, dass die Hände nicht früher unten ankommen als die Schwertspitze
+    (Kissaki), sondern man muss das Kissaki in einer großen Kreisbewegung so nach unten führen, dass das Kissaki
+    und die Hände etwa gleichzeitig in die Höhe des Bauchs kommen, wo die Schlagbewegung endet. Das Ki sollte hauptsächlich
+    auf das Kissaki gelegt werden. Diese Übung kann man auch mit einem Gegenstand wie einem alten Reifen oder einem
+    Reisigbündel vor sich durchführen (richtig hineinschlagen).
+  en: One stands with the feet somewhat more than hip-width apart, side by side and parallel, pointing forward.
+    The feet do not move during the exercise. The knees are not fully straightened but slightly bent. One raises
+    the sword high above the head for the backswing. The angle of the sword can be varied, but one should practise
+    mainly with an angle of 45 degrees. Arms and shoulders should in any case stay loose. Then one swings the sword
+    straight down, while springing loosely in both knees. The sword stops in front of the belly in a horizontal
+    position. Take care that the hands do not arrive at the bottom before the sword tip (Kissaki); rather, one must
+    bring the Kissaki downward in a large circular movement so that the Kissaki and the hands reach belly height
+    at about the same time, where the striking movement ends. The Ki should be placed mainly on the Kissaki. This
+    exercise can also be performed with an object such as an old tyre or a bundle of brushwood in front of one (striking
+    right into it).
+- de: Shomen-Uchikomi ("Frontales Hineinschlagen")
+  en: Shomen-Uchikomi ("Frontal striking-in")
+- de: |-
+    Man steht in In no Kamae. Mit dem rechten Fuß einen Schritt vorgehend hebt man das Schwert über den Kopf (Neigung nach hinten 45 Grad) und schlägt in einem großen Bogen nach vorne, während der linke Fuß bis zur Ferse des rechten Fußes nachgezogen wird. Der linke Fuß soll dabei möglichst geradeaus gerichtet bleiben und die Fußspitze soll nicht nach links außen gedreht werden. Auch hierbei sollte man das Bewusstsein haben, dass das Kissaki einen großen Kreis beschreibt (und nicht die Hände einen kleinen Kreis). Die Endstellung des Kissaki liegt etwa in der Höhe des eigenen Kinns.
+
+    Mit dem linken Fuß zurücktretend wechselt man zu Yo no Kamae, wobei der rechte Fuß etwa bis zu den Zehenspitzen des linken Fußes nachgezogen wird. Diesmal geht man dann mit dem linken Fuß nach vorne, während man das Schwert über den Kopf hochhebt und anschließend wie oben schlägt. Der rechte Fuß wird nachgezogen. Auch hier sollte man darauf achten, dass der nachgezogene rechte Fuß möglichst geradeaus gerichtet bleibt. Dann geht man mit dem rechten Fuß beginnend zurück und wechselt zu In no Kamae wie zuvor.
+  en: |-
+    One stands in In no Kamae. Going one step forward with the right foot, one raises the sword above the head (tilted back 45 degrees) and strikes forward in a large arc, while the left foot is drawn up to the heel of the right foot. The left foot should stay pointing as straight ahead as possible and the toes should not be turned outward to the left. Here too one should be aware that the Kissaki describes a large circle (and not the hands a small circle). The end position of the Kissaki is at about the height of one's own chin.
+
+    Stepping back with the left foot, one changes to Yo no Kamae, with the right foot drawn up to about the toes of the left foot. This time one goes forward with the left foot while raising the sword above the head, and then strikes as above. The right foot is drawn up. Here too take care that the drawn-up right foot stays pointing as straight ahead as possible. Then, beginning with the right foot, one goes back and changes to In no Kamae as before.
+- de: Te no Uchi ("Zwischen-die-Unterarme-Hineinschlagen")
+  en: Te no Uchi ("Striking-in-between-the-forearms")
+- de: |-
+    Mae (vorne): Man steht in In no Kamae. Mit dem rechten Fuß geht man einen Schritt nach vorne rechts und schlägt in die Mitte der Ausgangsposition, wobei der linke Fuß zur Ferse des rechten Fußes hin nachgezogen wird. In diesem Fall weist die Spitze des linken Fußes etwas nach links. Der Schlag kommt von In no Kamae direkt durch die Handgelenke ohne das Schwert hochzuheben. Die Absicht des Schlags besteht darin, den linken Kote (Unterarm) des Angreifers zu schneiden, der mit dem Tsuki (gerader Stoß) nach vorn kommt. Der schneidende Schlag kommt von oben nach unten, und nicht schräg. Der Endpunkt des Kissaki ist etwas tiefer als das gedachte entgegen gestreckte Kote. Das Tsuki ist auch der Grund, warum man etwas nach rechts ausweicht.
+
+    Danach kommt man, mit dem linken Fuß anfangend und den rechten nachziehend, in die Mitte zurück und wechselt zu Yo no Kamae. Anschließend geht man mit dem linken Fuß nach links vorne und schlägt das rechte Kote des gedachten Gegners, wobei der rechte Fuß nachgezogen wird. Danach kommt man wieder in die Mitte zu In no Kamae zurück und beginnt die Übung von vorne.
+
+    Oku (hinten): Fast die gleiche Bewegung, aber hier hebt man das Schwert hoch und schneidet das hintere Kote von innen. Der Schnitt ist in diesem Fall schräg. Wenn man von Yo no Kamae aus schneidet, kann man eigentlich den hinteren (= linken) Arm des Angreifers nicht erreichen, wenn er üblicherweise mit der linken Hand die Nähe des Tsukagashira greift und mit der rechten Hand die Nähe des Tsuba. Aber man übt auch diese Seite, damit die Bewegungen beider Seiten gleichermaßen trainiert werden. Außerdem ist diese Übung für das unübliche Kesagake von links geeignet.
+  en: |-
+    Mae (front): One stands in In no Kamae. With the right foot one goes one step forward to the right and strikes into the centre of the starting position, with the left foot drawn up towards the heel of the right foot. In this case the toes of the left foot point slightly to the left. The strike comes from In no Kamae directly through the wrists, without raising the sword. The intention of the strike is to cut the left Kote (forearm) of the attacker, who comes forward with a Tsuki (straight thrust). The cutting strike comes from top to bottom, not diagonally. The end point of the Kissaki is slightly lower than the imagined Kote stretched out towards one. The Tsuki is also the reason why one evades slightly to the right.
+
+    Then, starting with the left foot and drawing up the right, one comes back to the centre and changes to Yo no Kamae. Next one goes forward to the left with the left foot and strikes the right Kote of the imagined opponent, with the right foot drawn up. Then one comes back to the centre to In no Kamae and begins the exercise again.
+
+    Oku (rear): Almost the same movement, but here one raises the sword and cuts the rear Kote from the inside. The cut is diagonal in this case. When cutting from Yo no Kamae, one cannot actually reach the rear (= left) arm of the attacker if, as is usual, he grips near the Tsukagashira with the left hand and near the Tsuba with the right hand. But this side is practised too, so that the movements of both sides are trained equally. Moreover, this exercise is suitable for the unusual Kesagake from the left.
+- de: Man steht mit Shizentai (natürlicher Körperhaltung). Die Füße stehen leicht auseinander etwa schulterbreit
+    geöffnet. Tachi trägt man mit der linken Hand an der linken Körperseite. Die Schneide nach oben, die Spitze
+    entspannt hängen lassen. Der Griff der linken Hand ist direkt unterhalb des Tsuba (Handschutz), dieses berührend.
+    Das Tsuba kann ganz frei sein, weil in dieser Lage selbst das wirkliche Schwert nicht herausgleiten kann. Aber
+    man kann den Daumen leicht über das Tsuba legen. Mit dieser Haltung beugt man den Oberkörper nach vorne (etwa
+    25-30 Grad, 1-2 Sekunden lang) und wieder zurück zur aufrechten Haltung. In der Verbeugung soll der Oberkörper,
+    insbesondere der Kopf, gerade bleiben (nicht in Richtung der eigenen Füße schauen, aber auch nicht den Kopf
+    hebend in Richtung des Gegenübers. Oberkörper und Kopf bilden eine Gerade).
+  en: One stands in Shizentai (natural body posture). The feet stand slightly apart, about shoulder-width. The Tachi
+    is carried in the left hand on the left side of the body. The cutting edge up, the tip left hanging relaxed.
+    The grip of the left hand is directly below the Tsuba (hand guard), touching it. The Tsuba can be quite free,
+    because in this position even a real sword cannot slide out. But one can lay the thumb lightly over the Tsuba.
+    In this posture one bends the upper body forward (about 25-30 degrees, for 1-2 seconds) and back again to the
+    upright posture. In the bow the upper body, especially the head, should stay straight (do not look towards one's
+    own feet, but do not raise the head towards the person opposite either. Upper body and head form a straight
+    line).
+- de: |-
+    Battô (Schwert ziehen): Den rechten Fuß nach vorne setzen, das Knie abbeugen, mit der rechten Hand Tsuka (Griff des Schwertes) direkt am Tsuba greifen, das Schwert in einer großen Senkrecht-Halbkreis-Bewegung herausziehen und zu Seigan führen. Dabei darauf achten, dass die Schneide die linke Hand nicht berührt.
+
+    Seigan: Am Ende der Batto-Bewegung greift auch die linke Hand das Tsuka, wobei der Kleinfinger bis zum Tsuka-Ende (Tsuka-gashira) reicht. Gleichzeitig zieht man den linken Fuß nach und geht zu Seigan über. Die Füße sind rechts vorne und links hinten aber parallel gerichtet. Die Spitze des linken Fußes ist etwa in Höhe der rechten Ferse. Die Beine sind gerade und der Körper ist aufrecht. Das Schwert wird in der Mitte des Körpers gehalten und die Schwertspitze (Kissaki) in Kinn-Höhe (wenn man einen Gegner hat, dann in Höhe des gegnerischen Kinns.) Hält man sie noch höher, verdeckt man das Gesicht des Gegners mit dem eigenen Schwert. Die Arme dürfen nicht steif, sondern sollen entspannt gestreckt sein. Der rechte Zeigefinger berührt das Tsuba. Die rechte Hand greift das Schwert etwas von oben entspannt. Der linke Griff ist normalerweise der Haupt-griff und fester als der rechte Griff. Tsuka-gashira ist etwa zwei Fäuste vom Bauch entfernt.
+
+    Batto und Seigan werden in einer Bewegung durchgeführt.
+  en: |-
+    Battô (drawing the sword): Place the right foot forward, bend the knee, grasp Tsuka (grip of the sword) with the right hand directly at the Tsuba, draw the sword in a large vertical semicircular movement and bring it to Seigan. Take care that the cutting edge does not touch the left hand.
+
+    Seigan: At the end of the Batto movement the left hand also grasps the Tsuka, with the little finger reaching to the end of the Tsuka (Tsuka-gashira). At the same time one draws up the left foot and goes over to Seigan. The feet are right in front and left behind, but pointing parallel. The toes of the left foot are about level with the right heel. The legs are straight and the body is upright. The sword is held in the centre of the body and the sword tip (Kissaki) at chin height (if one has an opponent, then at the height of the opponent's chin.) If it is held even higher, one covers the opponent's face with one's own sword. The arms must not be stiff but should be stretched in a relaxed way. The right index finger touches the Tsuba. The right hand grasps the sword somewhat from above, relaxed. The left grip is normally the main grip and firmer than the right grip. Tsuka-gashira is about two fists away from the belly.
+
+    Batto and Seigan are performed in one movement.
+- de: Die gleiche Schwerthaltung bewahrend den linken Fuß einen Schritt nach vorne setzen. Den rechten Fuß nachziehen.
+    Die Spitze des rechten Fußes ist in Höhe der linken Ferse. Die beiden Füße sind ungefähr parallel gestellt.
+    Also soll die Spitze des rechten Fußes nicht nach rechts geöffnet sein.
+  en: Keeping the same sword posture, place the left foot one step forward. Draw up the right foot. The toes of
+    the right foot are level with the left heel. The two feet are placed roughly parallel. So the toes of the right
+    foot should not be opened to the right.
+- de: Mit dem hinteren (rechten) Fuß beginnend zurücktreten (der linke Fuß wird nachgezogen, bleibt aber vorne)
+    und das Schwert an der rechten Seite aufrecht stellen. Die Schneide zeigt in Richtung des Gegners. Die greifenden
+    Hände sollen weder zu hoch noch zu niedrig sein (der linke Unterarm ungefähr parallel zum Boden). Der rechte
+    Ellbogen darf nicht wie beim Hasso-no-Kamae hoch gehoben werden. Der linke Fuß zeigt gerade nach vorne und der
+    rechte Fuß ist schräg geöffnet.
+  en: Starting with the rear (right) foot, step back (the left foot is drawn up but stays in front) and stand the
+    sword upright on the right side. The cutting edge points towards the opponent. The grasping hands should be
+    neither too high nor too low (the left forearm roughly parallel to the floor). The right elbow must not be raised
+    high as in Hasso-no-Kamae. The left foot points straight forward and the right foot is opened diagonally.
+- de: Den linken Fuß einen Schritt nach hinten führend das Schwert von rechts nach links verlagern, wobei das Schwert
+    ganze Zeit senkrecht und die Schneide zum Gegner gerichtet ist. Diesmal zeigt der rechte Unterarm parallel zum
+    Boden. Der linke Ellbogen wird nicht hoch gehoben. Der rechte Fuß zeigt gerade nach vorne und der linke Fuß
+    ist schräg geöffnet.
+  en: Taking the left foot one step back, shift the sword from right to left, with the sword vertical the whole
+    time and the cutting edge directed at the opponent. This time the right forearm points parallel to the floor.
+    The left elbow is not raised high. The right foot points straight forward and the left foot is opened diagonally.
+- de: Den linken Fuß einen Schritt nach vorne setzend das Schwert allein mit der linken Hand über den Kopf führen.
+    Der rechte Fuß wird nachgezogen. Die rechte Hand ruht offen aber in Bereitschaft neben dem rechten Oberschenkel
+    mit der Handfläche nach unten zeigend. Das Schwert steht in der Mitte über dem Körper - aber etwa 45 Grad nach
+    hinten geneigt.
+  en: Placing the left foot one step forward, bring the sword above the head with the left hand alone. The right
+    foot is drawn up. The right hand rests open but ready beside the right thigh, with the palm facing downward.
+    The sword stands in the centre above the body – but tilted back about 45 degrees.
+- de: Den rechten Fuß einen Schritt nach vorne bewegend auch mit der rechten Hand das Schwert (direkt unterhalb
+    des Tsuba), also mit beiden Händen, halten. Die Neigung des Schwertes ändert sich nicht.
+  en: Moving the right foot one step forward, hold the sword also with the right hand (directly below the Tsuba),
+    so with both hands. The angle of the sword does not change.
+- de: Mit dem linken (hinteren) Fuß beginnend und weit zurücktretend das Schwert zu Gedan führen. Der rechte Fuß
+    wird nachgezogen, bleibt aber vor dem linken. Kissaki ist etwa 5 cm tiefer als das Tsukagashira.
+  en: Beginning with the left (rear) foot and stepping far back, bring the sword to Gedan. The right foot is drawn
+    up but stays in front of the left. Kissaki is about 5 cm lower than the Tsukagashira.
+- de: Den rechten Fuß einen Schritt nach hinten führend das Schwert auf die rechte Seite führen. Kissaki zeigt schräg
+    nach hinten und deutlich tiefer als die Hände. Die Schneide zeigt nach vorne. Man achte darauf, dass der Oberkörper
+    aufgerichtet bleibt.
+  en: Taking the right foot one step back, bring the sword to the right side. Kissaki points diagonally backward
+    and clearly lower than the hands. The cutting edge points forward. Take care that the upper body stays upright.
+- de: Den linken Fuß etwas nach vorne schicken, und den Oberkörper leicht nach vorne neigend das Schwert hinter
+    dem Körper verstecken. Kissaki bleibt tief. Trotz des Vorneigens muss der Oberkörper gerade bleiben. Kissaki
+    darf hinten nicht zu sehr gedreht werden. Denn in diesem Fall wird es an der anderen Seite (vom Gegner aus gesehen
+    rechts) sichtbar.
+  en: Send the left foot slightly forward and, tilting the upper body slightly forward, hide the sword behind the
+    body. Kissaki stays low. Despite leaning forward, the upper body must stay straight. Kissaki must not be turned
+    too far at the back. For in that case it becomes visible on the other side (on the right, seen from the opponent).
+- de: Den linken Fuß einen Schritt groß zurückführend das Schwert groß und rund nach vorne führen zur Seigan-Stellung.
+  en: Taking the left foot one big step back, bring the sword forward in a big round movement to the Seigan position.
+- de: Den linken Fuß nur ein wenig nach hinten verlagernd das Schwert an die linke Seite führen. Kissaki zeigt etwas
+    schräg aber ziemlich körpernah nach hinten und befindet sich in Höhe des eigenen Kopfs. Die linke Hand hält
+    man direkt am Bauch. Der Blick muss nach vorne zum Gegner hin gerichtet bleiben.
+  en: Shifting the left foot only a little back, bring the sword to the left side. Kissaki points somewhat diagonally
+    but fairly close to the body to the rear and is at the height of one's own head. The left hand is held directly
+    at the belly. The gaze must stay directed forward at the opponent.
+- de: Den linken Fuß nach vorne setzend das Schwert auf die rechte Seite führen. Die Hände befinden sich etwa eine
+    Faust breit vor dem Bauch. Kissaki ist in Augenhöhe und die Schneide ist nach außen gerichtet (nicht Richtung
+    Körper). Das linke (vordere) Knie ist leicht gebeugt, der Oberkörper aber aufrecht. Das hintere Bein ist fast
+    gestreckt.
+  en: Placing the left foot forward, bring the sword to the right side. The hands are about one fist's width in
+    front of the belly. Kissaki is at eye height and the cutting edge is directed outward (not towards the body).
+    The left (front) knee is slightly bent, but the upper body is upright. The rear leg is almost straight.
+- de: Den linken Fuß ein wenig nach vorne bewegen und den rechten (hinteren) Fuß leicht nachziehend hebt man das
+    Schwert bis in Kopfhöhe (rechts neben den Kopf). Es ist zum Boden fast horizontal. Aber Kissaki ist etwas tiefer
+    als die Hände und richtet sich gegen den Hals des vermeintlichen Gegners. Die Schneide ist oben.
+  en: Moving the left foot a little forward and drawing up the right (rear) foot slightly, one raises the sword
+    to head height (on the right beside the head). It is almost horizontal to the floor. But Kissaki is slightly
+    lower than the hands and is directed at the neck of the supposed opponent. The cutting edge is on top.
+- de: Den rechten Fuß weit nach vorne führend in Bauchhöhe stechen. Beide Arme sind ganz nach vorne gestreckt. Die
+    Schneide wendet sich nach unten. Den linken Fuß nachziehen.
+  en: Taking the right foot far forward, thrust at belly height. Both arms are stretched fully forward. The cutting
+    edge turns downward. Draw up the left foot.
+- de: Mit dem linken Fuß beginnend und den rechten Fuß folgen lassend in einer großen Bewegung zurückgehen und das
+    Schwert vor der Brust horizontal halten. Die Schneide zeigt nach links. Beide Ellbogen werden in gleicher Höhe
+    mit dem Schwert gehalten. Tsuka-gashira nicht zu nahe an die eigenen Brust führen. Beide Arme machen etwa eine
+    Kreisform vor der Brust.
+  en: Beginning with the left foot and letting the right foot follow, go back in one large movement and hold the
+    sword horizontally in front of the chest. The cutting edge points to the left. Both elbows are held at the same
+    height as the sword. Do not bring Tsuka-gashira too close to one's own chest. Both arms form roughly a circle
+    in front of the chest.
+- de: Den linken (hinteren) Fuß zurückziehend Hände an die linke Körperseite vor den Bauch führen. (Der rechte Fuß
+    wird leicht nachgezogen.) Die Schneide bleibt nach links (nach außen) gewendet und Kissaki ist in der Augenhöhe.
+    Das rechte Knie ist leicht gebeugt und das linke (hintere) Bein ist gerade.
+  en: Drawing back the left (rear) foot, bring the hands to the left side of the body in front of the belly. (The
+    right foot is drawn up slightly.) The cutting edge stays turned to the left (outward) and Kissaki is at eye
+    height. The right knee is slightly bent and the left (rear) leg is straight.
+- de: Den rechten Fuß ein wenig nach vorne bewegen, und den linken Fuß leicht nachziehend das Schwert auf Kopfhöhe
+    (neben den Kopf) anheben. Das Schwert zum Boden fast horizontal halten, aber Kissaki ist etwas tiefer als die
+    Hände. Die Schneide zeigt nach oben und Kissaki wendet sich gegen den Hals des vermeintlichen Gegners.
+  en: Move the right foot a little forward and, drawing up the left foot slightly, raise the sword to head height
+    (beside the head). Hold the sword almost horizontal to the floor, but Kissaki is slightly lower than the hands.
+    The cutting edge points upward and Kissaki is directed at the neck of the supposed opponent.
+- de: Den linken Fuß weit nach vorne führen, und den rechten Fuß nachziehend in Halshöhe zustechen. Beide Arme sind
+    nach vorne gestreckt. Die Schneide wendet sich nach unten. Der rechte Fuß wird nachgezogen.
+  en: Take the left foot far forward and, drawing up the right foot, thrust at neck height. Both arms are stretched
+    forward. The cutting edge turns downward. The right foot is drawn up.
+- de: |-
+    Suriage
+
+    Den linken Fuß einen Schritt zurückziehend erst Kissaki senken, und danach den rechten Fuß nachziehend das Schwert über den Kopf hochführen. Die ganze Bewegung findet in der Körpermitte statt.
+
+    Men (Shomen-uchi)
+
+    Den rechten (vorderen) Fuß etwas nach vorne führend von oben nach unten mit großer Bewegung Shomen schlagen. Der linke (hintere) Fuß wird nachgezogen, bleibt aber hinten. Beide Füße stehen jedoch parallel. Suriage und Shomen-uchi werden als "Suriage-Men" als eine Bewegung durchgeführt.
+  en: |-
+    Suriage
+
+    Drawing the left foot one step back, first lower Kissaki, and then, drawing up the right foot, bring the sword up above the head. The whole movement takes place in the centre of the body.
+
+    Men (Shomen-uchi)
+
+    Taking the right (front) foot slightly forward, strike Shomen from top to bottom with a large movement. The left (rear) foot is drawn up but stays behind. Both feet, however, stand parallel. Suriage and Shomen-uchi are performed as "Suriage-Men", as one movement.
+- de: Hiraki-Dachi (offenes Schwert)
+  en: Hiraki-Dachi (open sword)
+- de: Den rechten Fuß groß zurückziehend das Schwert auf der rechten Seite nur mit der rechten Hand greifend hängen
+    lassen. Man steht mit Shizentai (natürlich aufrechte Körperhaltung). Dies ist eine ganz offene Haltung für den
+    Fall, dass man umzingelt wird.
+  en: Drawing the right foot far back, let the sword hang on the right side, gripping it with the right hand only.
+    One stands in Shizentai (naturally upright body posture). This is a completely open posture for the case that
+    one is surrounded.
+- de: Den rechten Fuß weit nach vorne führend schlägt man schräg von rechts oben nach links unten. Dabei greift
+    auch die linke Hand das Schwert, wenn dieses mit der rechten Hand hochgehoben wird. Das rechte Knie wird gebeugt.
+    Den linken Fuß etwas nachziehen. Das linke Bein ist gestreckt.
+  en: Taking the right foot far forward, one strikes diagonally from upper right to lower left. In doing so the
+    left hand also grasps the sword when it is raised with the right hand. The right knee is bent. Draw up the left
+    foot slightly. The left leg is straight.
+- de: Kissaki nach oben und anschließend nach hinten (aber vor dem Körper) wendend das Schwert in die Scheide (ersatzweise
+    in die gekrümmten Finger der linken Hand) an der linken Körperseite führen. Die Schneide ist oben. Den rechten
+    Fuß gleichzeitig mit der Nôtô-Bewegung langsam zurückziehen und gerade stehen. Die Schneide soll die Hand(fläche)
+    nicht berühren.
+  en: Turning Kissaki upward and then backward (but in front of the body), bring the sword into the scabbard (as
+    a substitute, into the curved fingers of the left hand) on the left side of the body. The cutting edge is on
+    top. At the same time as the Nôtô movement, slowly draw back the right foot and stand straight. The cutting
+    edge should not touch the hand (palm).
+- de: Das Schwert auf der linken Körperseite hängen lassen und anschließend wie am Anfang den Oberkörper vorneigen
+    und wieder aufrecht stehen. Man sollte darauf achten, beim letzten Rei an der gleichen Stelle zu stehen wie
+    beim ersten Rei.
+  en: Let the sword hang on the left side of the body and then, as at the beginning, bend the upper body forward
+    and stand upright again. Take care to stand in the same place for the last Rei as for the first Rei.
+- de: |-
+    Bis zu Nr. 5 sind die Kumidachi-Nummer und die Nummer der Kimete = Siegestreffer gleich. Deswegen kann man -ban oder -honme sagen. Ab Nr. 6 differenzieren sich die Nummern, weswegen nur die Kumidachi-Nummer mit -ban genannt wird. Z.B. enthält Nr. 6 zwei Schläge. Was in den Klammern angegeben ist, ist die Stelle des Kimete. Sie ist innerhalb des Odachi-Kumite durchnummeriert. Das Verb "katsu" bedeutet "siegen". "hitotsu" ist "Eins". Hitotsu-gachi bedeutet, dass man mit einem Schlag siegt.)
+
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    (Die Angaben hinter dem Doppelpunkt sind die jeweiligen Anfangs-Kamae = Stellungen.) Mit In geht U dem S entgegen und legt beim Eintreten in Isshoku-sokuhatsu-no-Maai mit dem linken Fuß vorne einen Halt ein, so dass auch S seine Vorwärtsbewegung mit dem rechten Fuß vorne stoppt. U lauert mit großem Ki auf eine Lücke des S. Dann bewegt sich U plötzlich mit dem rechten Fuß nach rechts, hebt das linke Knie hoch, während er zu Dai-Jodan* geht und groß herunterschlägt mit dem Gefühl, das ganze Universum zu entzweien.** Eigentlich möchte U über und neben dem Seigan des S diesen direkt treffen, aber da er sieht, dass S sofort reagiert und sich ihm zuwendet, schlägt U etwas kürzer, um sich zu schützen. S sieht das Dai-Jodan des U, bleibt innerlich ruhig, geht selbst zu Jodan und macht - mit einem kleinen Gleitschritt rechts vorwärts - ein großes Kiriotoshi bis zum Hara des U, während der Schlag des U abprallt und sein Kissaki tief nach unten fällt. U gleitet nun mit dem rechten (hinteren) Fuß anfangend groß zurück und geht in Hidari-Jodan, um zum Gegenangriff überzugehen. S geht zwei Schritte (links - rechts) vor, hebt das Schwert noch einmal zu Jodan und schlägt etwas schräg das linke Kote (= Hidarigote) des U. Hierbei möchte U bis zum Ende kämpfen und sich nach Möglichkeit nicht schlagen lassen. Deswegen ist es nicht sachgemäß, wenn er das linke Kote dem S sozusagen "anbietet". U hält sich vielmehr frontal dem S gegenüber.*** Der Oberkörper des U darf auf keinen Fall nach hinten geneigt sein. Anschließend geht S zwei Schritte (rechts - links) zurücktretend zu Zanshin Gedan.**** Danach führt auch U sein Schwert zu Gedan, und die beiden bewegen sich zu Gedan-awase in die Mitte zurück (nicht nur in die mittlere Linie, sondern in die mittlere Position zwischen den beiden Startpositionen).
+
+    * Dai-Jodan ist noch größer als das normale Jodan. Dai bedeutet "groß", Jo "oben".
+
+    ** Das wichtigste Moment des Ippon-me ist Kiriotoshi. Nach dem Halten vor S muss U sich schnell nach rechts bewegen und sofort schlagen. U darf nicht halbherzig schlagen, sondern wie oben erwähnt mit dem Gefühl, das ganze Universum zu entzweien. Deswegen lässt man bei Mutoryu sogar so tief schlagen, dass das Kissaki heftig den Boden schlägt. Im Shinki Toho geht man zwar nicht so weit, aber das Kissaki muss fast bis zum Boden herunter geführt werden. Wichtig für S ist, vor diesem großen entschiedenen Angriff des U ruhig zu bleiben und mit noch größerem Ki als das von U über diesen Angriff Herr zu werden. Bei diesem Kiriotoshi darf auch S sein Knie (rechts) etwas hochheben; das muss aber nicht sein.
+
+    *** Da S und U sich frontal gegenüber stehen, schlägt S nicht ganz gerade, sondern etwas schräg etwa in die Mitte des jeweiligen Kote. Das Schwert des S muss gegenüber dem Kote, das geschlagen wird, grundsätzlich den Winkel von 90° haben, damit der Schnitt wirksam ist. Prinzipiell wird das Kote auf der Seite des vorderen Fußes von U geschlagen.
+
+    **** Mit dem Schlag von S auf das Kote ist der Kampf beendet, so dass S nicht zusätzlich "herunterschneidet". S geht mit normalen zwei Schritten rechts links zurück und kommt zur Ruhe im Zanshin Gedan. Zanshin bedeutet die letzte Aufmerksamkeit, um nicht siegestrunken leichtsinnig zu werden. Zanshin bedeutet direkt übersetzt "das bleibende Herz". Auch wenn die äußere Bewegung zu Ende ist, muss das Herz noch präsent bleiben.
+
+    Danach lösen sowohl U als auch S die Kamae, d.h. das Schwert wird von senkrecht zu waagerecht gekippt, so dass die beiden Schneiden sich innen gegenüber liegen. Anschließend wird das Schwert ein wenig schräg nach rechts unten gesenkt, bleibt dabei aber vor dem Körper. Nun gehen beide rückwärts auseinander zur Startposition, wobei sie mit dem linken Fuß beginnen. An der Startposition angekommen, lässt man eine Hand los, wobei das Kissaki etwa in der Körpermitte unten zur Ruhe kommt. Man kann während des Trainings entweder die linke oder die rechte Hand loslassen, aber für U, wenn er/sie die Onigote trägt, ist es natürlicher, wenn er/sie die rechte Hand loslässt und mit der linken Hand das Schwert hält. Man darf von Fall zu Fall und unabhängig davon, welche Hand der Gegner nimmt, die Seiten bestimmen bzw. wechseln. (Eine Ausnahme ist gegeben ganz am Anfang und am Ende der ganzen Übung sowie bei einer öffentlichen Vorführung und bei einer Prüfung. In diesen Fällen lässt man immer die rechte Hand los und hält das Schwert nur mit der linken Hand.) Diese Gestaltung der Schlussphase ist bei allen Kumidachi-Formen des O-dachi auf gleiche Weise möglich.
+  en: |-
+    Up to No. 5 the Kumidachi number and the number of the Kimete = winning hit are the same. For this reason one can say -ban or -honme. From No. 6 on the numbers differ, which is why only the Kumidachi number with -ban is given. E.g. No. 6 contains two strikes. What is given in brackets is the location of the Kimete. It is numbered consecutively throughout the Odachi-Kumite. The verb "katsu" means "to win". "hitotsu" is "one". Hitotsu-gachi means that one wins with one strike.)
+
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    (The details after the colon are the respective starting Kamae = stances.) With In, U goes towards S and, on entering Isshoku-sokuhatsu-no-Maai with the left foot forward, makes a halt, so that S also stops his forward movement with the right foot forward. U lies in wait with great Ki for a gap in S. Then U suddenly moves to the right with the right foot, raises the left knee high while going to Dai-Jodan* and strikes down in a big movement with the feeling of splitting the entire universe in two.** U would actually like to hit S directly over and beside his Seigan, but since he sees that S reacts immediately and turns towards him, U strikes somewhat shorter in order to protect himself. S sees U's Dai-Jodan, stays calm inside, goes to Jodan himself and – with a small gliding step forward to the right – does a big Kiriotoshi down to the Hara of U, while U's strike rebounds and his Kissaki falls low. U now glides back in a big movement, starting with the right (rear) foot, and goes into Hidari-Jodan in order to go over to a counter-attack. S goes two steps forward (left - right), raises the sword once more to Jodan and strikes somewhat diagonally the left Kote (= Hidarigote) of U. Here U wants to fight to the end and if possible not let himself be struck. For this reason it is not appropriate for him to "offer" his left Kote to S, so to speak. Rather, U holds himself frontally opposite S.*** U's upper body must on no account lean backward. Then S, stepping back two steps (right - left), goes to Zanshin Gedan.**** Then U also brings his sword to Gedan, and the two move back to the centre into Gedan-awase (not only to the middle line, but to the middle position between the two starting positions).
+
+    * Dai-Jodan is even bigger than the normal Jodan. Dai means "big", Jo "above".
+
+    ** The most important moment of Ippon-me is Kiriotoshi. After halting in front of S, U must move quickly to the right and strike at once. U must not strike half-heartedly but, as mentioned above, with the feeling of splitting the entire universe in two. For this reason, in Mutoryu one is even made to strike so low that the Kissaki hits the floor hard. In Shinki Toho one does not go that far, but the Kissaki must be brought down almost to the floor. What is important for S is to stay calm in the face of this big, decided attack by U and to master this attack with even greater Ki than U's. In this Kiriotoshi, S too may raise his knee (right) somewhat; but this is not necessary.
+
+    *** Since S and U stand frontally opposite each other, S does not strike quite straight, but somewhat diagonally, at about the middle of the Kote in question. S's sword must in principle be at an angle of 90° to the Kote being struck, so that the cut is effective. As a principle, the Kote on the side of U's front foot is struck.
+
+    **** With S's strike on the Kote the fight is over, so S does not additionally "cut down". S goes back with two normal steps, right left, and comes to rest in Zanshin Gedan. Zanshin means the last attentiveness, so as not to become careless, drunk with victory. Zanshin translated directly means "the remaining heart". Even when the outward movement has ended, the heart must stay present.
+
+    Then both U and S release the Kamae, i.e. the sword is tilted from vertical to horizontal, so that the two cutting edges face each other on the inside. Then the sword is lowered a little diagonally to the lower right, but stays in front of the body. Now both go backward, apart, to the starting position, beginning with the left foot. Having arrived at the starting position, one lets go with one hand, the Kissaki coming to rest below at about the centre of the body. During training one can let go with either the left or the right hand, but for U, if he/she is wearing the Onigote, it is more natural to let go with the right hand and hold the sword with the left hand. One may decide or change the sides from case to case, regardless of which hand the opponent takes. (An exception applies at the very beginning and end of the whole exercise, and at a public demonstration and at an examination. In these cases one always lets go with the right hand and holds the sword with the left hand only.) This way of shaping the final phase is possible in the same way in all Kumidachi forms of the O-dachi.
+- de: |-
+    Das Verb "ageru" bedeutet "hochheben" und "ukeru" heißt "empfangen". Age-uke bedeutet "hochhebend empfangen" oder "empfangend hochheben".
+
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    U geht mit Seigan und S mit Gedan vor. Kurz vor dem Isshoku-sokuhatsu-no-Maai, zeigt S mit dem Kissaki seinen Angriffswillen (mit dem linken Fuß vorne) auf das rechte Kote des U. Deswegen reagiert U dadurch, dass er sein Kissaki nach rechts neigt. Dabei muss sein Schwert oberhalb des Schwertes des S bleiben. S's Kissaki kommt dann von unterhalb des U-Schwerts in die Mitte, so dass auch U sofort reagiert und die Mitte zu beherrschen sucht. S streckt seinen Oberkörper langsam nach vorne als Finte. Das Kissaki des S kommt dabei zuerst etwa bis zur Hälfte des Schwertes von U hinein (Sutemi-no-Maai)* und wird dann von S aufreizend langsam am Schwert von U entlang gleitend bis zu dessen Kissaki (Kissaki neben Kissaki) zurückgezogen. Diese Phase ist sozusagen der "Kampf um die Mitte". Sobald S in dieser Position (Shoshi-Kikkou-no-Maai) ruht bzw. sich sicher fühlt, sticht U sofort gegen den Hals von S.** S führt sein Schwert zur Aufnahme und Abwehr des stechenden Schwertes von U schräg nach oben, wobei das Kissaki von S nach rechts gewendet ist, damit er das Schwert des U am Tsuba gut abstützen kann. So kommt U durch sein nach vorne gestrecktes bzw. gestochenes Schwert in eine instabile Haltung. Wegen dieser instabilen Haltung und des durch die Abwehr nach oben gerutschten Schwertes geht U nun, leicht nach links ausweichend, zu Jodan über, um erneut S anzugreifen.*** Da aber S's Schwertposition stabiler war, kann dieser schneller reagieren und - mit dem rechten Fuß vorne - U's rechtes Kote (= Migigote) schlagen. Danach geht S leicht zurücktretend zu Zanshin Jodan. Danach zu Gedan-awase.
+
+    * Sutemi-no-Maai: Sutemi bedeutet "soweit wagen, dass man bereit ist, sein Leben zu opfern". Hier verlässt man die Sicherheitszone und geht an den Gegner näher heran, um diesen zu provozieren. Da man tatsächlich das Leben verliert, wenn man nicht aufpasst, muss man ganz gesammelt und in jeder Bewegungsphase bereit sein, sofort zu reagieren. Shoshi-Kikkou-no-Maai: Shoshi bedeutet Leben und Tod. Kikkou heißt "gegenseitig heftig um etwas kämpfen". Also befinden sich U und S in diesem Maai in einer Lage, in der akut um Leben und Tod gekämpft wird. Ai-Seigan entspricht diesem Maai, wo beide versuchen, in die Mitte zu kommen. Es ist der Kampf um die Mitte. Dadurch sind beide Schwerter wie miteinander „verklebt“.
+
+    ** Wenn S noch Anfänger ist, sollte U etwas höher (Stirnhöhe) stechen, weil S sonst im Gesicht getroffen werden kann.
+
+    *** Weil U selbst die Spannung an den Schwertern löst, muss er aufpassen, dass das Schwert des S nicht auf ihn fällt. Das ist der Grund, warum U etwas nach links ausweicht.
+  en: |-
+    The verb "ageru" means "to lift" and "ukeru" means "to receive". Age-uke means "receiving while lifting" or "lifting while receiving".
+
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    U goes forward with Seigan and S with Gedan. Shortly before Isshoku-sokuhatsu-no-Maai, S shows with the Kissaki his will to attack (with the left foot forward) U's right Kote. For this reason U reacts by tilting his Kissaki to the right. In doing so his sword must stay above S's sword. S's Kissaki then comes from below U's sword into the centre, so that U too reacts immediately and seeks to control the centre. S slowly stretches his upper body forward as a feint. S's Kissaki first comes in about as far as the middle of U's sword (Sutemi-no-Maai)* and is then drawn back by S, provocatively slowly, gliding along U's sword as far as its Kissaki (Kissaki beside Kissaki). This phase is, so to speak, the "fight for the centre". As soon as S rests in this position (Shoshi-Kikkou-no-Maai) or feels safe, U immediately thrusts at the neck of S.** S brings his sword diagonally upward to take up and ward off U's thrusting sword, with S's Kissaki turned to the right, so that he can support U's sword well at the Tsuba. So U comes into an unstable posture through his sword, stretched or thrust forward. Because of this unstable posture and his sword having slid upward through the defence, U now, evading slightly to the left, goes over to Jodan in order to attack S again.*** But since S's sword position was more stable, he can react faster and – with the right foot forward – strike U's right Kote (= Migigote). Then S, stepping back slightly, goes to Zanshin Jodan. Then to Gedan-awase.
+
+    * Sutemi-no-Maai: Sutemi means "daring so far that one is ready to sacrifice one's life". Here one leaves the safety zone and goes closer to the opponent in order to provoke him. Since one really loses one's life if one does not take care, one must be fully collected and ready to react immediately in every phase of the movement. Shoshi-Kikkou-no-Maai: Shoshi means life and death. Kikkou means "fighting fiercely with each other over something". So in this Maai, U and S are in a situation in which a critical fight over life and death is going on. Ai-Seigan corresponds to this Maai, where both try to reach the centre. It is the fight for the centre. As a result both swords are as if "glued" together.
+
+    ** If S is still a beginner, U should thrust somewhat higher (forehead height), because S can otherwise be hit in the face.
+
+    *** Since U himself releases the tension on the swords, he must take care that S's sword does not fall on him. That is the reason why U evades slightly to the left.
+- de: |-
+    "uchi-komu" bedeutet hineinschlagen. "inasu" bedeutet souverän und spielerisch leicht beherrschen. Uchidachi: In
+
+    Shidachi: Seigan
+
+    U geht mit In vor, S mit Seigan. Im Isshoku-sokuhatsu-no-Maai angekommen (links vorne), wechselt U zu Dai-Jodan, wobei er das rechte Knie anhebt, und schlägt groß hinein. Wichtig ist, dass S mutig vorangeht und beim großen Angriff des U die innere Ruhe bewahrt. Da S (der mit rechts vorne wartet) zwei Schritte (rechts - links) zurückgeht,* schlägt U ins Leere und braucht noch weitere zwei Ausfallschritte (links - rechts), um wieder Halt zu finden. S wechselt beim zweiten Rückwärtsschritt schnell zu Gedan, so dass sein Kissaki bedrohlich vor dem Hara des U steht. U geht zügig zwei Schritte zurück (rechts - links) und geht zu Jodan. S folgt mit zwei Schritten (links - rechts) dem U und schlägt etwas schräg das Migi-gote. Anschließend wechselt S – etwas zurückgehend - zu Zanshin Jodan. Danach Gedan-awase.
+
+    * Beim ersten Rückwärtsschritt bleibt das Schwert des S bei Seigan, weil der Schlag des U das Tsuba treffen kann. Durch das gesenkte Kissaki beim zweiten Rückwärtsschritt vor dem Hara (= Mitte des Körpers) des U beherrscht S den U im Ganzen.
+  en: |-
+    "uchi-komu" means to strike in. "inasu" means to control with sovereign, playful ease. Uchidachi: In
+
+    Shidachi: Seigan
+
+    U goes forward with In, S with Seigan. Having arrived in Isshoku-sokuhatsu-no-Maai (left forward), U changes to Dai-Jodan, raising the right knee, and strikes in with a big movement. It is important that S goes forward bravely and keeps his inner calm during U's big attack. Since S (who is waiting with the right forward) goes back two steps (right - left),* U strikes into empty air and needs a further two lunging steps (left - right) to find his footing again. On the second backward step S quickly changes to Gedan, so that his Kissaki stands threateningly in front of the Hara of U. U briskly goes back two steps (right - left) and goes to Jodan. S follows U with two steps (left - right) and strikes the Migi-gote somewhat diagonally. Then S – going back slightly – changes to Zanshin Jodan. Then Gedan-awase.
+
+    * On the first backward step S's sword stays at Seigan, because U's strike can hit the Tsuba. With the Kissaki lowered in front of U's Hara (= centre of the body) on the second backward step, S controls U as a whole.
+- de: |-
+    "Kasumi" ist Nebel. Da der Gegner schwer einschätzen kann, wie man von diesem Kamae aus angreift, wird es "Nebel" genannt.
+
+    Uchidachi: Seigan è Gedan Kasumi
+
+    Shidachi: Gedan
+
+    Mit Seigan anfangend geht U allmählich in Gedan, und im Isshoku-Sokuhatsu-no-Maai wechselt er zu Gedan Kasumi (linker Fuß vorne), während S mit Gedan vorgeht. Das Kissaki des U zeigt zuerst in die Körpermitte des S. Da S immer näher kommt, bewegt sich das Kissaki des U langsam nach links, um die Lücke der linken Körperseite zu schützen. S überschreitet Isshoku-Sokuhatsu-no-Maai, stoppt seinen Schritt rechts vorne und streckt seinen Oberkörper wie bei Nihon-me nach vorne und überschreitet auch das Shoshi-kikkou-no-Maai bis zum Sutemi-no-Maai. Nun liegt das Kissaki des S etwa in der Mitte der Schneide des U ohne Druck, wobei sein Schwert - die Schneide nach links - fast horizontal ist. S möchte austesten, wie U reagiert. U reagiert aber nicht und wartet aufmerksam ab, wie S weiter vorgehen will. S zieht das Kissaki provozierend langsam zurück bis zum Kissaki des U, wobei er den Druck auf das Schwert des U immer mehr erhöht. U wartet, bis dieser Druck am stärksten ist, und zieht dann sein Kissaki plötzlich nach links. U führt seinen rechten Fuß nach rechts, dreht das Kissaki oberhalb seines Kopfs nicht allzu groß um und versucht Kesagake. Sein linker Fuß wird viertelkreisförmig nach hinten nachgezogen. Da S nun rechts vorgleitend bis zum Hals des U Kiriotoshi ausführt und mit zwei Schritten (links - rechts) Semeage* macht, gleitet U mit dem hinteren (linken) Fuß beginnend zurück und geht zu Jodan, um den Gegenangriff zu ermöglichen. S schlägt mit dem zweiten Vorwärtsschritt das rechte Kote des U und geht etwas zurücktretend (normalerweise mit zwei Schritten) zu Zanshin Gedan. Danach Gedan-awase.
+
+    * Semeage: Mit der Vorwärtsbewegung führt Shidachi sein Kissaki vom Hals zur Höhe der Nase des U, so dass dieser/diese zurückgedrängt wird.
+  en: |-
+    "Kasumi" is mist. Because the opponent can hardly judge how one will attack from this Kamae, it is called "mist".
+
+    Uchidachi: Seigan → Gedan Kasumi
+
+    Shidachi: Gedan
+
+    Starting with Seigan, U gradually goes into Gedan, and in Isshoku-Sokuhatsu-no-Maai he changes to Gedan Kasumi (left foot forward), while S goes forward with Gedan. U's Kissaki first points at the centre of S's body. Since S comes ever closer, U's Kissaki moves slowly to the left, to protect the gap on the left side of the body. S crosses Isshoku-Sokuhatsu-no-Maai, stops his step with the right forward and stretches his upper body forward as in Nihon-me and also crosses Shoshi-kikkou-no-Maai as far as Sutemi-no-Maai. Now S's Kissaki lies at about the middle of U's cutting edge without pressure, his sword – the cutting edge to the left – being almost horizontal. S wants to test how U reacts. But U does not react and waits attentively to see how S intends to proceed. S draws his Kissaki back, provocatively slowly, as far as U's Kissaki, increasing the pressure on U's sword more and more. U waits until this pressure is at its strongest, and then suddenly draws his Kissaki to the left. U takes his right foot to the right, turns the Kissaki above his head in a not too large movement and attempts Kesagake. His left foot is drawn back in a quarter circle. Since S, gliding forward to the right, now performs Kiriotoshi down to the neck of U and does Semeage* with two steps (left - right), U glides back beginning with the rear (left) foot and goes to Jodan, to make the counter-attack possible. S strikes U's right Kote with the second forward step and, stepping back slightly (normally with two steps), goes to Zanshin Gedan. Then Gedan-awase.
+
+    * Semeage: With the forward movement Shidachi brings his Kissaki from the neck to the height of U's nose, so that he/she is pushed back.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Waki-gamae
+
+    U geht mit Seigan voran. S fängt mit Waki-gamae an, wechselt aber früh zu Gedan und kommt ein paar Schritte entgegen und macht schnell ein hartes Tsuki-komi in Richtung des Halses von U; S möchte das standfeste Seigan des U durchbrechen. U hält sein Schwert stark entgegen, damit das Tsuki des S nicht durchkommt.* Da aber dieser Angriff plötzlich und stark war, muss U schnell zurückweichen, bis er wieder einigermaßen sicheren Stand hat (am Ende ist sein rechter Fuß hinten). Mit letzter Kraft versucht U mit einem Schritt rechts vor das Schwert des S nach links unten zu drücken. In diesem Augenblick lockert S seine Kraft und lässt sein Kissaki fallen, so dass U nach vorne fallend in eine instabile Position kommt. U versucht, sich wieder aufzurichten und wechselt zu Jodan. Dabei zieht er seinen rechten Fuß etwas zurück, der aber immer noch vor dem linken Fuß bleibt. S geht leicht nach links und schlägt das Migi-gote des U,** geht dann zu Zanshin Jodan. Danach Gedan-awase.
+
+    * Bei diesem Tsuki-komi geht S nicht von vornherein mit gestreckten Armen. Zuerst zieht er sein Schwert vor die Brust, so dass das Kissaki leicht nach oben geht. In Shoshi-Kikko-no-Maai eintretend führt S Tsuki gegen die Mitte des Schwertes des U aus, wobei er seine Arme nach vorne streckt. Um diesen Druck aufzufangen zieht auch U sein Schwert vor die Brust, um dem Angriff von S Paroli zu bieten. Aber da der Druck von S sehr groß ist, geht U gleichzeitig zurück, um die ihm entgegenkommende Energie auffangen zu können.
+
+    ** In Wirklichkeit kann S am Ende sofort von oben U schlagen, wenn U sich nach unten neigt, so dass dieser keine Zeit hat, den Fuß des S zu treffen. Aber als Kumidachi wartet S bis U sich wieder aufrecht stellt.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Waki-gamae
+
+    U goes ahead with Seigan. S starts with Waki-gamae, but changes early to Gedan and comes a few steps towards him and quickly does a hard Tsuki-komi towards the neck of U; S wants to break through U's firm Seigan. U holds his sword strongly against it, so that S's Tsuki does not get through.* But since this attack was sudden and strong, U must quickly fall back until he has a reasonably secure stance again (at the end his right foot is behind). With the last of his strength U tries, with a step forward to the right, to press S's sword down to the left. At this moment S relaxes his strength and lets his Kissaki fall, so that U, falling forward, comes into an unstable position. U tries to straighten up again and changes to Jodan. In doing so he draws back his right foot slightly, but it still stays in front of the left foot. S goes slightly to the left and strikes U's Migi-gote,** then goes to Zanshin Jodan. Then Gedan-awase.
+
+    * In this Tsuki-komi S does not go with outstretched arms from the start. First he draws his sword in front of the chest, so that the Kissaki rises slightly. Entering Shoshi-Kikko-no-Maai, S performs Tsuki against the middle of U's sword, stretching his arms forward. To absorb this pressure, U also draws his sword in front of the chest, to stand up to S's attack. But since S's pressure is very great, U goes back at the same time, to be able to absorb the energy coming towards him.
+
+    ** In reality S can immediately strike U from above at the end if U leans downward, so that he has no time to hit S's foot. But as a Kumidachi, S waits until U stands upright again.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Wie bei Ippon-me geht U mit In vor, während S mit Seigan vorgeht. Im Isshoku-Sokuhatsu-no-Maai hält U an und lauert kurz, geht plötzlich nach rechts und schlägt von Dai-Jodan (mit erhobenem linken Knie) aus das Shomen des S. S wendet sich nach links zu U, führt mit großer Bewegung Kiriotoshi aus bis zum Hara des U, und schlägt anschließend das Hidari-gote des U. Danach geht S das Schwert zu Seigan senkend langsam-kontrollierend zwei Schritte zurück. Aber bevor er zur Ruhe kommt, hat U zu In gewechselt, geht plötzlich nach links und schlägt Shomen (diesmal mit dem erhobenen rechten Knie). Besonders wichtig ist hier, dass U - nachdem S sein Hidari-gote geschlagen hat - noch einmal zum Angriff übergeht, wobei U nicht zulässt, dass S den zweiten Rückwärtsschritt sicher vollendet. Allerdings muss U warten, bis sich das Kissaki des S etwas entfernt, bevor er zu In wechselt. S muss auch zurücktretend sein Ki nach vorne schicken und bereit sein, auf den erneuten Angriff sofort zu reagieren. S reagiert also souverän, macht Kiriotoshi bis zum Hara des U. U gleitet mit dem linken Fuß beginnend zurück und wechselt zu Jodan. S schlägt das rechte Kote des U und geht zurücktretend zu Zanshin Jodan. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    As in Ippon-me, U goes forward with In while S goes forward with Seigan. In Isshoku-Sokuhatsu-no-Maai, U halts and lies in wait briefly, suddenly goes to the right and strikes the Shomen of S from Dai-Jodan (with the left knee raised). S turns to the left towards U, performs Kiriotoshi with a big movement down to the Hara of U, and then strikes the Hidari-gote of U. Then S, lowering the sword to Seigan, goes two steps back, slowly and under control. But before he comes to rest, U has changed to In, suddenly goes to the left and strikes Shomen (this time with the right knee raised). It is especially important here that U – after S has struck his Hidari-gote – goes over to the attack once more, U not allowing S to complete the second backward step safely. However, U must wait until S's Kissaki moves away somewhat before changing to In. S too must, while stepping back, send his Ki forward and be ready to react immediately to the renewed attack. So S reacts with sovereign ease, does Kiriotoshi down to the Hara of U. U glides back, beginning with the left foot, and changes to Jodan. S strikes U's right Kote and, stepping back, goes to Zanshin Jodan. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U geht mit In vor, S mit Seigan. Von Isshoku-Sokuhatsu-no-Maai aus schlägt U das Shomen des S; beim Schlag hebt U den linken Fuß und kommt links vorne zu stehen. Da aber S unerschütterlich stark sein Seigan hält (rechts vorne stehend), scheitert U bei dem Versuch, das Schwert des S hinunterzuschlagen. S geht kaum zurück und senkt sein Kissaki zu Gedan, so dass das Kissaki des S direkt vor dem Hara des U steht. U gleitet nun mit dem rechten (hinteren) Fuß anfangend kurz zurück und wechselt zu Jodan. S schlägt das linke Kote des U mit einem links-rechts-Vorwärtsschritt. Während S mit dem rechten (vorderen) Fuß beginnend zügig zwei Schritte zurückgeht, wechselt U zu In. Lauernd geht U mit dem rechten (hinteren) Fuß anfangend langsam zwei Schritte vor, während S dementsprechend weitere zwei Schritte (rechts - links) zurückgeht. U setzt nun seinen rechten (hinteren) Fuß langsam nach vorn und wechselt zu Seigan, während S dementsprechend mit dem rechten (vorderen) Fuß einen Schritt zurückgeht und zu In wechselt. Nun, entweder sofort oder nach einem Moment des Lauerns, kommt S plötzlich mit dem rechten (hinteren) Fuß nach vorne, schlägt mit seinem Schwert heftig etwa in die Mitte des Schwertes von U (Seigan-Yaburi) und macht sofort Tsuki zum Hals des U. U geht ein paar Schritte ausweichend zurück und erhebt sein Schwert mit dem linken Fuß vorne zu Jodan. S folgt und schlägt am Ende - mit dem rechten Fuß vorne - das linke Kote des U. Etwas zurücktretend wechselt er zu Zanshin In. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U goes forward with In, S with Seigan. From Isshoku-Sokuhatsu-no-Maai, U strikes the Shomen of S; in striking, U lifts the left foot and comes to stand with the left forward. But since S holds his Seigan unshakeably strongly (standing with the right forward), U fails in the attempt to strike S's sword down. S goes back hardly at all and lowers his Kissaki to Gedan, so that S's Kissaki stands directly in front of the Hara of U. U now glides back briefly, starting with the right (rear) foot, and changes to Jodan. S strikes the left Kote of U with a left-right forward step. While S, beginning with the right (front) foot, briskly goes back two steps, U changes to In. Lying in wait, U slowly goes two steps forward, starting with the right (rear) foot, while S accordingly goes back a further two steps (right - left). U now slowly places his right (rear) foot forward and changes to Seigan, while S accordingly goes one step back with the right (front) foot and changes to In. Now, either immediately or after a moment of lying in wait, S suddenly comes forward with the right (rear) foot, strikes with his sword violently at about the middle of U's sword (Seigan-Yaburi) and immediately does Tsuki to the neck of U. U goes a few steps back, evading, and raises his sword to Jodan with the left foot forward. S follows and at the end – with the right foot forward – strikes the left Kote of U. Stepping back slightly, he changes to Zanshin In. Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    U geht mit Seigan vor. S kommt mit Gedan entgegen, und in Isshoku-Sokuhatsu-no-Maai führt er sein Kissaki plötzlich nach links (mit dem linken Fuß vorne) und bedroht das rechte Kote des U. U wendet sein Schwert etwas nach rechts, um diesem Angriff entgegenzuwirken. In diesem Augenblick hebt S sein Schwert zu Jodan und schlägt groß nach vorn; das Ziel ist der Kopf des U. Beim Schlag des S hebt U sein Kissaki, um dem Schlag entgegen zu wirken. Da aber das Vordringen des S sehr stark ist, geht U zügig zurück, während S, mit rechts beginnend, schnell auf ihn zugeht. S' Schwert trifft das des U und schlägt dieses hinunter. U geht am Ende links vorne zu Hidari-Jodan, wenn er eine kleine Verfolgungslücke von S sieht. S schlägt mit linkem Fuß vorne das linke Kote des U und geht zurücktretend zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    U goes forward with Seigan. S comes towards him with Gedan, and in Isshoku-Sokuhatsu-no-Maai he suddenly takes his Kissaki to the left (with the left foot forward) and threatens the right Kote of U. U turns his sword slightly to the right, to counter this attack. At this moment S raises his sword to Jodan and strikes forward in a big movement; the target is the head of U. At S's strike, U raises his Kissaki to counter the strike. But since S's advance is very strong, U briskly goes back, while S, beginning with the right, quickly goes towards him. S's sword hits that of U and strikes it down. At the end U goes with the left forward to Hidari-Jodan when he sees a small gap in S's pursuit. S strikes the left Kote of U with the left foot forward and, stepping back, goes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U geht mit In und S mit Seigan vor. In Isshoku-Sokuhatsu-no-Maai schlägt U mit rechts vorne das Shomen des S. S führt Kiriotoshi aus bis zum Hara des U. U geht zwei Schritte (rechts - links) zurück und wechselt zu Jodan. Daraufhin schlägt S das Migi-gote des U. Mit Seigan geht S zwei Schritte zurück. U schlägt nun von Yo aus mit dem linken Fuß vorne das Shomen des S. S macht Kiriotoshi. Das Kissaki des S liegt nun direkt vor dem Hara des U. Deswegen versucht U, das Schwert des S mit dem eigenen Schwert nach links unten zu beherrschen, wobei U das eigene Kissaki von rechts unten nach oben über dem Schwert des S und weiter nach links unten führt (= gegen den Uhrzeigersinn). Gleichzeitig mit dieser Bewegung zieht U seinen linken Fuß nach hinten zurück. S dreht sein Kissaki im Uhrzeigersinn, weicht dem Druck des Schwertes des U und führt sein Schwert über das des U, wobei er mit dem linken Fuß einen Schritt vorwärts geht. U tritt zügig zwei Schritte (rechts - links) zurück, wechselt zu Jodan und schlägt Shomen mit dem rechten Fuß vorne. S folgt mit dem rechten Schritt U. Da U aber schnell zum Gegenangriff übergeht und Shomen schlägt, empfängt S dieses Schwert von oben nach links unten (Hiki-otoshi) und geht fließend zu Chudan-Uragasumi. Sofort führt S sein Schwert in Richtung Hara des U (Tsuki) mit dem vorderen (rechten) Fuß (Der linke Fuß wird nachgezogen). U weicht einen Schritt mit dem rechten Fuß zurück. U geht weiter zurück mit dem rechten (hinteren) Fuß (der linke Fuß wird nachgezogen) und geht zu Jodan. S schlägt das linke Kote des U mit links-rechts-Schritt und geht zurücktretend zu Zanshin In. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U goes forward with In and S with Seigan. In Isshoku-Sokuhatsu-no-Maai, U strikes the Shomen of S with the right forward. S performs Kiriotoshi down to the Hara of U. U goes two steps back (right - left) and changes to Jodan. Thereupon S strikes the Migi-gote of U. With Seigan, S goes two steps back. U now strikes from Yo with the left foot forward the Shomen of S. S does Kiriotoshi. S's Kissaki now lies directly in front of the Hara of U. For this reason U tries to control S's sword with his own sword towards the lower left, taking his own Kissaki from lower right upward over S's sword and on to the lower left (= anticlockwise). At the same time as this movement, U draws his left foot back. S turns his Kissaki clockwise, yields to the pressure of U's sword and brings his sword over that of U, going one step forward with the left foot. U briskly steps two steps back (right - left), changes to Jodan and strikes Shomen with the right foot forward. S follows U with the right step. But since U quickly goes over to the counter-attack and strikes Shomen, S receives this sword from above towards the lower left (Hiki-otoshi) and goes flowingly to Chudan-Uragasumi. At once S brings his sword towards the Hara of U (Tsuki) with the front (right) foot (the left foot is drawn up). U evades one step back with the right foot. U goes further back with the right (rear) foot (the left foot is drawn up) and goes to Jodan. S strikes the left Kote of U with a left-right step and, stepping back, goes to Zanshin In. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U geht mit In und S mit Seigan vor. U gibt vor, nach links zu gehen, aber in die Mitte zurückkommend schlägt er das Shomen des S mit dem rechten Fuß vorne. S führt Kiriotoshi bis zum Hals des U aus. Da U zurückgehend zu Jodan wechselt, verfolgt S ihn mit Semeage, schlägt sein Migi-gote und geht zurücktretend zu Zanshin Gedan. Danach Gedan-awase..
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U goes forward with In and S with Seigan. U pretends to go to the left, but coming back to the centre he strikes the Shomen of S with the right foot forward. S performs Kiriotoshi down to the neck of U. Since U, going back, changes to Jodan, S pursues him with Semeage, strikes his Migi-gote and, stepping back, goes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    U geht mit Seigan vor, S mit Gedan. In Isshoku-Sokuhatsu-no-Maai eintretend tut S so, als ob er das Migi-gote des U angreifen würde. U neigt das Kissaki etwas nach rechts, um auf diese Bewegung zu reagieren. Sein Kissaki bleibt aber oberhalb des Kissaki des S. S sieht nun, dass die Mitte des U frei wird und macht ein heftiges Tsukikomi wie bei Gohon-me. Der Unterschied zu Gohon-me ist, dass diesmal S viel näher zu U steht, wenn er mit Tsuki beginnt. U geht Tsuki aufnehmend zügig zurück, stoppt den Angriff des S und versucht das Schwert des S nach links unten zurückzuschlagen. S lässt locker und dadurch schnell das Kissaki nach rechts unten fallen, so dass U ins Leere schlägt und sich nach links herunterbeugt. Jetzt wechselt U sofort zu Jodan. S wartet quasi schon oben, schlägt das Migi-gote des U und geht zu Jodan.* Zwei Schritte zurücktretend führt S sein Schwert zu Seigan hinunter. Während dessen geht U zu Yo no Kamae, und bevor S richtig zu Seigan kommt, greift U wieder aus Jodan S an. S reagiert sofort, macht Kiriotoshi bis zum Hara und schlägt das Hidari-gote des U, und etwas zurücktretend geht S zu Zanshin Gedan. Danach Gedan-awase.
+
+    * In Wirklichkeit kann S sofort von oben U schlagen, wenn U sich nach unten neigt, so dass dieser keine Zeit hat, den Fuß des S zu treffen. Aber als Kumidachi wartet S bis U sich wieder aufrecht stellt.
+
+    Itto-den Shinki Toho, Chûden: Odachi
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    U goes forward with Seigan, S with Gedan. Entering Isshoku-Sokuhatsu-no-Maai, S acts as if he were going to attack the Migi-gote of U. U tilts the Kissaki slightly to the right, to react to this movement. But his Kissaki stays above the Kissaki of S. S now sees that U's centre becomes free and does a violent Tsukikomi as in Gohon-me. The difference from Gohon-me is that this time S stands much closer to U when he starts with Tsuki. U, taking up the Tsuki, briskly goes back, stops S's attack and tries to strike S's sword back towards the lower left. S lets go loosely and thereby quickly lets the Kissaki fall to the lower right, so that U strikes into empty air and bends down to the left. Now U immediately changes to Jodan. S is already waiting above, as it were, strikes the Migi-gote of U and goes to Jodan.* Stepping two steps back, S brings his sword down to Seigan. Meanwhile U goes to Yo no Kamae, and before S has properly come to Seigan, U attacks S again from Jodan. S reacts immediately, does Kiriotoshi down to the Hara and strikes the Hidari-gote of U, and stepping back slightly S goes to Zanshin Gedan. Then Gedan-awase.
+
+    * In reality S can immediately strike U from above if U leans downward, so that he has no time to hit S's foot. But as a Kumidachi, S waits until U stands upright again.
+
+    Itto-den Shinki Toho, Chûden: Odachi
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Wakigamae
+
+    U startet in Seigan und S kommt mit Wakigamae entgegen. Von Isshoku-Sokuhatsu-no-Maai schlägt S von oben groß auf U herunter und kniet sofort nieder, wobei er das rechte Knie stehen lässt. Sein Kissaki zielt auf den Hals des U. Denn beim großen Schlag von S geht U mit dem rechten Fuß groß zurück und hält das Schwert in In-no-Kamae. U tut so, als ob er sich erst nach links bewegen und die rechte Seite des S angreifen möchte, kommt aber schnell zurück nach rechts und führt aus In direkt Kesagake aus auf die linke Schulter des S, mit dem rechten Fuß vorne. S steht schnell auf und sticht das Mizo'ochi (Solar plexus) des U, dessen Kote von oben beherrschend. Das ist der erste Teil. U geht mit dem rechten Fuß groß zurück und kehrt zu In-no-Kamae zurück, während S sich leicht zurückzieht und zu Seigan wechselt. U geht mit dem rechten Fuß nach vorne und schlägt das Schwert von S (linke Seite des S), um Seigan-Yaburi durchzuführen. Da S sein Schwert fest dagegen hält und U der Seigan-Yaburi nicht gelingt, führt U sein Schwert unterhalb des Schwertes von S nach links und versucht den Hara des S mit dem rechten Fuß vorne zu schneiden. S stellt sein Schwert – Spitze nach oben – senkrecht und empfängt das Schwert des U kräftig, aber etwas nach hinten führend. Sofort anschließend schlägt S das gestreckte Migi-gote des U, während S etwas nach links seine Position verlagert. Etwas zurücktretend (oder alternativ: vortretend) wechselt S zu Zanshin In. Anschließend Gedan-Awase.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Wakigamae
+
+    U starts in Seigan and S comes towards him with Wakigamae. From Isshoku-Sokuhatsu-no-Maai, S strikes from above in a big movement down at U and immediately kneels down, leaving the right knee standing. His Kissaki aims at the neck of U. For at S's big strike, U goes far back with the right foot and holds the sword in In-no-Kamae. U acts as if he first wants to move to the left and attack the right side of S, but quickly comes back to the right and from In performs Kesagake directly at the left shoulder of S, with the right foot forward. S quickly stands up and thrusts at the Mizo'ochi (solar plexus) of U, controlling his Kote from above. That is the first part. U goes far back with the right foot and returns to In-no-Kamae, while S withdraws slightly and changes to Seigan. U goes forward with the right foot and strikes the sword of S (left side of S), in order to perform Seigan-Yaburi. Since S holds his sword firmly against it and U does not succeed in Seigan-Yaburi, U takes his sword underneath S's sword to the left and tries to cut the Hara of S with the right foot forward. S stands his sword vertically – tip upward – and receives U's sword forcefully, but guiding it somewhat backward. Immediately afterwards S strikes the outstretched Migi-gote of U, while S shifts his position slightly to the left. Stepping back slightly (or alternatively: stepping forward), S changes to Zanshin In. Then Gedan-Awase.
+- de: |-
+    Uchi-dachi: Migi-Jôdan
+
+    Shidachi: Seigan
+
+    Von Isshoku-Sokuhatsu-no-Maai aus schlägt U mit dem rechten Fuß vorne das Shomen des S. S macht mit dem linken Fuß vorne Suriage. Da U sofort zu Jodan zurückgeht, schlägt S mit einem rechten Schritt dessen Migi-gote. S wechselt zu Migi-Jodan und geht mit zwei kleinen Schritten (rechts – links) zurück. U senkt sein Schwert zu Gedan und führt mit einem großen Linksschritt Tsuki aus zum Hara des S. S schlägt sein Schwert gegen das des U (mit der Schwertbewegung wie Gyaku-Kesagake), während er seinen rechten Fuß zurückzieht. U versucht sich wieder aufzurichten und geht zu Hidari-Jodan, während er erst den linken und danach rechten Fuß zurückzieht. S verfolgt die Bewegung des U erst mit einem kleinen Vorwärtsschritt mit dem linken Fuß, dann mit einem großen Schritt mit dem rechten Fuß und schlägt das Hidari-gote des U. S tritt etwas zurück und wechselt zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchi-dachi: Migi-Jôdan
+
+    Shidachi: Seigan
+
+    From Isshoku-Sokuhatsu-no-Maai, U strikes the Shomen of S with the right foot forward. S does Suriage with the left foot forward. Since U immediately goes back to Jodan, S strikes his Migi-gote with a right step. S changes to Migi-Jodan and goes back with two small steps (right – left). U lowers his sword to Gedan and with a big left step performs Tsuki to the Hara of S. S strikes his sword against that of U (with a sword movement like Gyaku-Kesagake), while drawing back his right foot. U tries to straighten up again and goes to Hidari-Jodan, drawing back first the left and then the right foot. S pursues U's movement first with a small forward step with the left foot, then with a big step with the right foot, and strikes the Hidari-gote of U. S steps back slightly and changes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Wakigamae
+
+    Kurz vor dem Isshoku-Sokuhatsu-no-Maai bewegt S seine linke Schulter leicht nach links, und tut so, als ob er die rechte Seite des U angreifen würde, wechselt aber zu Jodan, hebt sein rechtes Knie und schlägt U. U hebt sein Kissaki entgegen und tritt zügig zurück. Da der Schlag des S heftig ist, wird das Schwert des U nach unten gedrückt (etwa bis Gedan-Höhe). U geht weiter zurück und schlägt das Schwert des S nach links oben (Harai) und geht zu Jodan. S nutzt die Aufwärtsbewegung des Harai von U, geht zu Jodan und schlägt das Migi-gote des U. Dieser Schlag ist fast ganz gerade, weil das Migi-gote des U durch die Harai-Bewegung etwas nach links (von U her gesehen) verlagert ist. S tritt etwas zurück und wechselt zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Wakigamae
+
+    Shortly before Isshoku-Sokuhatsu-no-Maai, S moves his left shoulder slightly to the left and acts as if he were going to attack the right side of U, but changes to Jodan, raises his right knee and strikes U. U raises his Kissaki against it and briskly steps back. Since S's strike is violent, U's sword is pressed downward (to about Gedan height). U goes further back and strikes S's sword towards the upper left (Harai) and goes to Jodan. S uses the upward movement of U's Harai, goes to Jodan and strikes the Migi-gote of U. This strike is almost quite straight, because U's Migi-gote is shifted slightly to the left (seen from U) by the Harai movement. S steps back slightly and changes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: Gedan
+
+    Shidachi: Seigan
+
+    Wenn beide einander entgegentreten, bewegt sich U frühzeitig etwas nach links und wechselt zu Jodan-Uragasumi. S bewahrt das Seigan und bewegt sich etwas nach rechts. U macht einen kleinen Linksschritt und deutet einen Tsuki an, dreht aber anschließend das Kissaki im Uhrzeigersinn über seinem Kopf und führt mit einem Rechtsschritt Kesagake aus. S lässt sich nicht durch die Tsuki-Antäuschung beirren und macht gegen Kesagake des U Kiriotoshi bis zum Hara des U. U geht mit dem rechten Fuß zurück und wechselt zu Hidari-Jodan. S geht mit einem links-rechts-Schritt vor, schlägt das Hidari-gote des U. S tritt etwas zurück und geht zu Zanshin Gedan. Danach Gedanawase.
+  en: |-
+    Uchidachi: Gedan
+
+    Shidachi: Seigan
+
+    When the two come towards each other, U moves early slightly to the left and changes to Jodan-Uragasumi. S keeps the Seigan and moves slightly to the right. U makes a small left step and hints at a Tsuki, but then turns the Kissaki clockwise above his head and performs Kesagake with a right step. S is not misled by the feinted Tsuki and does Kiriotoshi against U's Kesagake down to the Hara of U. U goes back with the right foot and changes to Hidari-Jodan. S goes forward with a left-right step, strikes the Hidari-gote of U. S steps back slightly and goes to Zanshin Gedan. Then Gedanawase.
+- de: |-
+    Uchidachi: Jôdan-gasumi
+
+    Shidachi: Gedan
+
+    In das Shôshi-Kikkou-no-Maai eintretend hebt S mit dem linken Fuß vorne sein Kissaki gegen das des U. U führt mit einem rechten Schritt Tsuki gegen den Hals des S. Den linken Fuß zurückziehend wechselt S zu Yo und empfängt das Tsuki des U. Anschließend führt S mit einem links-rechts-Schritt das Kissaki zu Mizo'ochi des U, während er mit dem eigenen Schwert das Schwert des U bogenförmig nach außen-vorn schiebt. Da das Kissaki des S direkt vor dem Mizo'ochi gehalten wird, gibt U auf und zeigt sein Kissaki nach rechts unten wie beim Zurücktreten nach den einzelnen Übungen. S geht mit einem rechts-links-Schritt zurück und legt sein Kissaki nach rechts unten genau wie U (Zanshin Sasage-Dachi). Danach Gedan-awase.
+  en: |-
+    Uchidachi: Jôdan-gasumi
+
+    Shidachi: Gedan
+
+    Entering Shôshi-Kikkou-no-Maai, S raises his Kissaki with the left foot forward against that of U. With a right step U performs Tsuki against the neck of S. Drawing back the left foot, S changes to Yo and receives U's Tsuki. Then, with a left-right step, S brings the Kissaki to the Mizo'ochi of U, while with his own sword he pushes U's sword in an arc outward and forward. Since S's Kissaki is held directly in front of the Mizo'ochi, U gives up and points his Kissaki to the lower right, as when stepping back after the individual exercises. S goes back with a right-left step and lays his Kissaki to the lower right just like U (Zanshin Sasage-Dachi). Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend lauert S nach dem Linksschritt des U und mit dem rechten Fuß vorne gibt eine Finte auf das linke Kote des U. U nutzt diese Gelegenheit und macht mit einem Schritt rechts Kesagake. S geht mit dem rechten Fuß zurück und wechselt zu In. U geht mit dem rechten Fuß zurück und wechselt zu Hidari-Jodan. S schlägt mit einem Rechtsschritt das Hidari-gote des U und kehrt - mit dem rechten Fuß groß zurücktretend – wieder zu In zurück. Da U mit dem Rechtsschritt zu Gedan wechselt, wechselt S zu Wakigamae und greift sofort mit einem Rechtsschritt von oben das Men des U an. U macht Suriage, während er den rechten Fuß zurückzieht. Mit dem linken Fuß weiter zurücktretend schlägt U das Shomen des S, dem gegenüber S mit einem linken Vorwärtsschritt Suriage macht. U geht mit einem rechten Schritt weiter zurück und wechselt zu Hidari-Jodan. S schlägt das Hidari-gote des U mit einem rechten Schritt und - den rechten Fuß zurückziehend - wechselt er zu Zanshin In. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    Entering Isshoku-Sokuhatsu-no-Maai, S lies in wait after U's left step and with the right foot forward gives a feint at the left Kote of U. U uses this opportunity and does Kesagake with a step to the right. S goes back with the right foot and changes to In. U goes back with the right foot and changes to Hidari-Jodan. S strikes the Hidari-gote of U with a right step and returns to In – stepping far back with the right foot. Since U changes to Gedan with the right step, S changes to Wakigamae and immediately, with a right step, attacks the Men of U from above. U does Suriage while drawing back the right foot. Stepping further back with the left foot, U strikes the Shomen of S, against which S does Suriage with a left forward step. U goes further back with a right step and changes to Hidari-Jodan. S strikes the Hidari-gote of U with a right step and – drawing back the right foot – changes to Zanshin In. Then Gedan-awase.
+- de: |-
+    Uchidachi: Gedan
+
+    Shidachi: Seigan
+
+    Wie bei Honshô geht U frühzeitig etwas nach links und wechselt zu Jodan-Uragasumi. S ändert seine Position diesmal (im Gegensatz zu Honshô) nicht, lässt aber sein Kissaki nach rechts in die Richtung U zeigen. U macht einen kleinen Linksschritt und täuscht ein Tsuki vor, aber das Kissaki über seinem Kopf in Uhrzeigersinn drehend macht er mit einem Rechtsschritt Kesagake. S lässt sich durch die Tsuki-Finte nicht verwirren, beobachtet die Bewegung des U ruhig und macht Kiriotoshi gegen Kesagake. Da das Kissaki nun direkt vor dem Bauch liegt, versucht U mit einem rechten Rückwärtsschritt, - das eigene Schwert von links nach rechts drehend (im Uhrzeigersinn) - das Schwert des S nach rechts unten zu beherrschen. S dreht aber mit einem linken Schritt sein Schwert in gleiche Richtung etwas schneller als U und hält sein Schwert über dem des U. Diesmal dreht U sein Schwert noch einen Schritt (links) zurücktretend in die andere Richtung (gegen den Uhrzeigersinn), um das Schwert des S links unten zu beherrschen. Aber auch diesmal dreht S sein Schwert in die gleiche Richtung (von S her gesehen im Uhrzeigersinn) und hält sein Schwert über dem des U, wobei er mit dem rechten Fuß einen Schritt vorgeht. Nun versucht U noch einmal sein Schwert im Uhrzeigersinn zu drehen, um das Schwert des S rechts unten zu beherrschen, während er mit dem rechten Fuß einen Schritt zurückgeht. S aber verfolgt ihn mit einem linken Vorwärtsschritt, während er das Schwert gegen den Uhrzeigersinn dreht und auf das Schwert des U legt. Nun wechselt U mit einem kleinen Rückwärts-Suriashi des rechten Fußes zu Jodan, um den Gegenangriff zu starten. Aber S verfolgt ihn mit einem rechten Vorwärtsschritt, schlägt das Hidari-Gote des U und geht zu Zanshin Gedan zurück. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Gedan
+
+    Shidachi: Seigan
+
+    As in Honshô, U goes early slightly to the left and changes to Jodan-Uragasumi. This time S does not change his position (in contrast to Honshô), but lets his Kissaki point to the right in the direction of U. U makes a small left step and feints a Tsuki, but turning the Kissaki above his head clockwise he does Kesagake with a right step. S does not let himself be confused by the Tsuki feint, calmly watches U's movement and does Kiriotoshi against Kesagake. Since the Kissaki now lies directly in front of the belly, U tries, with a right backward step, – turning his own sword from left to right (clockwise) – to control S's sword towards the lower right. But S, with a left step, turns his sword in the same direction somewhat faster than U and holds his sword above that of U. This time U turns his sword, stepping one more step back (left), in the other direction (anticlockwise), to control S's sword at the lower left. But this time too S turns his sword in the same direction (clockwise, seen from S) and holds his sword above that of U, going one step forward with the right foot. Now U tries once more to turn his sword clockwise, to control S's sword at the lower right, while going one step back with the right foot. But S pursues him with a left forward step, while turning the sword anticlockwise and laying it on U's sword. Now U, with a small backward Suriashi of the right foot, changes to Jodan to start the counter-attack. But S pursues him with a right forward step, strikes the Hidari-Gote of U and goes back to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend schlägt U von Dai-Jodan (großem Jodan) aus mit dem rechten Fuß vorne das Men des S. S bleibt mit vollem Ki mit dem rechten Fuß vorne an der Stelle, so dass U's Schlag kürzer wird und auf das Schwert des S fällt. S senkt in diesem Augenblick das Kissaki zügig auf Höhe des Hara des U. Mit dem rechten Fuß zurücktretend wechselt U zu In. Da S mit dem Kissaki direkt vor der linken Faust des U folgt, geht U ein paar Schritte mit In zurück und den linken Fuß zurückziehend schlägt er das linke Yokomen des S. S schickt sein Schwert nach linksvorne, empfängt das schlagende Schwert des U und drängt diesen. U geht ein paar Schritte zurück, stoppt mit dem linken Fuß hinten die Rückwärtsbewegung, hebt mit dem eigenen Schwert das nachdrängende Schwert des S und versucht dieses von oben nach links unten zurückzuschlagen. In diesem Augenblick lässt S, sich etwas nach links bewegend, sein Schwert nach rechts unten fallen (hierbei wird die rechte Hand nicht gesenkt, sondern sein Schwert wird nur nach rechts unten gekippt), so dass U sich stark nach links-unten neigt. Wenn U sich wieder fängt und zu Migi-Jodan wechselt, schlägt S das Migi-gote des U.* Während das Schwert noch auf Migi-gote ruht macht S eine schiebende Vorwärtsbewegung (wie beim Aikido-Ikkyo), beginnend mit dem linken Fuß. Auf den Schritt nach links-vorne folgt mit dem rechten Fuß eine Rückwärts-Dreh-Bewegung im Uhrzeigersinn, bevor S zu Zanshin Hidari-Jôdan wechselt (mit beiden Händen). Anschließend Gedan-awase.
+
+    *In Wirklichkeit kann S sofort von oben U schlagen, wenn U sich nach unten neigt, so dass dieser keine Zeit hat, den Fuß des S zu treffen. Aber als Kumidachi wartet S bis U sich wieder aufrecht stellt.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Entering Isshoku-Sokuhatsu-no-Maai, U strikes from Dai-Jodan (big Jodan) with the right foot forward the Men of S. S stays in place with full Ki with the right foot forward, so that U's strike becomes shorter and falls on S's sword. At this moment S briskly lowers the Kissaki to the height of U's Hara. Stepping back with the right foot, U changes to In. Since S follows with the Kissaki directly in front of U's left fist, U goes a few steps back with In and, drawing back the left foot, strikes the left Yokomen of S. S sends his sword to the left front, receives U's striking sword and presses him. U goes a few steps back, stops the backward movement with the left foot behind, with his own sword raises S's pressing sword and tries to strike it back from above towards the lower left. At this moment S, moving slightly to the left, lets his sword fall to the lower right (here the right hand is not lowered; his sword is only tilted to the lower right), so that U leans strongly to the lower left. When U catches himself again and changes to Migi-Jodan, S strikes the Migi-gote of U.* While the sword still rests on the Migi-gote, S makes a pushing forward movement (as in aikido Ikkyo), beginning with the left foot. The step to the left front is followed with the right foot by a backward turning movement clockwise, before S changes to Zanshin Hidari-Jôdan (with both hands). Then Gedan-awase.
+
+    *In reality S can immediately strike U from above if U leans downward, so that he has no time to hit S's foot. But as a Kumidachi, S waits until U stands upright again.
+- de: |-
+    Uchi-dachi: In
+
+    Shidachi: Seigan
+
+    In Shoshi-Kikko-no-Maai eintretend versucht U das Seigan-Schwert des S nach links unten herunterzuschlagen. S senkt das Kissaki, so dass U ins Leere schlägt und sein Kissaki links unten hält. S hebt sein Kissaki sofort wieder hoch und führt Tsuki in Richtung Hals des U. U geht ein paar Schritte zurück und schlägt mit dem rechten Fuß vorne das Migi-Do (die rechte Seite) des S. S macht einen Links-Schritt, senkt das Kissaki nach rechts vorne und empfängt das Schwert des U. U wechselt sofort zu Migi-Jodan; S schlägt das Migi-gote des U und wechselt zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchi-dachi: In
+
+    Shidachi: Seigan
+
+    Entering Shoshi-Kikko-no-Maai, U tries to strike S's Seigan sword down to the lower left. S lowers the Kissaki, so that U strikes into empty air and holds his Kissaki at the lower left. S immediately raises his Kissaki again and performs Tsuki towards the neck of U. U goes a few steps back and with the right foot forward strikes the Migi-Do (the right side) of S. S makes a left step, lowers the Kissaki to the front right and receives U's sword. U immediately changes to Migi-Jodan; S strikes the Migi-gote of U and changes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: Yô
+
+    Shidachi: Seigan
+
+    U geht mit Yo vor, während S mit Seigan nach vorn kommt. In Shoshi-Kikko-no-Maai eintretend lässt U mit dem linken Fuß vorne sein Kissaki gerade nach vorne fallen, um das Migi-gote des S zu schneiden. S empfängt diesen Angriff mit Chudan-Kasumi (also mit dem linken Fuß vorne). Da dieser anschließend mit einem kleinen linken Vorwärtsschritt eine Tsuki-Bewegung macht, zieht U erst seinen linken Fuß und dann sofort auch den rechten Fuß zurück und geht zu Hidari-Jodan. Mit einem rechten Vorwärtsschritt schlägt S das Hidari-gote des U. Danach gehen S und U jeweils zwei Schritte zurück. S bewahrt Seigan und U wechselt zu In. Während beide sich aufeinander zu bewegen, versucht U aus Jodan heraus, S zu treffen. S weicht mit einem Schritt nach rechts dieser Bewegung aus, taucht leicht unter dem Hidari-gote des U hindurch und schneidet mit einem ziehenden Schnitt den Bauch des U von links nach rechts. U stoppt seine Vorwärtsbewegung und senkt den Oberkörper, bis das Schwert fast den Boden berührt. S verharrt nach dem Schnitt kurz in seiner Position als Zanshin Migi Harai-dachi. Anschließend Gedan-awase.
+
+    Itto-den Shinki Toho, Okuden: Odachi
+  en: |-
+    Uchidachi: Yô
+
+    Shidachi: Seigan
+
+    U goes forward with Yo, while S comes forward with Seigan. Entering Shoshi-Kikko-no-Maai, U, with the left foot forward, lets his Kissaki fall straight forward, to cut the Migi-gote of S. S receives this attack with Chudan-Kasumi (so with the left foot forward). Since he then makes a Tsuki movement with a small left forward step, U first draws back his left foot and then immediately also the right foot and goes to Hidari-Jodan. With a right forward step S strikes the Hidari-gote of U. Then S and U each go two steps back. S keeps Seigan and U changes to In. While both move towards each other, U tries from Jodan to hit S. S evades this movement with a step to the right, dips slightly under the Hidari-gote of U and with a drawing cut cuts the belly of U from left to right. U stops his forward movement and lowers his upper body until the sword almost touches the floor. After the cut S remains briefly in his position as Zanshin Migi Harai-dachi. Then Gedan-awase.
+
+    Itto-den Shinki Toho, Okuden: Odachi
+- de: '22. Nijûni-ban : Chishô (31. Migi-gote Shita = von unten)'
+  en: '22. Nijûni-ban : Chishô (31. Migi-gote Shita = from below)'
+- de: |-
+    Uchidachi: Gedan
+
+    Shidachi: jizuri no Gedan
+
+    In das Isshoku-sokuhatsu-no-Maai eintretend wechselt U zu Jodan und möchte S schlagen. S hebt sein Schwert nach oben, während er etwas nach links ausweicht, und schneidet das Migi-gote des U von unten. Anschließend gehen beide zu Zanshin Yô. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Gedan
+
+    Shidachi: jizuri no Gedan
+
+    Entering Isshoku-sokuhatsu-no-Maai, U changes to Jodan and wants to strike S. S raises his sword upward, while evading slightly to the left, and cuts the Migi-gote of U from below. Then both go to Zanshin Yô. Then Gedan-awase.
+- de: |-
+    Uchidachi: Gedan
+
+    Shidachi: Gedan
+
+    In Shôshi-kikkô-no-Maai eintretend versucht U, Gedan-zuki zu Mizo'ochi des S zu geben. S weicht etwas nach rechts aus und stößt, nur mit der rechten Hand das Schwert streckend, das Mizo'ochi des U. Zurücktretend geht er anschließend zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Gedan
+
+    Shidachi: Gedan
+
+    Entering Shôshi-kikkô-no-Maai, U tries to give Gedan-zuki to the Mizo'ochi of S. S evades slightly to the right and thrusts, stretching out the sword with the right hand only, at the Mizo'ochi of U. Stepping back, he then goes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend versucht U mit einem rechten Schritt das Seigan-Schwert des S nach links wegzuschlagen. In diesem Augenblick zieht S seinen rechten Fuß zurück und wechselt zu In, so dass U ins Leere schlägt und in einen unsicheren Stand halbwegs zu Yo no Kamae zu kommen. Anschließend zieht er seinen rechten Fuß zurück und wechselt zu Hidari-Jodan. Mit einem rechten Schritt nach vorne schlägt S dessen Hidari-gote und geht zu Zanshin Chûdan-gasumi zurück. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Entering Isshoku-Sokuhatsu-no-Maai, U tries with a right step to strike S's Seigan sword away to the left. At this moment S draws back his right foot and changes to In, so that U strikes into empty air and comes into an unsure stance, halfway to Yo no Kamae. Then he draws back his right foot and changes to Hidari-Jodan. With a right step forward S strikes his Hidari-gote and goes back to Zanshin Chûdan-gasumi. Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan è Chudan-gasumi
+
+    Shidachi: Gedan
+
+    U nähert sich dem S, während U von Seigan beginnend allmählich das Kissaki bis Gedan senkt und anschließend zu Chudan Kasumi wechselt. S kommt mit Gedan dem U näher und im Shôshi-Kikkôno-Maai hebt er sein Kissaki und berührt das Kissaki des U von rechts. Hierbei hat S seinen rechten Fuß vorne. U versucht mit einem Rechtsschritt Tsuki gegen den Hals des S. Im gleichen Augenblick geht S mit einem Linksschritt entschieden nach vorne und gibt mit seinem Schwert Druck auf das Schwert des U. U geht mit dem rechten Fuß zurück und wechselt zu Waki und anschließend zu Hidari-Jodan. S geht mit einem kleinen Schritt des rechten Fußes vor und schlägt das Hidari-gote des U und geht in Seigan zwei Schritte zurück (rechts – links). U wechselt zu In und versucht mit einem Rechtsschritt von links die rechte Seite (Do = Rumpf) des S zu schlagen. Da S dieses Schwert mit dem eigenen Schwert von oben beherrscht, versucht U das Schwert des S im Uhrzeigersinn quasi einzuwickeln (Makikomi). S lässt dies zu und zieht sein Schwert aus dieser Kreisbewegung heraus. Da U's Schwert dadurch ins Leere geführt wird, bringt er sein Schwert zu Migi-Jodan und möchte noch einmal schlagen. Aber S schlägt U's Migi-gote rechtzeitig und geht zu Zanshin Gedan zurück. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Seigan → Chudan-gasumi
+
+    Shidachi: Gedan
+
+    U approaches S, while U, beginning from Seigan, gradually lowers the Kissaki to Gedan and then changes to Chudan Kasumi. S comes closer to U with Gedan and in Shôshi-Kikkôno-Maai raises his Kissaki and touches U's Kissaki from the right. Here S has his right foot forward. With a right step U attempts Tsuki against the neck of S. At the same moment S goes decidedly forward with a left step and with his sword gives pressure on U's sword. U goes back with the right foot and changes to Waki and then to Hidari-Jodan. S goes forward with a small step of the right foot and strikes the Hidari-gote of U and goes two steps back in Seigan (right – left). U changes to In and with a right step tries from the left to strike the right side (Do = torso) of S. Since S controls this sword with his own sword from above, U tries to wrap S's sword clockwise, as it were (Makikomi). S allows this and draws his sword out of this circular movement. Since U's sword is thereby led into empty air, he brings his sword to Migi-Jodan and wants to strike once more. But S strikes U's Migi-gote in time and goes back to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Hidari-gote)
+
+    Uchidachi: Hidari-Jôdan
+
+    Shidachi: Seigan
+
+    Bei der Begegnung versucht U von Hidari-Jodan aus mit dem rechten Fuß vorne das rechte Uchi-kote des S zu schneiden. S zieht seinen rechten Fuß zurück und wechselt von Seigan zu Waki-gamae, so dass U ins Leere schlägt. U versucht schnell zur stabilen Lage zurückzukommen, indem er den rechten Fuß zurückzieht und zu Hidari-Jodan wechselt. Mit einem rechten Vorwärtsschritt schlägt S das Hidari-gote des U, zieht sofort seinen rechten Fuß wieder zurück und wechselt zu Wakigamae. Während U von Hidari-Jodan zu In wechselt, wechselt S von Waki-gamae auch zu In. U versucht von In aus direkt das Mizo'ochi des S zu stechen. S weicht etwas nach rechts aus und führt gegen das Mizo'ochi des U einen Gegen-Tsuki. U versucht nun gegen den Uhrzeigersinn das Schwert des S einzuwickeln (Makikomi), während er ausweichend den rechten Fuß zurückzieht, weil das Kissaki des S direkt vor dem Hara ist. U geht zu Hidari-Jodan, um einen Gegenangriff zu starten. S lässt zuerst sein Schwert leicht „einwickeln“, hebt es dann zu Jodan und schlägt das Hidari-gote des U. Anschließend tritt S zu Zanshin Gedan zurück. Danach Gedan-awase.
+  en: |-
+    Hidari-gote)
+
+    Uchidachi: Hidari-Jôdan
+
+    Shidachi: Seigan
+
+    At the encounter, U tries from Hidari-Jodan with the right foot forward to cut the right Uchi-kote of S. S draws back his right foot and changes from Seigan to Waki-gamae, so that U strikes into empty air. U tries to come back quickly to a stable position, by drawing back the right foot and changing to Hidari-Jodan. With a right forward step S strikes the Hidari-gote of U, immediately draws his right foot back again and changes to Wakigamae. While U changes from Hidari-Jodan to In, S also changes from Waki-gamae to In. U tries from In to thrust directly at the Mizo'ochi of S. S evades slightly to the right and performs a counter-Tsuki against the Mizo'ochi of U. U now tries to wrap S's sword anticlockwise (Makikomi), while evading by drawing back the right foot, because S's Kissaki is directly in front of the Hara. U goes to Hidari-Jodan to start a counter-attack. S first lets his sword be lightly "wrapped", then raises it to Jodan and strikes the Hidari-gote of U. Then S steps back to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend gibt S mit dem Kissaki eine Finte auf das rechte Kote des U. Da U reagiert und sein Kissaki nach rechts neigt, wendet S sein Kissaki wieder in die Mitte und versucht das Schwert des U mit einem leichten Tsuki von oben etwas nach links zu beherrschen. U hält diesen Angriff stark und versucht gegen die Brust des S ein Tsuki. Da S in diesem Augenblick sein Schwert nach oben führt und das Kissaki des U ins Leere stößt, neigt es nach links (rechts von S). S schlägt das Schwert des U heftig von oben, so dass der rechte Griff des U sich löst und dieser nur mit der linken Hand das Schwert an seiner linken Seite halten kann. S macht sofort Nuki-Do von rechts unten nach links oben. S führt sein Schwert - Schneide voran - nach rechts, bis das Kissaki in die Richtung des Halses des U zeigt, und wendet seine Schneide im Uhrzeigersinn, so dass die Schneide nach links zeigt, um mit Zanshin Hongaku zu Ende zu kommen. Danach Gedan-Awase.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    Entering Isshoku-Sokuhatsu-no-Maai, S gives a feint with the Kissaki at the right Kote of U. Since U reacts and tilts his Kissaki to the right, S turns his Kissaki back to the centre and tries to control U's sword slightly to the left from above with a light Tsuki. U holds this attack strongly and attempts a Tsuki against the chest of S. Since at this moment S brings his sword upward and U's Kissaki thrusts into empty air, it tilts to the left (to the right of S). S strikes U's sword violently from above, so that U's right grip comes loose and he can hold the sword on his left side with the left hand only. S immediately does Nuki-Do from lower right to upper left. S brings his sword – cutting edge first – to the right, until the Kissaki points in the direction of U's neck, and turns his cutting edge clockwise, so that the cutting edge points to the left, to finish with Zanshin Hongaku. Then Gedan-Awase.
+- de: |-
+    Uchidachi: Gedan
+
+    Shidachi: Gedan
+
+    Beide treten mit Gedan vor. Ins Isshoku-Sokuhatsu-no-Maai eintretend geht U etwas nach rechts ausweichend zu Waki-gamae und macht mit dem rechten Fuß vorne ein großes Kesa-gake. Im gleichen Augenblick weicht auch S etwas nach rechts und schlägt das Hidari-gote des U von oben. (Das Hidari-gote des U verharrt nach der Kesa-gake-Bewegung kurz in Bauchhöhe.) Anschließend geht S zu Zanshin Chûdan-Ura-gasumi. Das Kissaki ruht dann direkt vor dem Hals des U.
+  en: |-
+    Uchidachi: Gedan
+
+    Shidachi: Gedan
+
+    Both step forward with Gedan. Entering Isshoku-Sokuhatsu-no-Maai, U, evading slightly to the right, goes to Waki-gamae and with the right foot forward does a big Kesa-gake. At the same moment S also evades slightly to the right and strikes the Hidari-gote of U from above. (After the Kesa-gake movement U's Hidari-gote remains briefly at belly height.) Then S goes to Zanshin Chûdan-Ura-gasumi. The Kissaki then rests directly in front of the neck of U.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Gedan
+
+    Mit In in Isshoku-Sokuhatsu-no-Maai eintretend geht U nach rechts. S lässt sein Schwert wie bis jetzt und wendet sich absichtlich nicht dem U zu, um ihn zum Angriff zu verlocken. Da U sieht, dass die linke Seite des S frei ist, greift er mit einem großen Kesagake an (rechter Fuß vorne). S weicht etwas nach rechts aus und wechselt zu In. Da die Hände des U nach dem Kesagake gesenkt sind, legt S sein Schwert sofort auf das linke Kote des S mit einer Tsuki-Bewegung (den rechten Fuß vorne). U zieht seinen rechten Fuß zurück und wechselt ausweichend zu Waki, dem S mit einem Schritt links vor folgt. Das Schwert des S liegt ganze Zeit auf dem linken Kote des U. U hebt sein Schwert hoch zu Jodan; S folgt, indem er seinen rechten Fuß dem linken parallel stellt und das linke Kote des U oben mit dem eigenen Schwert stemmend blockiert. U versucht dieses Stemmen des S zu durchbrechen und S von oben zu schlagen. In diesem Augenblick senkt S seine Position und schneidet das Do des U von rechts oben nach links unten, wobei er mit dem linken Fuß zuerst nach links ausweicht und den rechten Fuß nachzieht. Anschließend geht er zu Zanshin Jôdan Ura-gasumi. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Gedan
+
+    Entering Isshoku-Sokuhatsu-no-Maai with In, U goes to the right. S leaves his sword as it was and deliberately does not turn towards U, to tempt him to attack. Since U sees that the left side of S is free, he attacks with a big Kesagake (right foot forward). S evades slightly to the right and changes to In. Since U's hands are lowered after the Kesagake, S immediately lays his sword on the left Kote of S with a Tsuki movement (the right foot forward). U draws back his right foot and, evading, changes to Waki, which S follows with a step forward to the left. S's sword lies the whole time on the left Kote of U. U raises his sword high to Jodan; S follows by placing his right foot parallel to the left and blocking the left Kote of U above, bracing with his own sword. U tries to break through this bracing by S and to strike S from above. At this moment S lowers his position and cuts the Do of U from upper right to lower left, evading first to the left with the left foot and drawing up the right foot. Then he goes to Zanshin Jôdan Ura-gasumi. Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    Beide treten bis Shoshi-Kikko-no-Maai vor. S hebt das Kissaki mit starkem Ki bis Ai-Seigan. U wartet bis zum Ai-Seigan und gerade dann, wenn S sich durch den Gleichstand sicher zu fühlen beginnt, wendet U sein Kissaki halbkreisförmig von rechts nach links und – mit dem rechten Fuß vorne – schlägt den Migi-Do des S. Da S sein Schwert auf das des U legt und sich so verteidigt, versucht U mit dem rechten Fuß einen Schritt zurückgehend – den Hidari-Do des S zu schlagen, während er das Kissaki halbkreisförmig diesmal von links nach rechts wendet. In diesem Augenblick schlägt S nur mit der linken Hand das Men des U mit dem linken Fuß vorne. S geht mit links-rechts-Schritt zurück und geht zu Zanshin Hidari-Jôdan über - nur mit der linken Hand. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    Both step forward as far as Shoshi-Kikko-no-Maai. S raises the Kissaki with strong Ki up to Ai-Seigan. U waits until Ai-Seigan and just when S begins to feel safe through the even position, U turns his Kissaki in a semicircle from right to left and – with the right foot forward – strikes the Migi-Do of S. Since S lays his sword on that of U and so defends himself, U tries, going one step back with the right foot, – to strike the Hidari-Do of S, while this time turning the Kissaki in a semicircle from left to right. At this moment S, with the left hand only, strikes the Men of U with the left foot forward. S goes back with a left-right step and goes over to Zanshin Hidari-Jôdan – with the left hand only. Then Gedan-awase.
+- de: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    Genau wie bei Uragiri treten beide bis Shoshi-Kikko-no-Maai vor, und S hebt das Kissaki bis Ai-Seigan. U versucht das Kissaki des S etwas nach links zu drängen, dem gegenüber versucht S das Kissaki des U seinerseits nach links zurückzudrängen. Um dieser Gegenbewegung des S nicht zu unterliegen, versucht U erneut dagegen zu agieren, und zwar diesmal mit einem Tsuki zum Hals des S. S weicht etwas nach links aus und hebt das Tsuka über seinen Kopf, während das Kissaki rechts unten gesenkt wird, wobei beide Schwerter Kontakt halten. Hierbei lässt S das Kissaki des U nach rechts gleiten (fließen = Nagashi). Da U leicht in die Leere sticht, geht er etwas zurück nach links und wechselt zu Migi-Jodan, um S erneut zu schlagen. S schlägt in diesem Augenblick das Migi-gote des U mit rechtem Fuß vorne. Anschließend tritt S mit dem rechten Fuß groß zurück und wechselt zu Zanshin Jôdan-gasumi. Danach Gedan-awase.
+  en: |-
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    Just as in Uragiri, both step forward as far as Shoshi-Kikko-no-Maai, and S raises the Kissaki up to Ai-Seigan. U tries to push S's Kissaki slightly to the left; against this, S for his part tries to push U's Kissaki back to the left. In order not to succumb to this counter-movement of S, U tries to act against it again, this time with a Tsuki to the neck of S. S evades slightly to the left and raises the Tsuka above his head, while the Kissaki is lowered to the lower right, both swords keeping contact. Here S lets U's Kissaki glide to the right (flow = Nagashi). Since U thrusts lightly into empty air, he goes back slightly to the left and changes to Migi-Jodan, to strike S again. At this moment S strikes the Migi-gote of U with the right foot forward. Then S steps far back with the right foot and changes to Zanshin Jôdan-gasumi. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Von Isshoku-Sokuhatsu-no-Maai aus schlägt U mit rechtem Fuß vorne das Men des S. S macht Kiriotoshi bis zum Mizo'ochi des U. U geht mit dem rechten Fuß einen Schritt zurück und schlägt sofort mit Kesagiri zurück. S hebt das Kissaki etwas und empfängt das schlagende Schwert des U, wobei S sein Kissaki etwas nach vorne streckt. U weicht leicht nach links und wechselt nach einer Kasumi-nagashi-Bewegung zu Jodan, um S zu schlagen. S reagiert schnell und schlägt das Migi-Do des U von links nach rechts mit dem linken Fuß vorne. (Dieser Schnitt wird vor dem Migi-Do des U gestoppt, solange wir noch keinen Do-Schutz verwenden.) Anschließend tritt er mit dem linken Fuß etwas zurück und wechselt zu Zanshin Hongaku. Die Schwertspitze des S ist auf den Hals des U gerichtet. Danach Gedan-awase.
+
+    Itto-den Shinki Toho, Jun-Menkyo: Odachi
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    From Isshoku-Sokuhatsu-no-Maai, U strikes the Men of S with the right foot forward. S does Kiriotoshi down to the Mizo'ochi of U. U goes one step back with the right foot and immediately strikes back with Kesagiri. S raises the Kissaki slightly and receives U's striking sword, stretching his Kissaki slightly forward. U evades slightly to the left and after a Kasumi-nagashi movement changes to Jodan, to strike S. S reacts quickly and strikes the Migi-Do of U from left to right with the left foot forward. (This cut is stopped in front of U's Migi-Do as long as we do not yet use a Do protector.) Then he steps back slightly with the left foot and changes to Zanshin Hongaku. S's sword tip is directed at the neck of U. Then Gedan-awase.
+
+    Itto-den Shinki Toho, Jun-Menkyo: Odachi
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    In Shoshi-Kikko-no-Maai eintretend streckt U sein Kissaki gegen das des S, so dass sich beide in Ai-Seigan gegenüber stehen. Hierbei hat U den linken Fuß vorne. Mit einem kleinen Links-Schritt geht U vor, um die Reaktion des S zu prüfen. S steht mit dem rechten Fuß vorne, aber da U einen kleinen Schritt vorwärts macht, geht S auch mit dem hinteren (linken) Fuß etwas zurück, wobei der rechte Fuß nachgezogen wird. U glaubt hier die Schwäche des S zu sehen, so dass er mit dem linken Fuß vorne groß das Shomen des S schlägt. Gerade in diesem Augenblick macht S Shomen Kiriotoshi und stoppt sein Kissaki vor dem Hals des U. Danach geht S mit Semeage vor und schlägt das Hidari-gote des U, während dieser mit dem rechten Fuß anfangend zurücktritt. S geht zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Entering Shoshi-Kikko-no-Maai, U stretches his Kissaki against that of S, so that both stand opposite each other in Ai-Seigan. Here U has the left foot forward. With a small left step U goes forward, to test S's reaction. S stands with the right foot forward, but since U makes a small step forward, S also goes back slightly with the rear (left) foot, with the right foot drawn up. Here U believes he sees S's weakness, so that with the left foot forward he strikes the Shomen of S in a big movement. Just at this moment S does Shomen Kiriotoshi and stops his Kissaki in front of the neck of U. Then S goes forward with Semeage and strikes the Hidari-gote of U, while U steps back, starting with the right foot. S goes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    In Shoshi-Kikko-no-Maai eintretend streckt U wie beim Junpi sein Kissaki gegen das des S mit dem linken Fuß vorne (Ai-Seigan). Danach drückt U das Kissaki des S nach links. S reagiert gegen diesen Druck und geht etwas nach rechts, mit dem rechten Fuß beginnend. Hier zieht U plötzlich und überraschend das Schwert zurück zu In, aber gleich anschließend schlägt er das Shomen des S mit einem rechten Vorwärtsschritt. S hebt das Kissaki erst auch hoch, aber nach links ausweichend schlägt er das Do des U. Da U sich zuerst nach vorne unten stark neigt, aber wieder zu Jodan wechselt und sich dem S zuwendet, wendet sich auch S etwas nach rechts zum U und schlägt das Migi-gote des U. Danach mit Nadegiri* das Schwert nach rechts unten führend geht er zu Zanshin Hirakidachi, wobei er seinen Körper nach rechts dreht und rechts hinter dem U steht. Danach Gedanawase.
+
+    * Nadegiri: das Verb „naderu“ bedeutet „streicheln“. „kiru“ heißt „schneiden“. Nadegiri ist „leicht streichelnd schneiden“.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Entering Shoshi-Kikko-no-Maai, U stretches, as in Junpi, his Kissaki against that of S with the left foot forward (Ai-Seigan). Then U presses the Kissaki of S to the left. S reacts against this pressure and goes slightly to the right, beginning with the right foot. Here U suddenly and surprisingly draws the sword back to In, but immediately afterwards strikes the Shomen of S with a right forward step. S first also raises the Kissaki, but evading to the left strikes the Do of U. Since U at first leans strongly forward and down, but changes back to Jodan and turns towards S, S also turns slightly to the right towards U and strikes the Migi-gote of U. Then, with Nadegiri* bringing the sword to the lower right, he goes to Zanshin Hirakidachi, turning his body to the right and standing to the right behind U. Then Gedanawase.
+
+    * Nadegiri: the verb "naderu" means "to stroke". "kiru" means "to cut". Nadegiri is "cutting with a light stroke".
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Vom Isshoku-Sokuhatsu-no-Maai aus versucht U mit dem erhobenen linken Knie wie beim Ippon-me das Shomen des S zu schlagen. Da S aber unbeirrt mit Seigan vorwärts marschiert und mit dem Kissaki auf den Hals des U hinzielt, kann U den Schlag nicht vollenden, sondern dreht sich- dessen Kissaki ausweichend - nach links, während er sein Schwert links in großer Bewegung hinunter führt. S stoppt das Kissaki vor dem Hals des U, während er das Schwert nach rechts kippt, so dass die Schneide vor dem Hals des U ruht. Danach geht er mit rechts-links-Rückwärtsschritt zurück zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    From Isshoku-Sokuhatsu-no-Maai, U tries with the left knee raised, as in Ippon-me, to strike the Shomen of S. But since S marches forward undeterred with Seigan and aims with the Kissaki at the neck of U, U cannot complete the strike, but turns – evading S's Kissaki – to the left, while bringing his sword down on the left in a big movement. S stops the Kissaki in front of the neck of U, while tilting the sword to the right, so that the cutting edge rests in front of the neck of U. Then he goes back with a right-left backward step to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    „Juji“ bedeutet „Kreuzform“. Dies kommt daher, dass die Zahl Zehn japanisch geschrieben (jû = 十) eine Kreuzform bildet. „Jûji“ ist urprünglich „Schrift oder Zeichen für Zehn“. „kuzusu“ bedeutet etwa „aus der Form bringen“.
+
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend gibt S mit seinem Kissaki eine Finte gegen das rechte Kote des U. Hierbei hat er den linken Fuß vorne. Da U auf diese Finte reagierend sein Kissaki etwas nach rechts neigt, versucht S mit einem Rechtsschritt sein Kissaki von unterhalb des Kissaki von U in die Mitte zu führen, wobei er sein Kissaki auf Seigan-Höhe bringt. Hier bringt auch U sein Kissaki in die Mitte, um den Kampf um die Mitte nicht zu verlieren. Nun stehen beide mit Ai-Seigan (Seigan-Gleichstand). U geht mit dem vorderen Fuß (rechts) etwas vor, und S geht dementsprechend mit dem hinteren Fuß (links) etwas zurück. Hier glaubt U die Schwäche des S zu sehen, und mit dem hinteren Fuß (links) beginnend geht er in vier Schritten vor und führt ein scharfes Tsuki. Sein Ziel ist das Mizo'ochi (Solar plexus) des S. S empfängt diesen Angriff dadurch, dass er den rechten Fuß nach rechts hinten etwa 90° herumdreht und sein Schwert vor dem Hara horizontal hält, so dass das Schwert von U auf dem des S mit Druck nach unten ruht. In diesem Moment bilden die beiden Schwerter eine Kreuzform (Jû = +). S gibt von unten in einem kurzen Moment dem Gegendruck nach und wendet plötzlich das Kissaki rechts herum, so dass U sich nach vorne beugt.* U versucht sofort sich wieder aufrecht zu stellen und wechselt zu Jodan. S schlägt mit linkem Fuß vorne das Migi-gote des U. Danach geht U mit rechts-links-Schritt zurück und wechselt zu Yo, während S den linken Fuß zurückzieht, den rechten Fuß bis vor den linken Fuß nachzieht und zu Seigan wechselt. Anschließend schlägt U mit dem linken Fuß vorne das Shomen und S macht Kiriotoshi bis zum Mizo'ochi des U. U geht mit dem hinteren (rechten) Fuß zurück und wechselt zu Jodan. S schlägt das linke Kote des U und geht zu Zanshin Gedan. Danach Gedan-awase.
+
+    * Das Rechts-herum-Wenden des Kissaki: Hierbei soll S den rechten Fuß, der neben dem linken Fuß Ferse zu Ferse steht, schräg nach rechts hinten drehen. Sein Schwert soll nicht entlang des Schwertes des U nach hinten (zur Spitze von U's Schwert) geführt werden, weil es dann von U nach unten gedrückt wird. S muss sein Schwert zügig rechts herum drehen und über den eigenen Kopf führen und sofort das Migi-gote des U schlagen.
+  en: |-
+    "Juji" means "cross shape". This comes from the fact that the number ten written in Japanese (jû = 十) forms a cross shape. "Jûji" is originally "writing or character for ten". "kuzusu" means roughly "to bring out of shape".
+
+    Uchidachi: Seigan
+
+    Shidachi: Gedan
+
+    Entering Isshoku-Sokuhatsu-no-Maai, S gives a feint with his Kissaki at the right Kote of U. Here he has the left foot forward. Since U, reacting to this feint, tilts his Kissaki slightly to the right, S tries with a right step to bring his Kissaki from below U's Kissaki into the centre, bringing his Kissaki to Seigan height. Here U too brings his Kissaki to the centre, so as not to lose the fight for the centre. Now both stand with Ai-Seigan (Seigan even position). U goes forward slightly with the front foot (right), and S accordingly goes back slightly with the rear foot (left). Here U believes he sees S's weakness, and beginning with the rear foot (left) he goes forward in four steps and performs a sharp Tsuki. His target is the Mizo'ochi (solar plexus) of S. S receives this attack by turning the right foot around to the rear right about 90° and holding his sword horizontally in front of the Hara, so that U's sword rests on that of S with downward pressure. At this moment the two swords form a cross shape (Jû = +). For a short moment S yields from below to the counter-pressure and suddenly turns the Kissaki round to the right, so that U bends forward.* U immediately tries to stand upright again and changes to Jodan. With the left foot forward S strikes the Migi-gote of U. Then U goes back with a right-left step and changes to Yo, while S draws back the left foot, draws up the right foot to in front of the left foot and changes to Seigan. Then U strikes the Shomen with the left foot forward and S does Kiriotoshi down to the Mizo'ochi of U. U goes back with the rear (right) foot and changes to Jodan. S strikes the left Kote of U and goes to Zanshin Gedan. Then Gedan-awase.
+
+    * Turning the Kissaki round to the right: Here S should turn the right foot, which stands beside the left foot heel to heel, diagonally to the rear right. His sword should not be brought backward along U's sword (towards the tip of U's sword), because it is then pressed down by U. S must briskly turn his sword round to the right and bring it over his own head and immediately strike the Migi-gote of U.
+- de: |-
+    Renzoku bedeutet „hintereinander“ oder „fortführend“. Diese Kiriotoshi-Form wird genau wie Nr. 38 und Nr. 39 eigentlich immer weiter fortgeführt, obwohl sie als Kumidachi nur zweimal praktiziert wird. Uchidachi: In
+
+    Shidachi: Seigan
+
+    Wie bei der Kiriotoshi-Übung schlägt U zuerst mit dem linken Fuß vorne direkt (ohne vorher zu stoppen oder sich nach rechts zu bewegen wie es bei Ippon-me der Fall ist) das Shomen des S, aber er hebt das linke Knie hoch wie beim Ippon-me. S macht Kiriotoshi bis zum Mizo'ochi des U. Danach gehen beide wieder auseinander. Danach kommen sie wieder in die Mitte, und U schlägt diesmal mit dem rechten Fuß vorne das Shomen des S, auch mit erhobenem (rechten) Knie. S macht Kiriotoshi bis zum Hals, geht mit einem Links-Rechts-Schritt vor (Seme-age) und schlägt das Migi-gote des U, nachdem U mit dem hinteren (linken) Fuß beginnend zurückgetreten ist und zu Jodan gewechselt hat. Dann geht S zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Renzoku means "one after another" or "continuing". This Kiriotoshi form, just like No. 38 and No. 39, is actually continued on and on, although as a Kumidachi it is practised only twice. Uchidachi: In
+
+    Shidachi: Seigan
+
+    As in the Kiriotoshi exercise, U first strikes with the left foot forward directly (without first stopping or moving to the right, as is the case in Ippon-me) the Shomen of S, but he raises the left knee as in Ippon-me. S does Kiriotoshi down to the Mizo'ochi of U. Then both go apart again. Then they come back to the centre, and this time U strikes with the right foot forward the Shomen of S, also with the (right) knee raised. S does Kiriotoshi down to the neck, goes forward with a left-right step (Seme-age) and strikes the Migi-gote of U, after U, beginning with the rear (left) foot, has stepped back and changed to Jodan. Then S goes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Der Bewegungsvorgang ist gleich wie bei Nr. 37 „Shin“, aber die Bewegung ist etwas zügiger. Hier wird ein besseres Ma'ai-Gefühl verlangt.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    The course of movement is the same as in No. 37 "Shin", but the movement is somewhat brisker. A better feeling for Ma'ai is demanded here.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Die Bewegung wird noch schneller. S schlägt und stoppt das Schwert direkt über dem Kopf des U. Auch beim zweiten Mal schlägt S und stoppt direkt über dem Kopf.* S geht mit Rechts-Links-Rückwärts-Schritt zu Zanshin Jôdan. Danach Gedan-awase.
+
+    * Da die Bewegung schnell ist, sollte S besonders darauf achten, dass er nicht wirklich den Kopf des U trifft.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    The movement becomes even faster. S strikes and stops the sword directly above the head of U. The second time too S strikes and stops directly above the head.* S goes with a right-left backward step to Zanshin Jôdan. Then Gedan-awase.
+
+    * Since the movement is fast, S should take special care not to actually hit U's head.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend schlägt U zuerst mit dem linken Fuß vorne das Shomen des S. S macht Kiriotoshi bis zum Mizo'ochi des U. U und S gehen einmal auseinander und kommen erneut näher. U schlägt von In aus diesmal mit dem rechten Fuß vorne das Men des S. S macht Kiriotoshi bis zum Hals des U. U geht nach rechts (Rechtsschritt seitwärts, der linke Fuß wird nachgezogen) und wechselt zu Jodan. S geht U folgend nach links (Seitwärts-Linksschritt und der rechte Fuß wird nachgezogen, aber der rechte Fuß steht vorne), schlägt das Migi-gote des U und geht zu Zanshin Gedan. Danach Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Entering Isshoku-Sokuhatsu-no-Maai, U first strikes with the left foot forward the Shomen of S. S does Kiriotoshi down to the Mizo'ochi of U. U and S go apart once and come closer again. U strikes from In, this time with the right foot forward, the Men of S. S does Kiriotoshi down to the neck of U. U goes to the right (right step sideways, the left foot is drawn up) and changes to Jodan. S, following U, goes to the left (sideways left step and the right foot is drawn up, but the right foot stands in front), strikes the Migi-gote of U and goes to Zanshin Gedan. Then Gedan-awase.
+- de: |-
+    (Koshi bedeutet Hüfte. Mi bedeutet Körper. Koshimi bedeutet, dass man von der Hüfte aus Kraft schöpfend den Körper einsetzt. Gemeint ist hier ein lebendiges Tsuki. Ushiro = Hinten, Kubi = Hals.) Uchidachi: In
+
+    Shidachi: Seigan
+
+    In Isshoku-Sokuhatsu-no-Maai eintretend schlägt U das Shomen des S mit dem linken Fuß vorne. S macht Kiriotoshi bis zum Hara des U. Danach gehen U und S einmal von einander weg zurück bis zur Anfangsposition. Sie kommen erneut näher und wieder schlägt U mit dem linken Fuß vorne. S macht Kiriotoshi bis zum Mizo'ochi des U mit dem rechten Fuß vorne. Sofort macht S Tsuki in das Mizo'ochi des U mit einem heftigen linken Schritt. Da U aber diesem Tsuki dadurch ausweicht, indem er einen Rechtsschritt macht und seinen Körper nach links dreht, macht S noch einen Schritt (rechts), und schaut mit einer Links-Drehung des Körpers zurück, wobei er nun fast mit Waki-gamae steht. U dreht sich nach links und versucht das Shomen des S mit einem Rechtsschritt zu schlagen. S macht eine schnelle Rechtsdrehung vor U (mit einem kleinen Schritt des linken Fußes und einer Rechts-Rückwärts-Drehung mit dem Rückwärtsschritt des rechten Fußes) und schlägt mit dem Tsuka-gashira das Mizo'ochi des U. Während dieser dadurch vorneigt, zieht S den linken Fuß zurück und schlägt den Nacken des U von oben. Etwas zurücktretend wechselt er zu Zanshin Yô. Danach Gedanawase.
+  en: |-
+    (Koshi means hip. Mi means body. Koshimi means that one uses the body, drawing strength from the hip. What is meant here is a lively Tsuki. Ushiro = behind, Kubi = neck.) Uchidachi: In
+
+    Shidachi: Seigan
+
+    Entering Isshoku-Sokuhatsu-no-Maai, U strikes the Shomen of S with the left foot forward. S does Kiriotoshi down to the Hara of U. Then U and S go away from each other once, back to the starting position. They come closer again and again U strikes with the left foot forward. S does Kiriotoshi down to the Mizo'ochi of U with the right foot forward. Immediately S does Tsuki into the Mizo'ochi of U with a violent left step. But since U evades this Tsuki by making a right step and turning his body to the left, S makes one more step (right) and looks back with a left turn of the body, now standing almost in Waki-gamae. U turns to the left and tries to strike the Shomen of S with a right step. S makes a quick right turn in front of U (with a small step of the left foot and a right backward turn with the backward step of the right foot) and strikes the Mizo'ochi of U with the Tsuka-gashira. While U leans forward as a result, S draws back the left foot and strikes the back of U's neck from above. Stepping back slightly he changes to Zanshin Yô. Then Gedanawase.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U geht mit In no Kamae bis zum S, während S mit Gedan unbewegt wartet. In Shôshi-Kikkô-no-Ma'ai eintretend geht S mit starkem Ki nach vorne, so dass U ausweichend zurücktrit. Zurücktretend macht U plötzlich Tsuki zum Mizo'ochi des S, während sein rechter Fuß zurückgezogen wird. S führt mit dem rechten Fuß vorne zum Mizo'ochi des U einen Konter-Tsuki*, so dass das Schwert des S das des U nach unten drückt. U schlägt das Schwert des S nach oben links, während er den linken Fuß zurückzieht, so dass er nun mit Migi-Jodan steht. S nutzt diese Aufwärtsbewegung aus, geht zu Jodan und schlägt mit dem linken Fuß vorne das Migi-gote des U. U zieht seinen rechten Fuß zurück und wechselt zu Hidari-Jôdan. S schlägt mit einem rechten Schritt das Hidari-gote des U und geht zu Zanshin Gedan. Diese Übung führt man nacheinander in Shin-, Gyô- und Sô-Form durch. Am Ende Gedan-awase .
+
+    * Konter-Tsuki: Dieses Tsuki wird so geführt, dass das Schwert des S auf das des U gewissermaßen „aufsteigt“. Deswegen wird es Nori-zuki genannt. Das Verb noru bedeutet auf- oder ein-„steigen“, wie das Besteigen eines Pferdes oder Zugs.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    U goes with In no Kamae up to S, while S waits motionless with Gedan. Entering Shôshi-Kikkô-no-Ma'ai, S goes forward with strong Ki, so that U, evading, steps back. Stepping back, U suddenly does Tsuki to the Mizo'ochi of S, while his right foot is drawn back. S, with the right foot forward, performs a counter-Tsuki* to the Mizo'ochi of U, so that S's sword presses that of U downward. U strikes S's sword upward to the left, while drawing back the left foot, so that he now stands with Migi-Jodan. S makes use of this upward movement, goes to Jodan and strikes the Migi-gote of U with the left foot forward. U draws back his right foot and changes to Hidari-Jôdan. S strikes the Hidari-gote of U with a right step and goes to Zanshin Gedan. This exercise is performed successively in Shin, Gyô and Sô form. At the end Gedan-awase.
+
+    * Counter-Tsuki: This Tsuki is performed so that S's sword, as it were, "rises" onto that of U. For this reason it is called Nori-zuki. The verb noru means to "climb" on or in, like mounting a horse or boarding a train.
+- de: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    Wie bei Nr. 42 geht U mit In no Kamae dem wartenden S entgegen. In Shôshi-Kikkô-no-Ma'ai eintretend geht S mit starkem Ki nach vorne, so dass U ausweichend zurückgeht. Zurücktretend macht U plötzlich Te-no-uchi, während sein rechter Fuß zurückgezogen wird. S schlägt das Schwert des U mit dem eigenen Schwert nach links unten, während er den rechten Fuß einen Schritt vorwärts bewegt. Hierbei zeigt der Schwertrücken (Mine) nach links außen. U geht mit dem linken Fuß zurück, führt sein Schwert unterhalb des Schwertes des S nach links, wendet sein Schwert und schlägt von links nach rechts das Do des S. S macht einen Schritt vorwärts mit dem linken Fuß und schlägt das Schwert des U etwas nach rechts unten, während er sein Schwert nach rechts etwa 180° wendet. Hier zeigt der Schwertrücken nach rechts außen. Sofort wendet er das Schwert nach links etwa 180° und führt das Kissaki zum Hals (Nodo) des U. Sein Schwertrücken zeigt wieder nach links außen. Er bewahrt sein Chûdan-gasumi als Zanshin. Auch diese Übung wird nacheinander in Shin, Gyo und So durchgeführt. Danach am Ende Gedan-awase.
+  en: |-
+    Uchidachi: In
+
+    Shidachi: Seigan
+
+    As in No. 42, U goes with In no Kamae towards the waiting S. Entering Shôshi-Kikkô-no-Ma'ai, S goes forward with strong Ki, so that U, evading, goes back. Stepping back, U suddenly does Te-no-uchi, while his right foot is drawn back. S strikes U's sword with his own sword to the lower left, while moving the right foot one step forward. Here the back of the sword (Mine) points outward to the left. U goes back with the left foot, brings his sword underneath S's sword to the left, turns his sword and strikes from left to right the Do of S. S makes a step forward with the left foot and strikes U's sword slightly to the lower right, while turning his sword about 180° to the right. Here the back of the sword points outward to the right. Immediately he turns the sword about 180° to the left and brings the Kissaki to the neck (Nodo) of U. The back of his sword again points outward to the left. He keeps his Chûdan-gasumi as Zanshin. This exercise too is performed successively in Shin, Gyo and So. Then at the end Gedan-awase.
+- de: 'Grundübung: Kiriotoshi'
+  en: 'Basic exercise: Kiriotoshi'

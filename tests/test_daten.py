@@ -184,6 +184,73 @@ def test_wartezeiten(daten):
     assert hoshu and hoshu[0]["pruefbar"] is False
 
 
+def test_englisch_in_der_json(daten):
+    """English stands beside the German as x_en, only where it differs; ids and German stay."""
+    aikido, _, st = daten["disziplinen"]
+    k5 = aikido["grade"][0]
+    assert (k5["name"], k5["name_en"]) == ("5. Kyu", "5th Kyu")
+    assert aikido["teile"][0]["titel_en"] == "Kyu grades"
+    theorie = next(g for g in aikido["gruppen"] if g["titel"] == "Theorie")
+    assert (theorie["id"], theorie["titel_en"]) == ("aikido/dan-grade/theorie", "Theory")
+    ikkyo = next(t for t in aikido["techniken"] if t["name"] == "Ikkyo")
+    assert "name_en" not in ikkyo
+
+    assert st["grade"][0]["bedeutung_en"] == "First transmission"
+    assert len(st["zulassung_en"]) == len(st["zulassung"])
+    assert st["kamae"]["name_en"] == "Kamae exercise"
+    assert st["kamae"]["positionen"][15]["name_en"] == "Tsuki (right foot forward)"
+    assert st["suburi"][0]["text_en"].startswith("Frontal downward strike")
+
+    nach_wort = {w["wort"]: w for w in daten["glossar"]["woerter"]}
+    assert nach_wort["Hakama"]["en"] == "divided skirt trousers"
+    assert "en" not in nach_wort["Kiri-otoshi"]        # no German to translate
+
+
+def test_englisch_kommentare_vollstaendig(daten):
+    """Each comment has English with the German's paragraphs and headings; Kamae counts like the German."""
+    st = daten["disziplinen"][2]
+    eintraege = st["suburi"] + st["odachi"] + [st["kamae"], st["kiriotoshi"], st["kumidachi"]]
+    for e in eintraege:
+        k = e["kommentar"]
+        de, en = k["text"].split("\n\n"), k["text_en"].split("\n\n")
+        assert len(de) == len(en), e["id"]
+        assert [t.startswith("## ") for t in de] == [t.startswith("## ") for t in en], e["id"]
+    kamae = st["kamae"]["kommentar"]["text_en"]
+    assert kamae.startswith("1. Rei\nOne stands") and "\n\n2–3. Battô Seigan\n" in kamae and "\n\n26. Rei\n" in kamae
+
+
+def test_heft_ohne_englisch(tmp_path):
+    """The booklet's data carry no English: the app's data share objects with it (Kamae positions)."""
+    subprocess.run([sys.executable, str(WURZEL / "tools" / "daten.py"), "--ausgabe", str(tmp_path)],
+                   check=True, capture_output=True)
+    for datei in ("aikido.lua", "daitoryu.lua", "shinki-toho.lua"):
+        assert "_en" not in (tmp_path / datei).read_text(encoding="utf-8"), datei
+
+
+def test_englisch_fehlt_ist_fehler():
+    """A text without English, one with other paragraphs, and an entry no text needs all stop the run."""
+    sys.path.insert(0, str(WURZEL / "tools"))
+    import daten as werkzeug
+    werkzeug.fehler.clear()
+    en = werkzeug.Englisch({"Waffen": "Weapons", "A\n\nB": "A", "alt": "old"}, {"Ikkyo"})
+
+    assert en.text("b", "o", "f", "Waffen") == "Weapons"
+    assert en.text("b", "o", "f", "Ikkyo") == "Ikkyo"
+    assert not werkzeug.fehler
+
+    assert en.text("b", "o", "f", "Neu") is None
+    assert "Englisch fehlt" in werkzeug.fehler[-1]
+    assert en.text("b", "o", "f", "A\n\nB") == "A"
+    assert "Absätze" in werkzeug.fehler[-1]
+    assert en.rest() == ["alt"]
+
+    ziel = {"name": "Ikkyo", "zusatz": "Waffen"}
+    en.felder("b", "o", ziel, ("name", "zusatz"))
+    assert ziel == {"name": "Ikkyo", "zusatz": "Waffen", "zusatz_en": "Weapons"}
+    werkzeug.fehler.clear()
+    werkzeug.texte.clear()
+
+
 def test_korrekturen_status_nach_kopfzeile(tmp_path):
     """The status comes from the column named Status, also with more columns after it (the owner's
     decisions)."""

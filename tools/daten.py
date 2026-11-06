@@ -11,6 +11,7 @@ Eingabe (daten/):
   videos.yaml                  Videostelle je Technik (erzeugt von tools/kapitel.py, von Hand geprüft)
   begriffe.yaml                Kanji (Aikido, Shinki Toho), gesichert
   daitoryu-begriffe.yaml       Kanji-Bausteine Daitoryu, ungeprüft
+  englisch-*.yaml              Englisch zu jedem deutschen Text, nur für die App (Abschnitt „Englisch“ unten)
   ../KORREKTUREN.md            offene Fragen; jede Frage-ID der Daten muss dort stehen
 
 Ausgabe (build/daten/):
@@ -22,7 +23,7 @@ Ausgabe (build/daten/):
   fehlende-kanji.txt           Namen, zu denen es kein Kanji gibt
 
 Bricht mit Exit-Code 1 ab, wenn die Daten Fehler haben (unbekannter Grad, unbekannte
-Frage-ID, unbekannter Schlüssel).
+Frage-ID, unbekannter Schlüssel, Text ohne Englisch).
 """
 import argparse
 import json
@@ -30,6 +31,7 @@ import re
 import sys
 import unicodedata
 from pathlib import Path
+from typing import NamedTuple
 
 import yaml
 
@@ -40,6 +42,7 @@ STAND = WURZEL / "STAND"  # Datenstand, den App und Heft anzeigen; das Tag dazu 
 
 fehler: list[str] = []
 fehlend: set[str] = set()
+texte: list["Text"] = []  # jeder Text mit Ort und Englisch, für tools/uebersetzung.py
 
 
 def melde(text):
@@ -437,6 +440,191 @@ def glossar(ids):
     return {"quelle": lexikon["quelle"], "woerter": woerter}
 
 
+# --- Englisch ----------------------------------------------------------------
+
+# Paare {de, en} und die Liste der Texte, die englisch gleich bleiben (japanische Namen).
+# Der Schlüssel ist der deutsche Text selbst: Ändert er sich (auch in den erzeugten Dateien, die man
+# nicht von Hand bearbeitet), fehlt das Englisch und der Lauf bricht ab, statt Veraltetes auszuliefern.
+#
+#   daten/aikido.yaml                    → "2 Arten"
+#   daten/englisch-programm.yaml         → {de: "2 Arten", en: "2 variants"}
+#   mitori-daten.json                    → "zusatz": "2 Arten", "zusatz_en": "2 variants"
+#
+# In der JSON steht neben einem Feld x das Feld x_en, nur wenn es sich unterscheidet; sonst gilt x.
+# Das Glossar nennt die Übersetzung von `de` schlicht `en`. Das Heft bekommt kein Englisch.
+ENGLISCH_PAARE = ("englisch-programm.yaml", "englisch-kommentare.yaml", "englisch-lexikon.yaml")
+ENGLISCH_GLEICH = "englisch-gleich.yaml"
+ABSATZ = "\n\n"
+UEBERSCHRIFT = "## "
+ANGEHAENGT = "_en"
+
+
+class Text(NamedTuple):
+    bereich: str    # Gruppe auf der Prüfseite, Ebenen mit " › " getrennt
+    ort: str        # ID oder Pfad in den Daten
+    feld: str
+    de: str
+    en: str | None  # None: fehlt
+
+
+def absatzform(text):
+    """Absätze und Überschriften eines Textes; Deutsch und Englisch müssen gleich gebaut sein."""
+    teile = text.split(ABSATZ)
+    return len(teile), [i for i, t in enumerate(teile) if t.startswith(UEBERSCHRIFT)]
+
+
+class Englisch:
+    def __init__(self, paare, gleich):
+        self.paare = paare
+        self.gleich = gleich
+        self.benutzt = set()
+
+    @classmethod
+    def laden(cls):
+        """Liest daten/englisch-*.yaml; ein Text mit zwei Übersetzungen ist ein Fehler."""
+        paare = {}
+        for datei in ENGLISCH_PAARE:
+            for p in yaml.safe_load((DATEN / datei).read_text(encoding="utf-8")):
+                if paare.setdefault(p["de"], p["en"]) != p["en"]:
+                    melde(f"{datei}: zwei Übersetzungen für „{p['de'][:60]}“")
+                if p["de"] == p["en"]:
+                    melde(f"{datei}: „{p['de'][:60]}“ ist gleich, gehört nach {ENGLISCH_GLEICH}")
+        gleich = set(yaml.safe_load((DATEN / ENGLISCH_GLEICH).read_text(encoding="utf-8")))
+        for de in gleich & paare.keys():
+            melde(f"{ENGLISCH_GLEICH}: „{de[:60]}“ hat auch eine Übersetzung")
+        return cls(paare, gleich)
+
+    def text(self, bereich, ort, feld, de):
+        """Das Englisch zu einem Text (None, wenn es fehlt); merkt den Text für die Prüfseite."""
+        en = de if de in self.gleich else self.paare.get(de)
+        self.benutzt.add(de)
+        texte.append(Text(bereich, ort, feld, de, en))
+        if en is None:
+            melde(f"{ort}, {feld}: Englisch fehlt für „{de[:60]}“")
+        elif absatzform(en) != absatzform(de):
+            melde(f"{ort}, {feld}: Absätze oder Überschriften anders als im Deutschen: „{de[:60]}“")
+        return en
+
+    def feld(self, bereich, ort, ziel, feld, neu=None):
+        """Setzt neben ziel[feld] das Englisch, falls es sich unterscheidet: name → name_en."""
+        de = ziel.get(feld)
+        if not de:
+            return
+        en = self.text(bereich, ort, feld, de)
+        if en and en != de:
+            ziel[neu or feld + ANGEHAENGT] = en
+
+    def felder(self, bereich, ort, ziel, felder):
+        for f in felder:
+            self.feld(bereich, ort, ziel, f)
+
+    def rest(self):
+        """Einträge, zu denen es keinen Text mehr gibt: die Übersetzung ist veraltet."""
+        return sorted((self.paare.keys() | self.gleich) - self.benutzt)
+
+
+def englisch_disziplin(en, d):
+    """Grade und Überschriften, die jede Disziplin hat."""
+    name = d["kurzname"]
+    en.felder(f"{name} › Allgemein", d["id"], d, ("titel", "kurzname", "untertitel", "stand"))
+    for g in d["grade"]:
+        en.felder(f"{name} › Grade", f"{d['id']}/{g['id']}", g, ("name", "kurzname", "bedeutung", "inhalt", "abstand"))
+
+
+def englisch_programm(en, d):
+    """Aikido, Daitoryu: Gruppen und Techniken. `fuss` steht nur im Heft, daher kein Feld in der JSON."""
+    name = d["kurzname"]
+    for t in d["teile"]:
+        en.feld(f"{name} › Teile und Gruppen", f"{d['id']}/{kennung(t['titel'])}", t, "titel")
+    titel = {}
+    for g in d["gruppen"]:
+        en.felder(f"{name} › Teile und Gruppen", g["id"], g, ("titel", "teil"))
+        titel[g["id"]] = f"{name} › {g['teil']} › {g['titel']}"
+    for t in d["techniken"]:
+        bereich = titel[t["gruppe"]]
+        en.felder(bereich, t["id"], t, ("name", "zusatz"))
+        if t["angriff"]:
+            en.felder(bereich, f"{t['id']} (Angriff)", t["angriff"], ("name", "zusatz"))
+    quelle = yaml.safe_load((DATEN / f"{d['id']}.yaml").read_text(encoding="utf-8"))
+    for teil in quelle["teile"]:
+        for g in teil["gruppen"]:
+            if g.get("fuss"):
+                en.text(f"{name} › Nur im Heft", f"{d['id']}/{kennung(teil['titel'])}/{kennung(g['titel'])}", "fuss", g["fuss"])
+
+
+def englisch_vorbemerkung(en, datei, bereich):
+    """Vorbemerkung des Hefts, je Absatz ein Text. Die App zeigt sie nicht, daher kein Feld in der JSON."""
+    zeilen = (DATEN / datei).read_text(encoding="utf-8").splitlines()
+    absaetze = "\n".join(z for z in zeilen if not z.startswith("%")).strip().split(ABSATZ)
+    for i, absatz in enumerate(absaetze, 1):
+        en.text(bereich, datei, f"Absatz {i}", absatz)
+
+
+def englisch_kommentar(en, bereich, e):
+    en.felder(bereich, e["id"], e["kommentar"], ("titel", "text"))
+
+
+def englisch_kamae(en, kamae):
+    """Der Kommentar der Kamae-Übung ist aus 24 Stücken gebaut (shinki_toho): englisch genauso."""
+    bereich = "Shinki Toho › Kommentare › Kamae"
+    teile = []
+    for kk in yaml.safe_load((DATEN / "shinki-toho-kommentare.yaml").read_text(encoding="utf-8"))["kamae"]:
+        ort = f"shinkitoho/kamae/{kk['nr']}"
+        teile.append((positionen(kk["kamae"]), en.text(bereich, ort, "titel", kk["titel"]),
+                      en.text(bereich, ort, "text", kk["text"])))
+    en.feld(bereich, kamae["id"], kamae["kommentar"], "titel")
+    if all(titel and text for _, titel, text in teile):
+        kamae["kommentar"]["text_en"] = ABSATZ.join(f"{nr}. {titel}\n{text}" for nr, titel, text in teile)
+
+
+def englisch_shinki_toho(en, d):
+    name = d["kurzname"]
+    zulassung = [en.text(f"{name} › Zulassung", f"{d['id']}/zulassung/{i}", "text", t)
+                 for i, t in enumerate(d["zulassung"], 1)]
+    if all(zulassung):
+        d["zulassung_en"] = zulassung
+    for art, a in d["abschnitte"].items():
+        en.felder(f"{name} › Abschnitte", f"{d['id']}/abschnitte/{art}", a, ("name", "text"))
+
+    en.feld(f"{name} › Kamae", d["kamae"]["id"], d["kamae"], "name")
+    for i, p in enumerate(d["kamae"]["positionen"], 1):
+        en.feld(f"{name} › Kamae", f"{d['kamae']['id']}/{i}", p, "name")
+    for s in d["suburi"]:
+        en.felder(f"{name} › Suburi", s["id"], s, ("name", "text"))
+        englisch_kommentar(en, f"{name} › Kommentare › Suburi", s)
+    for art in ("kiriotoshi", "kumidachi"):
+        en.felder(f"{name} › {d[art]['name']}", d[art]["id"], d[art], ("name", "text"))
+        englisch_kommentar(en, f"{name} › Kommentare › {d[art]['name']}", d[art])
+    for f in d["odachi"]:
+        en.felder(f"{name} › Ô-dachi", f["id"], f, ("name", "uchidachi", "shidachi", "treffer", "zanshin"))
+        englisch_kommentar(en, f"{name} › Kommentare › Ô-dachi", f)
+    englisch_kamae(en, d["kamae"])
+    en.feld(f"{name} › Allgemein", d["id"], d["kommentare_quelle"], "titel")
+
+
+def englisch_glossar(en, glossar_app):
+    en.feld("Glossar › Quelle", "glossar", glossar_app, "quelle")
+    for w in glossar_app["woerter"]:
+        en.feld("Glossar › Wörter", w["wort"], w, "wort")
+        en.feld("Glossar › Wörter", w["wort"], w, "de", "en")
+
+
+def englisch(disziplinen, glossar_app):
+    """Hängt das Englisch an die App-Daten. Erst aufrufen, wenn die *.lua geschrieben sind: Die App-Daten
+    teilen sich Objekte mit dem Heft (Kamae-Positionen), und das Heft bekommt kein Englisch."""
+    en = Englisch.laden()
+    for d in disziplinen:
+        englisch_disziplin(en, d)
+        if "techniken" in d:
+            englisch_programm(en, d)
+        else:
+            englisch_shinki_toho(en, d)
+    englisch_vorbemerkung(en, "aikido-vorbemerkung.tex", "Aikido › Nur im Heft")
+    englisch_glossar(en, glossar_app)
+    for de in en.rest():
+        melde(f"daten/englisch-*.yaml: zu „{de[:60]}“ gibt es keinen Text mehr")
+
+
 # --- Ausgabe -----------------------------------------------------------------
 
 def lua(wert, tiefe=0):
@@ -492,10 +680,8 @@ def datenstand():
     return stand
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--ausgabe", default=str(WURZEL / "build" / "daten"))
-    ausgabe = Path(ap.parse_args().ausgabe)
+def erzeuge(ausgabe):
+    """Schreibt alle Ausgaben nach `ausgabe`; Fehler sammelt `fehler`, Texte sammelt `texte`."""
     ausgabe.mkdir(parents=True, exist_ok=True)
 
     ids = korrekturen()
@@ -518,8 +704,10 @@ def main():
     (ausgabe / "stand.lua").write_text(
         "-- erzeugt von tools/daten.py aus STAND, nicht von Hand bearbeiten\nreturn " + lua(stand) + "\n",
         encoding="utf-8")
+    glossar_app = glossar(ids)
+    englisch(disziplinen, glossar_app)
     app = {"format": FORMAT, "stand": stand, "disziplinen": disziplinen, "videos": videos,
-           "glossar": glossar(ids)}
+           "glossar": glossar_app}
     (ausgabe / "mitori-daten.json").write_text(json.dumps(app, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     (ausgabe / "fehlende-kanji.txt").write_text(
         "# Namen ohne Kanji (Schlüssel fehlt in daten/begriffe.yaml bzw. daten/daitoryu-begriffe.yaml)\n"
@@ -528,6 +716,12 @@ def main():
     techniken = sum(len(d.get("techniken", [])) for d in disziplinen)
     print(f"daten {stand}: {techniken} Techniken, {len(st_app['odachi'])} Ô-dachi-Formen, "
           f"{mit_video} mit Videostelle, {len(fehlend)} Namen ohne Kanji → {ausgabe}")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--ausgabe", default=str(WURZEL / "build" / "daten"))
+    erzeuge(Path(ap.parse_args().ausgabe))
     if fehler:
         print("\n".join(["Fehler in den Daten:"] + [f"  {f}" for f in fehler]), file=sys.stderr)
         sys.exit(1)

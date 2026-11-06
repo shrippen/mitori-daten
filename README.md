@@ -11,10 +11,10 @@ gehört zur App und liegt in `mitori-app/shinki/`. Die Videos liegen nie in eine
 
 | Ordner | Inhalt |
 |---|---|
-| `daten/` | Quell-YAML (`aikido.yaml`, `daitoryu.yaml`, `shinki-toho.yaml`, `begriffe.yaml`, `daitoryu-begriffe.yaml`); erzeugte YAMLs (`lexikon.yaml`, `shinki-toho-kommentare.yaml`, `videos.yaml`); `aikido-vorbemerkung.tex`. |
+| `daten/` | Quell-YAML (`aikido.yaml`, `daitoryu.yaml`, `shinki-toho.yaml`, `begriffe.yaml`, `daitoryu-begriffe.yaml`); erzeugte YAMLs (`lexikon.yaml`, `shinki-toho-kommentare.yaml`, `videos.yaml`); Englisch (`englisch-*.yaml`); `aikido-vorbemerkung.tex`. |
 | `quellen/` | Originale (Prüfungsordnungen, Listen, PDFs), von `tools/kommentare.py` und `tools/lexikon.py` gelesen. |
-| `tools/` | `daten.py` (prüft + erzeugt `mitori-daten.json` und `*.lua`), `kommentare.py`, `lexikon.py`, `kapitel.py`, `bundle.py` (Video-Bundle-Encoder). |
-| `tests/` | `test_daten.py` (Datenformat, Glossar, Wartezeiten), `test_bundle.py` (Bundle-Encoder). |
+| `tools/` | `daten.py` (prüft + erzeugt `mitori-daten.json` und `*.lua`), `kommentare.py`, `lexikon.py`, `kapitel.py`, `bundle.py` (Video-Bundle-Encoder), `uebersetzung.py` (Prüfseite Deutsch–Englisch, Glossar dazu in `uebersetzung-glossar.md`). |
+| `tests/` | `test_daten.py` (Datenformat, Glossar, Wartezeiten), `test_bundle.py` (Bundle-Encoder), `test_uebersetzung.py` (Prüfseite). |
 | `STAND` | Datenstand, den App und Heft anzeigen (`JJJJ.M.N`). |
 | `KORREKTUREN.md` | Offene Fragen zu den Daten, mit IDs (`A-…`, `D-…`, `S-…`) und Status. |
 
@@ -52,6 +52,18 @@ Eine andere Implementierung des Datenformats (z. B. eine zweite App) muss nur
 (siehe `tests/test_daten.py`). Wer Video-Bundles entschlüsseln will: das Format ist im Docstring
 von `tools/bundle.py` dokumentiert; die Referenz-Implementierung und die C++-App-Implementierung
 sind untereinander kompatibel.
+
+## Englisch
+
+Die Texte bleiben deutsch in den Quellen. Das Englisch steht in `daten/englisch-programm.yaml`,
+`englisch-kommentare.yaml`, `englisch-lexikon.yaml` (Paare `{de, en}`, Schlüssel ist der deutsche Text selbst) und
+`englisch-gleich.yaml` (Texte, die gleich bleiben, meist japanische Namen). `tools/daten.py` bricht ab, wenn ein
+Text kein Englisch hat, die Absätze nicht passen oder ein Eintrag zu keinem Text mehr gehört: Ändert sich ein deutscher
+Text, muss sein Paar mit. In `mitori-daten.json` steht neben einem Feld `x` das Feld `x_en`, nur wenn es sich
+unterscheidet (im Glossar neben `de` das Feld `en`); `FORMAT` bleibt, weil nur Felder dazukommen. Das Heft bleibt deutsch.
+
+Zum Gegenprüfen schreibt `python3 tools/uebersetzung.py AUSGABE.html` eine Seite mit beiden Sprachen nebeneinander
+(offline lesbar, nicht einchecken).
 
 ## Checks
 
