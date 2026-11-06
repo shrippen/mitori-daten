@@ -194,6 +194,10 @@ def main():
     fehlen = sum(1 for t in daten.texte if t.en is None)
     print(f"uebersetzung: {len(daten.texte)} Stellen, {fehlen} ohne Englisch → {ziel}", file=sys.stderr)
 
+    # Die Seite zeigt nur fehlendes Englisch; andere Fehler der Daten sollen nicht „alles da“ vortäuschen.
+    if daten.fehler:
+        print("\n".join(["Fehler in den Daten:"] + [f"  {f}" for f in daten.fehler]), file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()

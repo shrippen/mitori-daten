@@ -53,6 +53,16 @@ def test_texte_werden_maskiert():
     assert "<b>" not in seite and "&lt;b&gt;" in seite and "a &amp; b" in seite
 
 
+def test_meldet_fehler_der_daten(tmp_path, monkeypatch, capsys):
+    """The page shows only missing English; other errors of the data must reach the terminal."""
+    monkeypatch.setattr(sys, "argv", ["uebersetzung.py", str(tmp_path / "s.html")])
+    monkeypatch.setattr(werkzeug, "erzeuge", lambda ablage: werkzeug.melde("Absätze anders"))
+    monkeypatch.setattr(werkzeug, "fehler", [])
+    monkeypatch.setattr(werkzeug, "texte", [])
+    uebersetzung.main()
+    assert "Absätze anders" in capsys.readouterr().err
+
+
 def test_seite_aus_den_daten_ohne_netz(tmp_path):
     """The whole page from the repository's data: complete, self-contained, in a new folder."""
     ziel = tmp_path / "neu" / "uebersetzung.html"
