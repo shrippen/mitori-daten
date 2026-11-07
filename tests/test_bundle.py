@@ -599,6 +599,24 @@ def test_adressen_prueft_groesse(monkeypatch):
     assert len(fehler) == 2 and "7 Byte" in fehler[0] and "c.mvb" in fehler[1]
 
 
+def test_hochladen_schickt_rohe_bytes(monkeypatch):
+    """Ohne Content-Type setzt urllib application/x-www-form-urlencoded; Gitea liest den PUT dann als
+    Formular und antwortet 500 ("request Content-Type isn't multipart/form-data")."""
+    gesehen = []
+
+    def urlopen(anfrage, timeout):
+        gesehen.append(anfrage)
+        if anfrage.get_method() == "DELETE":
+            raise bundle.urllib.error.HTTPError(anfrage.full_url, 404, "fehlt", {}, None)
+        return None
+
+    monkeypatch.setattr(bundle.urllib.request, "urlopen", urlopen)
+    bundle.hochladen("mitori-manifest", "1", "manifest.json", b"{}", "t")
+    put = gesehen[-1]
+    assert put.get_method() == "PUT"
+    assert put.get_header("Content-type") == "application/octet-stream"
+
+
 def test_schnittpunkte_aus_den_daten_ohne_pruefvermerk():
     k = bundle.schnittpunkte("aikido/k5")
     assert k and all(set(e) == {"id", "von", "bis"} for e in k)
