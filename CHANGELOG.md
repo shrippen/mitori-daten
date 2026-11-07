@@ -15,8 +15,9 @@ An den deutschen Texten ändert sich nichts.
 - `tools/uebersetzung.py` schreibt eine Seite mit beiden Sprachen nebeneinander zum Gegenprüfen.
   Das Werkzeug nennt dabei auch andere Fehler in den Daten.
 - `tools/bundle.py` bereitet die Videos verschlüsselt für den Download per Lizenz vor. Die Videos
-  liegen statisch auf einem Webserver. Das Manifest mit ihren Adressen und den Schnittpunkten je
-  Technik erzeugt `bundle.py`, es liegt als Paket auf Gitea. Hochgeladen ist noch nichts.
+  werden statisch auf einem Webserver liegen. Das Manifest mit ihren Adressen und den Schnittpunkten
+  je Technik erzeugt `bundle.py`, `bundle.py hochladen` legt es als Paket auf Gitea ab. Hochgeladen
+  ist noch nichts.
 - Offene Frage S-16: Welche Techniken prüft Shoden?
 
 ### Hinweis
