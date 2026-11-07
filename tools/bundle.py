@@ -602,6 +602,8 @@ def hochladen(paket, version, name, daten, token, laenge=None):
             raise
     if laenge is not None:
         kopf["Content-Length"] = str(laenge)
+    # Ohne Angabe schickt urllib application/x-www-form-urlencoded, Gitea antwortet darauf mit 500.
+    kopf["Content-Type"] = "application/octet-stream"
     urllib.request.urlopen(urllib.request.Request(url, data=daten, method="PUT", headers=kopf), timeout=3600)
     print(f"bundle: hochgeladen {url}", file=sys.stderr)
 
