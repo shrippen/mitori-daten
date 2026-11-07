@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## [2026.11.1] — 2026-11-07
+
+Die Programme haben jetzt englische Texte, und die Videos lassen sich für den Download vorbereiten.
+An den deutschen Texten ändert sich nichts.
+
+### Neu
+
+- Englische Texte für die Programme und das Glossar, neben den deutschen. Apps, die Englisch zeigen,
+  fallen auf Deutsch zurück, wo eine Übersetzung fehlt.
+- Eine Prüfseite (`tools/uebersetzung.py`) zeigt Deutsch und Englisch nebeneinander, mit Glossar.
+  Von dort lassen sich Fehler in den Daten melden.
+- `tools/bundle.py` bereitet die Videos verschlüsselt für den Download per Lizenz vor. Die Videos
+  liegen statisch auf einem Webserver, das Manifest mit ihren Adressen und den Schnittpunkten je
+  Technik kommt aus diesem Repo. Hochgeladen ist noch nichts.
+- Offene Frage S-16: Welche Techniken prüft Shoden?
+
+### Hinweis
+
+- Die englischen Texte sind eine erste Übersetzung und noch nicht gegengelesen.
+- `bundle.py` bricht ab, statt ein abgeschnittenes Video, falsche Schnittpunkte oder ein
+  unvollständiges Manifest auszuliefern.
+
 ### Neu
 
 - Alle Texte der Programmdaten auf Englisch: Bezeichnungen, Kommentare zu Shinki Toho, Glossar.
