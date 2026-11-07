@@ -5,7 +5,7 @@
 *.m4v
 *.mvb
 *.key
-bundle-geheim/
+mitori-bundle-geheim/
 
 # Erzeugt
 build/

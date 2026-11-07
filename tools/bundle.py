@@ -28,7 +28,7 @@ löschen und neu anlegen: Scheitert das auch nach drei Versuchen, kann das Manif
 ein voller Lauf sie löscht. Der Server braucht kurz Platz für beide Fassungen.
 
 Geheimes (Inhaltsschlüssel, Codes, die beschnittenen Videos) liegt nie im Repo, sondern im Ordner
-MITORI_BUNDLE_GEHEIM (Standard ../bundle-geheim):
+MITORI_BUNDLE_GEHEIM (Standard ../mitori-bundle-geheim; darin eine README.md mit der Anleitung):
   schluessel/<bundle>.key      32 Byte je Bundle, bleibt über Versionen (die Codes gelten weiter)
   codes/<bundle>.csv           Code, Datum, Kennung im Manifest, für wen (die Lizenz; für den Verband)
   aus/<bundle>/<version>/      die verschlüsselten Dateien zum Hochladen
@@ -94,7 +94,7 @@ import yaml
 from nacl import bindings, pwhash
 
 WURZEL = Path(__file__).resolve().parent.parent
-GEHEIM = Path(os.environ.get("MITORI_BUNDLE_GEHEIM", WURZEL.parent / "bundle-geheim"))
+GEHEIM = Path(os.environ.get("MITORI_BUNDLE_GEHEIM", WURZEL.parent / "mitori-bundle-geheim"))
 GITEA = "https://git.arianw.de/api/packages/shrippen/generic"
 MANIFEST_FORMAT = 2
 VIDEO_BASIS = "video-basis"
