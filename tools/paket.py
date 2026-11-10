@@ -1,0 +1,366 @@
+#!/usr/bin/env python3
+"""Lernpakete: Video-Bundles mit eigenen Techniken (Aufbau: pakete/README.md).
+
+Aufruf aus dem Projektordner:
+  python3 tools/paket.py [pruefen]                  prüft jedes pakete/*.yaml (auch in tools/daten.py und der CI)
+  python3 tools/paket.py inhalt <id>                der Inhalt des Pakets als JSON (das steckt verschlüsselt im Bundle)
+  python3 tools/paket.py entwurf <untertitel> --video <schluessel> [--id <paket>]
+                                                    YAML-Entwurf aus SRT oder WebVTT, von Hand zu prüfen
+
+Ein Lernpaket kommt nie in mitori-daten.json oder die *.lua: Die Techniken gibt es nur mit den Videos.
+Ein Paket mit `pruefen: true` an einer Technik ist ein Entwurf: Es besteht die Prüfung, `bundle.py build`
+baut es nicht.
+
+Entwurf, die Heuristik: Eine Untertitelzeile ist ein Kandidat für eine Technik, wenn sie kurz ist (höchstens
+KANDIDAT_WOERTER Wörter), nicht mit .?! endet und mit Großbuchstabe oder Ziffer beginnt (wie eine Überschrift:
+„Shomen-uchi Irimi-nage“, nicht „und dann dreht er sich.“). Dieselbe Zeile direkt nach sich selbst zählt einmal.
+`von` ist der Beginn der Zeile, `bis` der Beginn des nächsten Kandidaten, beim letzten das Ende des
+letzten Untertitels.
+"""
+import argparse
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+import yaml
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import daten  # noqa: E402
+
+WURZEL = daten.WURZEL
+PAKETE = WURZEL / "pakete"
+BUNDLES = WURZEL / "tools" / "bundles.yaml"
+FORMAT = 1                                      # des Inhalts im Bundle (inhalt.mvb)
+VORSATZ = "lern/"                               # Vorsatz der Technik-Ids
+ABSCHNITT_ENTWURF = "Entwurf"
+
+# Wie bundle.ID: Ids werden Ordnernamen in der App (nur a-z, 0-9 und Bindestriche).
+ID = re.compile(r"[a-z0-9][a-z0-9-]*")
+VIDEO_ID = re.compile(r"[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9-]*")
+
+# Je Sparte das Glossar der Kanji, wie tools/daten.py es für das Programm nimmt: (Datei, Bausteine).
+SPARTEN = {"aikido": ("begriffe.yaml", False), "shinkitoho": ("begriffe.yaml", False),
+           "daitoryu": ("daitoryu-begriffe.yaml", True)}
+
+# Felder; zu jedem Feld in MIT_ENGLISCH darf `<feld>_en` stehen, aber nur neben dem Feld.
+MIT_ENGLISCH = {"titel", "text", "name", "angriff", "zusatz"}
+PAKET_FELDER = {"titel", "sparte", "text", "videos", "abschnitte"}
+VIDEO_FELDER = {"id", "datei", "titel", "beschnitt"}
+ABSCHNITT_FELDER = {"titel", "text", "techniken"}
+TECHNIK_FELDER = {"id", "name", "angriff", "zusatz", "text", "wie", "video", "von", "bis", "pruefen"}
+TECHNIK_PFLICHT = ("id", "name", "video", "von", "bis")
+
+KANDIDAT_WOERTER = 6
+SATZENDE = ".?!"
+ENDE = "-->"
+ZEIT = re.compile(r"(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{3})")
+MARKE = re.compile(r"<[^>]*>")
+KOPF_BLOECKE = ("WEBVTT", "NOTE", "STYLE", "REGION")
+
+
+# ── Laden und Prüfen ──
+
+def eintrags_ids(disziplinen):
+    """Die Ids aller Einträge des Programms (Techniken, Suburi, Ô-dachi, Kamae, Kiriotoshi)."""
+    ids = set()
+    for d in disziplinen:
+        ids.update(t["id"] for t in d.get("techniken", []))
+        for art in ("suburi", "odachi"):
+            ids.update(e["id"] for e in d.get(art, []))
+        for art in ("kamae", "kiriotoshi"):
+            if art in d:
+                ids.add(d[art]["id"])
+    return ids
+
+
+def laden():
+    """Alle pakete/*.yaml: ({id: Inhalt}, Fehler beim Lesen). Die Id ist der Dateiname."""
+    pakete, fehler = {}, []
+    for datei in sorted(PAKETE.glob("*.yaml")):
+        try:
+            pakete[datei.stem] = yaml.safe_load(datei.read_text(encoding="utf-8"))
+        except yaml.YAMLError as e:
+            fehler.append(f"{datei.name}: kein gültiges YAML ({e})")
+    return pakete, fehler
+
+
+def programmdaten():
+    """(Ids der Einträge, Videoschlüssel der Prüfungsvideos) aus build/daten/mitori-daten.json."""
+    pfad = daten.WURZEL / "build" / "daten" / "mitori-daten.json"
+    if not pfad.exists():
+        subprocess.run([sys.executable, str(WURZEL / "tools" / "daten.py")])
+    j = json.loads(pfad.read_text(encoding="utf-8"))
+    return eintrags_ids(j["disziplinen"]), set(j["videos"])
+
+
+def felder_fehler(wo, d, erlaubt, pflicht=()):
+    """Unbekannte und fehlende Felder, ein x_en ohne x."""
+    if not isinstance(d, dict):
+        return [f"{wo}: kein Eintrag mit Feldern"]
+    fehler = [f"{wo}: {k} fehlt" for k in pflicht if k not in d]
+    for k in d:
+        if k in erlaubt:
+            continue
+        grund = k[:-3] if k.endswith("_en") else None
+        if grund in erlaubt and grund in MIT_ENGLISCH:
+            if grund not in d:
+                fehler.append(f"{wo}: {k} ohne {grund}")
+            continue
+        fehler.append(f"{wo}: unbekanntes Feld {k}")
+    return fehler
+
+
+def zahl(x):
+    return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def liste_fehler(wo, d, feld):
+    """Eine nichtleere Liste unter `feld`, sonst die Fehlermeldung."""
+    if not isinstance(d.get(feld), list) or not d[feld]:
+        return [f"{wo}: {feld} fehlt oder ist leer"]
+    return []
+
+
+def video_fehler(pid, d, belegt, pruefung):
+    fehler = liste_fehler(pid, d, "videos")
+    erklaert = set()
+    for v in d.get("videos") or []:
+        wo = f"{pid}, Video {v.get('id') if isinstance(v, dict) else v}"
+        fehler += felder_fehler(wo, v, VIDEO_FELDER, ("id", "datei", "titel"))
+        if not isinstance(v, dict) or "id" not in v:
+            continue
+        datei = Path(str(v.get("datei")))
+        if datei.is_absolute() or ".." in datei.parts:
+            fehler.append(f"{wo}: datei nur relativ zu --videos, ohne ..")
+        vid = v["id"]
+        if not isinstance(vid, str) or not VIDEO_ID.fullmatch(vid):
+            fehler.append(f"{wo}: Id nur aus a-z, 0-9 und Bindestrichen, in zwei Teilen mit /")
+            continue
+        if vid in erklaert:
+            fehler.append(f"{wo}: Id steht doppelt")
+        if vid in pruefung:
+            fehler.append(f"{wo}: Id gehört schon einem Prüfungsvideo")
+        if belegt.get(vid, pid) != pid:
+            fehler.append(f"{wo}: Id gehört schon dem Paket {belegt[vid]}")
+        erklaert.add(vid)
+        belegt.setdefault(vid, pid)
+    return fehler, erklaert
+
+
+def technik_fehler(wo, t, videos, ids):
+    fehler = felder_fehler(wo, t, TECHNIK_FELDER, TECHNIK_PFLICHT)
+    if not isinstance(t, dict):
+        return fehler
+    if "id" in t and not (isinstance(t["id"], str) and ID.fullmatch(t["id"])):
+        fehler.append(f"{wo}: Id nur aus a-z, 0-9 und Bindestrichen")
+    if "video" in t and t["video"] not in videos:
+        fehler.append(f"{wo}: Video {t['video']} steht nicht in videos")
+    if "von" in t and "bis" in t:
+        if not (zahl(t["von"]) and zahl(t["bis"])):
+            fehler.append(f"{wo}: von und bis sind Sekunden (Zahlen)")
+        elif not 0 <= t["von"] < t["bis"]:
+            fehler.append(f"{wo}: von {t['von']} bis {t['bis']}")
+    wie = t.get("wie", [])
+    if not isinstance(wie, list):
+        return fehler + [f"{wo}: wie ist eine Liste von Ids"]
+    return fehler + [f"{wo}: wie {w}: unbekannte Id im Programm" for w in wie if w not in ids]
+
+
+def abschnitt_fehler(pid, d, videos, ids):
+    fehler = liste_fehler(pid, d, "abschnitte")
+    gesehen = set()
+    for a in d.get("abschnitte") or []:
+        wo = f"{pid}, Abschnitt {a.get('titel') if isinstance(a, dict) else a}"
+        fehler += felder_fehler(wo, a, ABSCHNITT_FELDER, ("titel", "techniken"))
+        if not isinstance(a, dict) or "techniken" not in a:
+            continue
+        fehler += liste_fehler(wo, a, "techniken")
+        for t in a["techniken"] if isinstance(a["techniken"], list) else []:
+            tid = t.get("id") if isinstance(t, dict) else None
+            fehler += technik_fehler(f"{wo}, Technik {tid}", t, videos, ids)
+            if tid in gesehen:
+                fehler.append(f"{pid}: Technik {tid} steht doppelt")
+            gesehen.add(tid)
+    return fehler
+
+
+def pruefe_paket(pid, d, ids, pruefung, belegt, bundles):
+    """Was an einem Paket nicht stimmt. `belegt`: Videoschlüssel der bisher geprüften Pakete."""
+    fehler = []
+    if not ID.fullmatch(pid):
+        fehler.append(f"{pid}: Id (Dateiname) nur aus a-z, 0-9 und Bindestrichen")
+    if pid in bundles:
+        fehler.append(f"{pid}: Id gehört schon einem Bundle aus tools/bundles.yaml")
+    fehler += felder_fehler(pid, d, PAKET_FELDER, ("titel", "sparte", "videos", "abschnitte"))
+    if not isinstance(d, dict):
+        return fehler
+    if "sparte" in d and d["sparte"] not in SPARTEN:
+        fehler.append(f"{pid}: Sparte {d['sparte']}, erlaubt: {', '.join(SPARTEN)}")
+    video, erklaert = video_fehler(pid, d, belegt, pruefung)
+    return fehler + video + abschnitt_fehler(pid, d, erklaert, ids)
+
+
+def pruefe_alle(ids, pruefung):
+    """Alle Pakete gegen das Programm (`ids`) und die Prüfungsvideos (`pruefung`): die Liste der Fehler."""
+    pakete, fehler = laden()
+    bundles = {b["id"] for b in yaml.safe_load(BUNDLES.read_text(encoding="utf-8"))["bundles"]}
+    belegt = {}
+    for pid, d in pakete.items():
+        fehler += pruefe_paket(pid, d, ids, pruefung, belegt, bundles)
+    return fehler
+
+
+def fehler_alle():
+    ids, pruefung = programmdaten()
+    return pruefe_alle(ids, pruefung)
+
+
+def ist_entwurf(d):
+    return any(t.get("pruefen") for a in d["abschnitte"] for t in a["techniken"])
+
+
+# ── Inhalt ──
+
+def mit_englisch(quelle, felder):
+    """Die Felder und ihr `_en`, soweit vorhanden."""
+    ziel = {}
+    for f in felder:
+        for name in (f, f + "_en"):
+            if name in quelle:
+                ziel[name] = quelle[name]
+    return ziel
+
+
+def inhalt(pid):
+    """Der Inhalt des Pakets für das Bundle (Format 1, pakete/README.md): Technik-Ids mit Vorsatz,
+    Kanji (`jp`) aus dem Glossar wie im Programm."""
+    d = yaml.safe_load((PAKETE / f"{pid}.yaml").read_text(encoding="utf-8"))
+    sparte = d["sparte"]
+    datei, bausteine = SPARTEN[sparte]
+    gloss = daten.Glossar(datei, bausteine)
+
+    def jp(name):
+        return gloss.kanji(sparte, name, leise=True)
+
+    def technik(t):
+        ziel = {"id": f"{VORSATZ}{pid}/{t['id']}", **mit_englisch(t, ["name"]), "jp": jp(t["name"])}
+        if "angriff" in t:
+            ziel["angriff"] = {"name": t["angriff"], **({"name_en": t["angriff_en"]} if "angriff_en" in t else {}),
+                               "jp": jp(t["angriff"])}
+        ziel.update(mit_englisch(t, ["zusatz", "text"]))
+        ziel.update({k: t[k] for k in ("wie", "video", "von", "bis") if k in t})
+        return {k: v for k, v in ziel.items() if v is not None}
+
+    def abschnitt(a):
+        return {**mit_englisch(a, ["titel", "text"]), "techniken": [technik(t) for t in a["techniken"]]}
+
+    return {"format": FORMAT, "id": pid, **mit_englisch(d, ["titel"]), "sparte": sparte,
+            **mit_englisch(d, ["text"]),
+            "videos": [{"id": v["id"], **mit_englisch(v, ["titel"]), **({"beschnitt": v["beschnitt"]} if "beschnitt" in v else {})}
+                       for v in d["videos"]],
+            "abschnitte": [abschnitt(a) for a in d["abschnitte"]]}
+
+
+# ── Entwurf aus Untertiteln ──
+
+def sekunden(m):
+    stunden, minuten, s, ms = m.groups()
+    return int(stunden or 0) * 3600 + int(minuten) * 60 + int(s) + int(ms) / 1000
+
+
+def untertitel(text):
+    """[(von, bis, Text)] aus SRT oder WebVTT. Kopfblöcke (WEBVTT, NOTE …) fallen weg, Marken wie <c> auch,
+    ein Text über mehrere Zeilen wird eine Zeile."""
+    zeilen = []
+    for block in re.split(r"\n\s*\n", text.replace("\r\n", "\n").lstrip("﻿")):
+        zeile = block.strip().splitlines()
+        if not zeile or zeile[0].startswith(KOPF_BLOECKE):
+            continue
+        pos = next((i for i, z in enumerate(zeile) if ENDE in z), None)
+        if pos is None:
+            continue
+        zeiten = [ZEIT.search(t) for t in zeile[pos].split(ENDE)]
+        if not all(zeiten):
+            continue
+        inhalt_ = " ".join(MARKE.sub("", z).strip() for z in zeile[pos + 1:])
+        inhalt_ = " ".join(inhalt_.split())
+        if inhalt_:
+            zeilen.append((sekunden(zeiten[0]), sekunden(zeiten[1]), inhalt_))
+    return zeilen
+
+
+def ist_kandidat(zeile):
+    if len(zeile.split()) > KANDIDAT_WOERTER or zeile[-1] in SATZENDE:
+        return False
+    return zeile[0].isupper() or zeile[0].isdigit()
+
+
+def entwurf(zeilen, video, pid=None):
+    """Der YAML-Entwurf als Text: jede Kandidatenzeile eine Technik mit `pruefen: true`."""
+    kandidaten, vorher = [], None
+    for von, _, text in zeilen:
+        text = text.lstrip("- ").strip()
+        if text and text != vorher and ist_kandidat(text):
+            kandidaten.append((von, text))
+        vorher = text
+    ende = max((bis for _, bis, _ in zeilen), default=0)
+    techniken, benutzt = [], {}
+    for i, (von, text) in enumerate(kandidaten):
+        bis = kandidaten[i + 1][0] if i + 1 < len(kandidaten) else ende
+        tid = daten.kennung(text) or "technik"
+        benutzt[tid] = benutzt.get(tid, 0) + 1
+        if benutzt[tid] > 1:
+            tid = f"{tid}-{benutzt[tid]}"
+        techniken.append({"id": tid, "name": text, "video": video, "von": round(von, 3), "bis": round(bis, 3),
+                          "pruefen": True})
+    d = {"titel": pid or "…", "sparte": "aikido",
+         "videos": [{"id": video, "datei": "…", "titel": "…"}],
+         "abschnitte": [{"titel": ABSCHNITT_ENTWURF, "techniken": techniken}]}
+    kopf = "# Entwurf aus Untertiteln: Zeiten, Namen und Sparte prüfen, dann `pruefen` löschen.\n"
+    return kopf + yaml.safe_dump(d, allow_unicode=True, sort_keys=False)
+
+
+# ── Aufruf ──
+
+def befehl_pruefen(args):
+    fehler = fehler_alle()
+    for f in fehler:
+        print(f"paket: {f}", file=sys.stderr)
+    if fehler:
+        sys.exit(1)
+    print(f"paket: {len(laden()[0])} Pakete in Ordnung", file=sys.stderr)
+
+
+def befehl_inhalt(args):
+    if not (PAKETE / f"{args.id}.yaml").exists():
+        sys.exit(f"paket: {args.id} gibt es nicht in {PAKETE}")
+    print(json.dumps(inhalt(args.id), ensure_ascii=False, indent=1))
+
+
+def befehl_entwurf(args):
+    zeilen = untertitel(Path(args.untertitel).read_text(encoding="utf-8"))
+    text = entwurf(zeilen, args.video, args.id)
+    if "pruefen" not in text:
+        print("paket: keine kurzen Zeilen gefunden, der Entwurf hat keine Techniken", file=sys.stderr)
+    print(text, end="")
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    sub = p.add_subparsers(dest="befehl")
+    sub.add_parser("pruefen")
+    i = sub.add_parser("inhalt")
+    i.add_argument("id")
+    e = sub.add_parser("entwurf")
+    e.add_argument("untertitel")
+    e.add_argument("--video", required=True, help="Videoschlüssel, z. B. shirakawa-1/v1")
+    e.add_argument("--id", help="Id des Pakets")
+    args = p.parse_args()
+    {"pruefen": befehl_pruefen, "inhalt": befehl_inhalt, "entwurf": befehl_entwurf,
+     None: befehl_pruefen}[args.befehl](args)
+
+
+if __name__ == "__main__":
+    main()
