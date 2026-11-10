@@ -4,8 +4,8 @@
 
 ### Neu
 
-- Lernpakete: Video-Bundles mit eigenen Techniken (`pakete/<id>.yaml`, Aufbau in `pakete/README.md`).
-  `tools/paket.py` prüft sie (auch `tools/daten.py` und die CI), schreibt ihren Inhalt als JSON und macht
+- Lernpakete: Video-Bundles mit eigenen Techniken (Aufbau in `tools/lernpakete.md`). Die Pakete liegen
+  nicht im Repo, sondern bei den Bundle-Geheimnissen. `tools/paket.py` prüft sie (auch `tools/daten.py`), schreibt ihren Inhalt als JSON und macht
   aus Untertiteln einen Entwurf. `tools/bundle.py` baut sie wie ein Bundle und legt die Techniken
   verschlüsselt als `inhalt.mvb` dazu. Sie stehen nicht in `mitori-daten.json` und nicht im Heft.
 

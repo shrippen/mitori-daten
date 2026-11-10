@@ -4,8 +4,9 @@ Ein Lernpaket ist ein Video-Bundle mit eigenen Techniken: Lernvideos, die zu kei
 Die Techniken gibt es nur mit den Videos. Darum stehen sie nicht in `mitori-daten.json` und nicht im
 Heft, sondern verschlüsselt im Bundle (`inhalt.mvb`). Die App zeigt sie, solange das Paket geladen ist.
 
-Je Paket eine Datei `pakete/<id>.yaml`; die Id ist der Dateiname und zugleich die Bundle-Id
-(`a-z`, `0-9`, Bindestriche). `tools/paket.py` prüft alle Pakete (auch `tools/daten.py` und die CI),
+Je Paket eine Datei `<id>.yaml` im Ordner `pakete/` von `mitori-bundle-geheim` (`MITORI_PAKETE` setzt einen
+anderen), nicht im Repo: Sein Spiegel ist öffentlich, die Techniken gibt es nur mit den Videos. Die Id ist der
+Dateiname und zugleich die Bundle-Id (`a-z`, `0-9`, Bindestriche). `tools/paket.py` prüft alle Pakete (auch `tools/daten.py`; die CI hat keine),
 `tools/bundle.py build <id>` baut eins wie ein Prüfungs-Bundle.
 
 ```yaml
@@ -55,4 +56,5 @@ JSON, `format` 1; Texte wie in `mitori-daten.json` mit `x_en` nur, wo es abweich
 Im öffentlichen Manifest steht ein Lernpaket unter `lernpakete` (nicht `bundles`: Mitori bis 0.3.0
 kennt nur diese), wie ein Bundle, aber ohne `kapitel` (die Stellen verraten die Techniken) und mit
 `inhalt: {datei, format, groesse, sha256, klar, url}`; kennt die App das `format` nicht, lädt sie das Paket
-nicht und bittet um ein Update. Codes stehen wie bei jedem Bundle unter `codes`.
+nicht und bittet um ein Update. Mitori bis 0.3.0 kennt `lernpakete` nicht: Der Code eines Lernpakets gilt dort
+als unbekannt. Codes stehen wie bei jedem Bundle unter `codes`.

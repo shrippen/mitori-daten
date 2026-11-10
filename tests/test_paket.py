@@ -66,6 +66,7 @@ FALSCH = {
     "Sparte": (lambda d: d.update(sparte="judo"), "Sparte judo"),
     "unbekanntes Feld": (lambda d: d.update(farbe="rot"), "unbekanntes Feld farbe"),
     "en ohne Feld": (lambda d: (d.pop("text"), d.update(text_en="x")), "text_en ohne text"),
+    "en gleich": (lambda d: d.update(titel_en=d["titel"]), "titel_en gleich titel"),
     "en beim Abschnitt ohne Feld": (lambda d: d["abschnitte"][0].update(text_en="x"),
                                     "text_en ohne text"),
     "Technik ohne Video": (lambda d: d["abschnitte"][0]["techniken"][0].update(video="anderes/v9"), "steht nicht in videos"),

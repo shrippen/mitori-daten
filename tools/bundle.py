@@ -6,8 +6,8 @@ Aufruf aus dem Projektordner:
   python3 tools/bundle.py build aikido-kyu [--videos "../Mitori Videos"] [--version 2] [--ohne-kodieren]
   python3 tools/bundle.py build aikido-kyu --videos "../Remaster" --fertig [--schnitt schnitt.yaml]
                                                              von Hand fertige Videos, nur verschlüsseln
-  python3 tools/bundle.py build shirakawa-1 [--videos "../Mitori Lernvideos"]    ein Lernpaket (pakete/<id>.yaml), sonst wie ein Bundle
-  python3 tools/bundle.py alle [--neu] [--videos …] [--ohne-kodieren|--fertig] [--schnitt …]    alle Bundles und Lernpakete, Gebautes bleibt
+  python3 tools/bundle.py build shirakawa-1 [--videos "../Mitori Lernvideos"]    ein Lernpaket (<PAKETE>/<id>.yaml), sonst wie ein Bundle
+  python3 tools/bundle.py alle [--neu] [--videos …] [--lernvideos …] [--ohne-kodieren|--fertig] [--schnitt …]    alle Bundles und Lernpakete, Gebautes bleibt
   python3 tools/bundle.py verifizieren [aikido-kyu]          entschlüsselt alles, prüft Größe, sha256, Bilderzahl
   python3 tools/bundle.py codes aikido-kyu --anzahl 50 --fuer "Dojo Köln"   Lizenzen: CSV, Einträge im Manifest
   python3 tools/bundle.py sperren 7KQ2M-X9HDV-3TAPR-WE6YC    Eintrag eines Codes aus dem Manifest
@@ -15,8 +15,8 @@ Aufruf aus dem Projektordner:
   python3 tools/bundle.py hochladen --probe                  zeigt, was hochginge
   python3 tools/bundle.py hochladen --verband-stimmt-zu [--nur-manifest]   Videos zu Caddy, Manifest zu Gitea
 
-Lernpakete (tools/paket.py, pakete/README.md) sind Bundles mit eigenen Techniken: Ihre Videos stehen in
-pakete/<id>.yaml (`datei` relativ zu --videos, Standard LERNVIDEOS), werden wie Prüfungsvideos kodiert
+Lernpakete (tools/paket.py, tools/lernpakete.md) sind Bundles mit eigenen Techniken: Ihre Videos stehen in
+<PAKETE>/<id>.yaml (`datei` relativ zu --videos, Standard LERNVIDEOS; bei `alle` --lernvideos), werden wie Prüfungsvideos kodiert
 (ohne `beschnitt` nur HEVC, kein Schnitt). Dazu kommt `inhalt.mvb`: der Inhalt des Pakets als JSON (UTF-8),
 verschlüsselt wie ein Video mit dem Schlüssel des Pakets. Ein Paket mit `pruefen: true` baut `build` nicht.
 
@@ -111,7 +111,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paket  # noqa: E402
 
 WURZEL = Path(__file__).resolve().parent.parent
-GEHEIM = Path(os.environ.get("MITORI_BUNDLE_GEHEIM", WURZEL.parent / "mitori-bundle-geheim"))
+GEHEIM = paket.GEHEIM
 GITEA = "https://git.arianw.de/api/packages/shrippen/generic"
 MANIFEST_FORMAT = 2
 VIDEO_BASIS = "video-basis"
@@ -510,7 +510,7 @@ def befehl_build_paket(args):
         sys.exit("bundle: " + "; ".join(fehler))
     p = paket.laden()[0][pid]
     if paket.ist_entwurf(p):
-        sys.exit(f"bundle: {pid} ist ein Entwurf (pruefen: true in pakete/{pid}.yaml), nichts wird gebaut")
+        sys.exit(f"bundle: {pid} ist ein Entwurf (pruefen: true in {paket.PAKETE / pid}.yaml), nichts wird gebaut")
     fertig = getattr(args, "fertig", False)
     videos_ordner = Path(args.videos or LERNVIDEOS)
     m = manifest_lesen()
@@ -554,6 +554,7 @@ def befehl_alle(args):
     gebaut = {x["id"] for x in eintraege(manifest_lesen()) if (args.ohne_kodieren or not ist_testbau(x))
               and (ist_paket(x) or all(v.get("kapitel") for v in x["videos"]))}
     args.version = None
+    videos, lernvideos = getattr(args, "videos", None), getattr(args, "lernvideos", None)
     pakete = paket.laden()[0]
     for bundle_id in [*definitionen(), *pakete]:
         if bundle_id in gebaut and not args.neu:
@@ -563,6 +564,7 @@ def befehl_alle(args):
             print(f"bundle: {bundle_id} ist ein Entwurf, übersprungen", file=sys.stderr)
             continue
         args.bundle = bundle_id
+        args.videos = lernvideos if bundle_id in pakete else videos     # je Art ihr Ordner
         befehl_build(args)
 
 
@@ -890,7 +892,8 @@ def main():
     h.add_argument("--verband-stimmt-zu", action="store_true", help="die Zustimmung liegt vor")
     a = sub.add_parser("alle")
     a.add_argument("--neu", action="store_true", help="auch schon Gebautes neu bauen")
-    a.add_argument("--videos", help="Ordner der Videos, für Bundles und Lernpakete (Standard je Art)")
+    a.add_argument("--videos", help=f"Ordner der Prüfungsvideos (Standard {ORIGINALE})")
+    a.add_argument("--lernvideos", help=f"Ordner der Lernvideos (Standard {LERNVIDEOS})")
     a.add_argument("--hinweis")
     art = a.add_mutually_exclusive_group()
     art.add_argument("--ohne-kodieren", action="store_true")

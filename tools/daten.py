@@ -8,7 +8,7 @@ Eingabe (daten/):
   shinki-toho.yaml             Grade, Kamae, Suburi, Ô-dachi-Formen
   shinki-toho-kommentare.yaml  Kommentare von shinkiryu.de (erzeugt von tools/kommentare.py)
   lexikon.yaml                 Aiki-Budo-Lexikon Japanisch–Deutsch (erzeugt von tools/lexikon.py)
-  ../pakete/*.yaml             Lernpakete (pakete/README.md), nur geprüft (tools/paket.py), nicht in der Ausgabe
+  Lernpakete                   außerhalb des Repos (tools/lernpakete.md), nur geprüft (tools/paket.py), nicht in der Ausgabe
   videos.yaml                  Videostelle je Technik (erzeugt von tools/kapitel.py, von Hand geprüft)
   begriffe.yaml                Kanji (Aikido, Shinki Toho), gesichert
   daitoryu-begriffe.yaml       Kanji-Bausteine Daitoryu, ungeprüft

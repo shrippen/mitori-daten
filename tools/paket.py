@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Lernpakete: Video-Bundles mit eigenen Techniken (Aufbau: pakete/README.md).
+"""Lernpakete: Video-Bundles mit eigenen Techniken (Aufbau: tools/lernpakete.md).
 
 Aufruf aus dem Projektordner:
-  python3 tools/paket.py [pruefen]                  prüft jedes pakete/*.yaml (auch in tools/daten.py und der CI)
+  python3 tools/paket.py [pruefen]                  prüft jedes <PAKETE>/*.yaml (auch in tools/daten.py)
   python3 tools/paket.py inhalt <id>                der Inhalt des Pakets als JSON (das steckt verschlüsselt im Bundle)
   python3 tools/paket.py entwurf <untertitel> --video <schluessel> [--id <paket>]
                                                     YAML-Entwurf aus SRT oder WebVTT, von Hand zu prüfen
@@ -19,6 +19,7 @@ letzten Untertitels.
 """
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -30,7 +31,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import daten  # noqa: E402
 
 WURZEL = daten.WURZEL
-PAKETE = WURZEL / "pakete"
+# Die Pakete liegen nicht im Repo (sein Spiegel ist öffentlich): Ihre Techniken gibt es nur mit den Videos.
+GEHEIM = Path(os.environ.get("MITORI_BUNDLE_GEHEIM", WURZEL.parent / "mitori-bundle-geheim"))
+PAKETE = Path(os.environ.get("MITORI_PAKETE", GEHEIM / "pakete"))
 BUNDLES = WURZEL / "tools" / "bundles.yaml"
 FORMAT = 1                                      # des Inhalts im Bundle (inhalt.mvb)
 VORSATZ = "lern/"                               # Vorsatz der Technik-Ids
@@ -76,7 +79,7 @@ def eintrags_ids(disziplinen):
 
 
 def laden():
-    """Alle pakete/*.yaml: ({id: Inhalt}, Fehler beim Lesen). Die Id ist der Dateiname."""
+    """Alle <PAKETE>/*.yaml: ({id: Inhalt}, Fehler beim Lesen). Die Id ist der Dateiname."""
     pakete, fehler = {}, []
     for datei in sorted(PAKETE.glob("*.yaml")):
         try:
@@ -107,6 +110,8 @@ def felder_fehler(wo, d, erlaubt, pflicht=()):
         if grund in erlaubt and grund in MIT_ENGLISCH:
             if grund not in d:
                 fehler.append(f"{wo}: {k} ohne {grund}")
+            elif d[k] == d[grund]:      # x_en nur, wo das Englische abweicht
+                fehler.append(f"{wo}: {k} gleich {grund}")
             continue
         fehler.append(f"{wo}: unbekanntes Feld {k}")
     return fehler
@@ -234,7 +239,7 @@ def mit_englisch(quelle, felder):
 
 
 def inhalt(pid):
-    """Der Inhalt des Pakets für das Bundle (Format 1, pakete/README.md): Technik-Ids mit Vorsatz,
+    """Der Inhalt des Pakets für das Bundle (Format 1, tools/lernpakete.md): Technik-Ids mit Vorsatz,
     Kanji (`jp`) aus dem Glossar wie im Programm."""
     d = yaml.safe_load((PAKETE / f"{pid}.yaml").read_text(encoding="utf-8"))
     sparte = d["sparte"]

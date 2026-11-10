@@ -1027,6 +1027,14 @@ def test_alle_baut_pakete_und_ueberspringt_entwuerfe(geheim, lernpaket, monkeypa
     assert "entwurf ist ein Entwurf" in capsys.readouterr().err
 
 
+def test_alle_nimmt_je_art_ihren_ordner(geheim, lernpaket, monkeypatch):
+    ordner = {}
+    monkeypatch.setattr(bundle, "befehl_build", lambda args: ordner.setdefault(args.bundle, args.videos))
+    bundle.befehl_alle(type("A", (), {"neu": False, "ohne_kodieren": True, "videos": "pruefung", "lernvideos": "lern"}))
+    assert ordner["shirakawa-1"] == "lern"
+    assert ordner["aikido-kyu"] == "pruefung"
+
+
 def test_alle_baut_gebautes_paket_nicht_neu(geheim, lernpaket, monkeypatch):
     _gebaut_paket(lernpaket, ohne_kodieren=False, fertig=True)
     gebaut = []

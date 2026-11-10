@@ -12,9 +12,8 @@ gehört zur App und liegt in `mitori-app/shinki/`. Die Videos liegen nie in eine
 | Ordner | Inhalt |
 |---|---|
 | `daten/` | Quell-YAML (`aikido.yaml`, `daitoryu.yaml`, `shinki-toho.yaml`, `begriffe.yaml`, `daitoryu-begriffe.yaml`); erzeugte YAMLs (`lexikon.yaml`, `shinki-toho-kommentare.yaml`, `videos.yaml`); Englisch (`englisch-*.yaml`); `aikido-vorbemerkung.tex`. |
-| `pakete/` | Lernpakete: Video-Bundles mit eigenen Techniken, je `pakete/<id>.yaml` (Aufbau in `pakete/README.md`). Nicht in `mitori-daten.json`: die Techniken gibt es nur verschlüsselt im Bundle. |
 | `quellen/` | Originale (Prüfungsordnungen, Listen, PDFs), von `tools/kommentare.py` und `tools/lexikon.py` gelesen. |
-| `tools/` | `daten.py` (prüft + erzeugt `mitori-daten.json` und `*.lua`), `kommentare.py`, `lexikon.py`, `kapitel.py`, `bundle.py` (Video-Bundle-Encoder, auch für Lernpakete), `paket.py` (prüft Lernpakete, erzeugt ihren Inhalt und Entwürfe aus Untertiteln), `uebersetzung.py` (Prüfseite Deutsch–Englisch, Glossar dazu in `uebersetzung-glossar.md`). |
+| `tools/` | `daten.py` (prüft + erzeugt `mitori-daten.json` und `*.lua`), `kommentare.py`, `lexikon.py`, `kapitel.py`, `bundle.py` (Video-Bundle-Encoder, auch für Lernpakete), `paket.py` (prüft Lernpakete, erzeugt ihren Inhalt und Entwürfe aus Untertiteln; Aufbau in `lernpakete.md`, die Pakete liegen außerhalb des Repos), `uebersetzung.py` (Prüfseite Deutsch–Englisch, Glossar dazu in `uebersetzung-glossar.md`). |
 | `tests/` | `test_daten.py` (Datenformat, Glossar, Wartezeiten), `test_bundle.py` (Bundle-Encoder), `test_paket.py` (Lernpakete), `test_uebersetzung.py` (Prüfseite). |
 | `STAND` | Datenstand, den App und Heft anzeigen (`JJJJ.M.N`). |
 | `KORREKTUREN.md` | Offene Fragen zu den Daten, mit IDs (`A-…`, `D-…`, `S-…`) und Status. |
