@@ -890,6 +890,12 @@ def _gebaut_paket(lernpaket, **mehr):
     return bundle.manifest_lesen()["lernpakete"][0]
 
 
+def test_paket_fertig_verlangt_einen_eigenen_ordner(geheim, lernpaket):
+    """Ohne --videos wären es die Lernvideos im Original, die dann als kodiert gälten."""
+    with pytest.raises(SystemExit, match="--videos"):
+        bundle.befehl_build(_paket_args(lernpaket[1], videos=None, ohne_kodieren=False, fertig=True))
+
+
 def test_paket_bauen(geheim, lernpaket):
     e = _gebaut_paket(lernpaket)
     m = bundle.manifest_lesen()

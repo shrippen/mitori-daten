@@ -513,6 +513,8 @@ def befehl_build_paket(args):
         sys.exit(f"bundle: {pid} ist ein Entwurf (pruefen: true in {paket.PAKETE / pid}.yaml), nichts wird gebaut")
     fertig = getattr(args, "fertig", False)
     videos_ordner = Path(args.videos or LERNVIDEOS)
+    if fertig and videos_ordner.resolve() == Path(LERNVIDEOS).resolve():
+        sys.exit("bundle: --fertig braucht --videos mit den fertig kodierten Dateien, sonst gälten die Originale als kodiert")
     m = manifest_lesen()
     alt = next((x for x in m["lernpakete"] if x["id"] == pid), None)
     version = neue_version(args, alt, pid)
