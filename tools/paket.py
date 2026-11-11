@@ -170,7 +170,10 @@ def technik_fehler(wo, t, videos, ids):
     wie = t.get("wie", [])
     if not isinstance(wie, list):
         return fehler + [f"{wo}: wie ist eine Liste von Ids"]
-    return fehler + [f"{wo}: wie {w}: unbekannte Id im Programm" for w in wie if w not in ids]
+    # Doppelt nennte die App dieselbe Technik zweimal im Blatt.
+    doppelt = sorted({w for w in wie if wie.count(w) > 1})
+    return (fehler + [f"{wo}: wie {w}: unbekannte Id im Programm" for w in wie if w not in ids]
+            + [f"{wo}: wie {w} steht doppelt" for w in doppelt])
 
 
 def abschnitt_fehler(pid, d, videos, ids):

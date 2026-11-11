@@ -75,6 +75,8 @@ FALSCH = {
     "von nach bis": (lambda d: d["abschnitte"][0]["techniken"][1].update(von=9, bis=3), "von 9 bis 3"),
     "von negativ": (lambda d: d["abschnitte"][0]["techniken"][1].update(von=-1), "von -1"),
     "wie unbekannt": (lambda d: d["abschnitte"][0]["techniken"][1].update(wie=["aikido/gibt-es-nicht"]), "unbekannte Id"),
+    "wie doppelt": (lambda d: d["abschnitte"][0]["techniken"][0].update(wie=d["abschnitte"][0]["techniken"][0]["wie"] * 2),
+                    "wie aikido/kyu-grade/x/k5/irimi-nage-2 steht doppelt"),
     "Video doppelt": (lambda d: d["videos"].append(dict(d["videos"][0])), "steht doppelt"),
     "Video ist Prüfungsvideo": (lambda d: d["videos"][0].update(id="aikido/k5"), "Prüfungsvideo"),
     "Video-Id": (lambda d: d["videos"][0].update(id="Shirakawa"), "Id nur aus a-z"),
