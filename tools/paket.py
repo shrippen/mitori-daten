@@ -6,6 +6,9 @@ Aufruf aus dem Projektordner:
   python3 tools/paket.py inhalt <id>                der Inhalt des Pakets als JSON (das steckt verschlüsselt im Bundle)
   python3 tools/paket.py entwurf <untertitel> --video <schluessel> [--id <paket>]
                                                     YAML-Entwurf aus SRT oder WebVTT, von Hand zu prüfen
+  python3 tools/paket.py vorschau <id> [--videos <ordner>]
+                                                    drei Standbilder je Technik und eine index.html unter
+                                                    <GEHEIM>/arbeit/<id>/vorschau/, um die Zeiten zu prüfen
 
 Ein Lernpaket kommt nie in mitori-daten.json oder die *.lua: Die Techniken gibt es nur mit den Videos.
 Ein Paket mit `pruefen: true` an einer Technik ist ein Entwurf: Es besteht die Prüfung, `bundle.py build`
@@ -18,9 +21,11 @@ KANDIDAT_WOERTER Wörter), nicht mit .?! endet und mit Großbuchstabe oder Ziffe
 letzten Untertitels.
 """
 import argparse
+import html
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -38,6 +43,15 @@ BUNDLES = WURZEL / "tools" / "bundles.yaml"
 FORMAT = 1                                      # des Inhalts im Bundle (inhalt.mvb)
 VORSATZ = "lern/"                               # Vorsatz der Technik-Ids
 ABSCHNITT_ENTWURF = "Entwurf"
+VORSCHAU_ORDNER = "arbeit"                      # unter GEHEIM: <id>/vorschau/
+VORSCHAU_BREITE = 320                           # Pixel der Standbilder
+VORSCHAU_RAND = 1.0                             # Sekunden hinter von und vor bis
+VORSCHAU_QUALITAET = "4"                        # ffmpeg -q:v (2 beste, 31 schlechteste)
+VORSCHAU_CSS = ("body{font:14px sans-serif;margin:1em;background:#fff;color:#111}"
+                "h2{margin:1.5em 0 .3em}.t{border-top:1px solid #ccc;padding:.5em 0}"
+                ".t p{margin:.1em 0}.pruefen{color:#b00;font-weight:bold}"
+                ".bilder{display:flex;gap:.5em;flex-wrap:wrap}.bilder figure{margin:0}"
+                ".bilder figcaption{font-size:12px;color:#555}")
 
 # Wie bundle.ID: Ids werden Ordnernamen in der App (nur a-z, 0-9 und Bindestriche).
 ID = re.compile(r"[a-z0-9][a-z0-9-]*")
@@ -355,6 +369,114 @@ def befehl_entwurf(args):
     print(text, end="")
 
 
+# ── Vorschau ──
+
+def mmss(sek):
+    sek = int(sek)
+    return f"{sek // 60}:{sek % 60:02d}"
+
+
+def bild_zeiten(t):
+    """Drei Zeiten (Sekunden) in der Technik: von + Rand, die Mitte, bis − Rand, auf von…bis begrenzt."""
+    von, bis = t["von"], t["bis"]
+    roh = (von + VORSCHAU_RAND, (von + bis) / 2, bis - VORSCHAU_RAND)
+    return sorted(round(min(max(z, von), bis), 3) for z in roh)
+
+
+def bild_name(tid, nr, zeit):
+    """Die Zeit (ms) steht im Namen: Wer die Zeiten ändert, bekommt neue Bilder, die alten fallen weg."""
+    return f"{tid}-{nr}-{round(zeit * 1000)}.jpg"
+
+
+def bild_holen(video, zeit, ziel):
+    """Ein Standbild nach `ziel`; True, wenn es entstand. -ss vor -i springt, statt zu dekodieren."""
+    r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(zeit), "-i", str(video), "-frames:v", "1",
+                        "-vf", f"scale={VORSCHAU_BREITE}:-2", "-q:v", VORSCHAU_QUALITAET, str(ziel)],
+                       capture_output=True, text=True)
+    if r.returncode == 0 and ziel.exists():
+        return True
+    ziel.unlink(missing_ok=True)
+    print(f"paket: kein Bild bei {zeit} s in {video}: {r.stderr.strip()}", file=sys.stderr)
+    return False
+
+
+def vorschau_seite(d, bilder):
+    """Die index.html: je Abschnitt eine Überschrift, je Technik eine Zeile mit Angaben und ihren Bildern.
+    `bilder`: {Technik-Id: [(Zeit, Dateiname oder None)]}."""
+    e = html.escape
+    zeilen = ["<!doctype html>", '<html lang="de"><head><meta charset="utf-8">',
+              f"<title>Vorschau {e(str(d['titel']))}</title><style>{VORSCHAU_CSS}</style></head><body>",
+              f"<h1>{e(str(d['titel']))}</h1>"]
+    for a in d["abschnitte"]:
+        zeilen.append(f"<h2>{e(str(a['titel']))}</h2>")
+        for t in a["techniken"]:
+            marke = ' <span class="pruefen">pruefen</span>' if t.get("pruefen") else ""
+            zeilen.append(f'<div class="t"><p><b>{e(str(t["name"]))}</b>{marke}</p>')
+            for feld in ("angriff", "zusatz"):
+                if feld in t:
+                    zeilen.append(f"<p>{feld.capitalize()}: {e(str(t[feld]))}</p>")
+            zeilen.append(f"<p>{mmss(t['von'])}–{mmss(t['bis'])} ({t['von']}–{t['bis']} s)</p>")
+            zeilen.append('<div class="bilder">')
+            for zeit, name in bilder[t["id"]]:
+                bild = f'<img src="{e(name)}" width="{VORSCHAU_BREITE}" alt="">' if name else "kein Bild"
+                zeilen.append(f"<figure>{bild}<figcaption>{zeit} s</figcaption></figure>")
+            zeilen.append("</div></div>")
+    return "\n".join(zeilen + ["</body></html>", ""])
+
+
+def vorschau(pid, videos_ordner):
+    """Schreibt die Vorschau von Paket `pid` nach <GEHEIM>/arbeit/<pid>/vorschau/; gibt den Ordner zurück."""
+    if not ID.fullmatch(pid):
+        sys.exit(f"paket: Id {pid} nur aus a-z, 0-9 und Bindestrichen")
+    d = yaml.safe_load((PAKETE / f"{pid}.yaml").read_text(encoding="utf-8"))
+
+    # Ein Entwurf ist ungeprüft: Seine Technik-Ids werden Dateinamen und müssen im Ordner bleiben.
+    falsch = [str(t.get("id")) for a in d["abschnitte"] for t in a["techniken"]
+              if not (isinstance(t.get("id"), str) and ID.fullmatch(t["id"]))]
+    if falsch:
+        sys.exit("paket: Technik-Ids nur aus a-z, 0-9 und Bindestrichen: " + ", ".join(falsch))
+
+    # Standbilder sind Videoinhalt: nie in ein Git-Repo, wie bei bundle.py.
+    import bundle       # erst hier: bundle.py lädt selbst paket.py
+    repo = bundle.repo_von(GEHEIM.resolve())
+    if repo:
+        sys.exit(f"paket: {GEHEIM} liegt im Git-Repo {repo}; MITORI_BUNDLE_GEHEIM außerhalb setzen")
+    dateien = {v["id"]: Path(videos_ordner) / v["datei"] for v in d["videos"]}
+    fehlt = [str(p) for p in dateien.values() if not p.is_file()]
+    if fehlt:
+        sys.exit("paket: Video nicht gefunden: " + ", ".join(fehlt))
+
+    ziel = GEHEIM / VORSCHAU_ORDNER / pid / "vorschau"
+    ziel.mkdir(parents=True, exist_ok=True)
+    bilder, behalten = {}, set()
+    for a in d["abschnitte"]:
+        for t in a["techniken"]:
+            bilder[t["id"]] = []
+            for nr, zeit in enumerate(bild_zeiten(t), 1):
+                name = bild_name(t["id"], nr, zeit)
+                if not (ziel / name).exists() and not bild_holen(dateien[t["video"]], zeit, ziel / name):
+                    name = None
+                if name:
+                    behalten.add(name)
+                bilder[t["id"]].append((zeit, name))
+    for alt in ziel.glob("*.jpg"):
+        if alt.name not in behalten:
+            alt.unlink()
+    (ziel / "index.html").write_text(vorschau_seite(d, bilder), encoding="utf-8")
+    return ziel
+
+
+def befehl_vorschau(args):
+    if not shutil.which("ffmpeg"):
+        sys.exit("paket: ffmpeg fehlt (nötig für die Standbilder der Vorschau)")
+    if not (PAKETE / f"{args.id}.yaml").exists():
+        sys.exit(f"paket: {args.id} gibt es nicht in {PAKETE}")
+    if args.videos is None:
+        import bundle       # erst hier: bundle.py lädt selbst paket.py
+        args.videos = bundle.LERNVIDEOS
+    print(vorschau(args.id, args.videos) / "index.html")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="befehl")
@@ -365,8 +487,12 @@ def main():
     e.add_argument("untertitel")
     e.add_argument("--video", required=True, help="Videoschlüssel, z. B. shirakawa-1/v1")
     e.add_argument("--id", help="Id des Pakets")
+    v = sub.add_parser("vorschau")
+    v.add_argument("id")
+    v.add_argument("--videos", help="Ordner der Lernvideos (Standard wie bundle.py)")
     args = p.parse_args()
     {"pruefen": befehl_pruefen, "inhalt": befehl_inhalt, "entwurf": befehl_entwurf,
+     "vorschau": befehl_vorschau,
      None: befehl_pruefen}[args.befehl](args)
 
 

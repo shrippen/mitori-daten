@@ -1,6 +1,7 @@
 """Checks of tools/paket.py: validating Lernpakete, their content JSON, the draft from subtitles."""
 import copy
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -229,3 +230,100 @@ def test_cli_entwurf_und_inhalt(pakete, tmp_path):
 def test_echtes_repo_besteht():
     r = subprocess.run([sys.executable, str(WURZEL / "tools" / "paket.py")], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
+
+
+# ── Vorschau ──
+
+ffmpeg = pytest.mark.skipif(not shutil.which("ffmpeg"), reason="ffmpeg fehlt")
+
+
+def vorschau_paket(pakete, tmp_path, monkeypatch):
+    """Ein Testvideo (10 s) und ein Paket mit zwei Techniken, eine kürzer als 2 s."""
+    videos = tmp_path / "videos"
+    videos.mkdir()
+    subprocess.run(["ffmpeg", "-v", "error", "-f", "lavfi", "-i", "testsrc=duration=10:size=640x360:rate=10",
+                    str(videos / "v.mp4")], check=True)
+    d = copy.deepcopy(GUT)
+    d["videos"][0]["datei"] = "v.mp4"
+    d["abschnitte"][0]["techniken"][0].update(von=2.0, bis=8.0, pruefen=True)
+    d["abschnitte"][0]["techniken"][1].update(von=8.5, bis=9.0)
+    schreibe(pakete, "p", d)
+    monkeypatch.setattr(paket, "GEHEIM", tmp_path / "geheim")
+    return videos
+
+
+def test_bild_zeiten_begrenzt():
+    assert paket.bild_zeiten({"von": 2.0, "bis": 8.0}) == [3.0, 5.0, 7.0]
+    assert paket.bild_zeiten({"von": 8.5, "bis": 9.0}) == [8.5, 8.75, 9.0]
+
+
+@ffmpeg
+def test_vorschau_schreibt_bilder_und_seite(pakete, tmp_path, monkeypatch):
+    ziel = paket.vorschau("p", vorschau_paket(pakete, tmp_path, monkeypatch))
+    assert ziel == tmp_path / "geheim" / "arbeit" / "p" / "vorschau"
+    assert sorted(f.name for f in ziel.glob("*.jpg")) == [
+        "shomen-uchi-irimi-nage-1-3000.jpg", "shomen-uchi-irimi-nage-2-5000.jpg",
+        "shomen-uchi-irimi-nage-3-7000.jpg", "zweite-1-8500.jpg", "zweite-2-8750.jpg", "zweite-3-9000.jpg"]
+    seite = (ziel / "index.html").read_text(encoding="utf-8")
+    for teil in ("<h2>Grund</h2>", "Irimi-nage", "Shomen-uchi", "0:02–0:08", "pruefen",
+                 'src="shomen-uchi-irimi-nage-1-3000.jpg"'):
+        assert teil in seite
+    assert "http" not in seite.replace("<!doctype html>", "")
+
+
+@ffmpeg
+def test_vorschau_zweiter_lauf_holt_nur_neues(pakete, tmp_path, monkeypatch):
+    videos = vorschau_paket(pakete, tmp_path, monkeypatch)
+    ziel = paket.vorschau("p", videos)
+    bleibt = ziel / "zweite-1-8500.jpg"
+    stempel = bleibt.stat().st_mtime_ns
+
+    d = yaml.safe_load((pakete / "p.yaml").read_text(encoding="utf-8"))
+    d["abschnitte"][0]["techniken"][0]["bis"] = 6.0
+    schreibe(pakete, "p", d)
+    paket.vorschau("p", videos)
+
+    assert bleibt.stat().st_mtime_ns == stempel
+    assert not (ziel / "shomen-uchi-irimi-nage-3-7000.jpg").exists()
+    assert (ziel / "shomen-uchi-irimi-nage-3-5000.jpg").exists()
+
+
+@ffmpeg
+def test_cli_vorschau(pakete, tmp_path, monkeypatch):
+    videos = vorschau_paket(pakete, tmp_path, monkeypatch)
+    env = {**__import__("os").environ, "MITORI_PAKETE": str(pakete), "MITORI_BUNDLE_GEHEIM": str(tmp_path / "geheim")}
+    r = subprocess.run([sys.executable, str(WURZEL / "tools" / "paket.py"), "vorschau", "p", "--videos", str(videos)],
+                       capture_output=True, text=True, env=env)
+    assert r.returncode == 0, r.stderr
+    assert r.stdout.strip().endswith("arbeit/p/vorschau/index.html")
+
+
+def test_vorschau_ohne_ffmpeg(pakete, monkeypatch, capsys):
+    monkeypatch.setattr(shutil, "which", lambda _: None)
+    with pytest.raises(SystemExit) as e:
+        paket.befehl_vorschau(type("A", (), {"id": "p", "videos": None})())
+    assert "ffmpeg" in str(e.value.code)
+
+
+@ffmpeg
+def test_vorschau_nie_in_ein_repo(pakete, tmp_path, monkeypatch):
+    """Standbilder sind Videoinhalt: Liegt GEHEIM in einem Git-Repo, schreibt die Vorschau nichts."""
+    videos = vorschau_paket(pakete, tmp_path, monkeypatch)
+    repo = tmp_path / "repo"
+    (repo / ".git").mkdir(parents=True)
+    monkeypatch.setattr(paket, "GEHEIM", repo / "geheim")
+    with pytest.raises(SystemExit, match="Git-Repo"):
+        paket.vorschau("p", videos)
+    assert not (repo / "geheim" / "arbeit").exists()
+
+
+@ffmpeg
+def test_vorschau_bleibt_in_ihrem_ordner(pakete, tmp_path, monkeypatch):
+    """Eine Technik-Id aus einem ungeprüften Entwurf wird kein Pfad außerhalb des Vorschau-Ordners."""
+    videos = vorschau_paket(pakete, tmp_path, monkeypatch)
+    d = yaml.safe_load((pakete / "p.yaml").read_text(encoding="utf-8"))
+    d["abschnitte"][0]["techniken"][0]["id"] = "../../../flucht"
+    schreibe(pakete, "p", d)
+    with pytest.raises(SystemExit, match="flucht"):
+        paket.vorschau("p", videos)
+    assert not list(tmp_path.rglob("flucht*"))
