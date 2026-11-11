@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,9 @@ import yaml
 nacl = pytest.importorskip("nacl", reason="PyNaCl (python-pynacl) needed for tools/bundle.py")
 
 WURZEL = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(WURZEL / "tools"))
+import paket  # noqa: E402  (dieselbe Instanz wie in bundle.py)
+
 spec = importlib.util.spec_from_file_location("bundle", WURZEL / "tools" / "bundle.py")
 bundle = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(bundle)
@@ -845,3 +849,261 @@ def test_sperre_haengt_nicht_an_den_daten(geheim, tmp_path, monkeypatch):
     monkeypatch.setattr(bundle, "hochladen", lambda *a, **k: gesendet.append(a))
     bundle.befehl_hochladen(type("A", (), {"nur_manifest": True, "verband_stimmt_zu": True, "probe": False}))
     assert len(gesendet) == 1
+
+
+# ── Lernpakete ──
+
+PAKET = {
+    "titel": "Shirakawa", "titel_en": "Shirakawa EN", "sparte": "aikido",
+    "videos": [{"id": "shirakawa-1/v1", "datei": "S/V1.mp4", "titel": "Vol. 1"}],
+    "abschnitte": [{"titel": "Grund", "techniken": [
+        {"id": "irimi", "name": "Irimi-nage", "angriff": "Shomen-uchi", "video": "shirakawa-1/v1", "von": 1, "bis": 9.5}]}],
+}
+
+
+def _paket_args(ordner, **mehr):
+    args = {"bundle": "shirakawa-1", "videos": str(ordner), "version": None, "hinweis": "",
+            "ohne_kodieren": True, "fertig": False, "schnitt": None}
+    return type("A", (), args | mehr)
+
+
+@pytest.fixture
+def lernpaket(geheim, tmp_path, monkeypatch):
+    """Ein Lernpaket in einem Test-Ordner, ein Dummy-Video; ffmpeg und ffprobe sind ersetzt."""
+    pakete = tmp_path / "pakete"
+    pakete.mkdir()
+    (pakete / "shirakawa-1.yaml").write_text(yaml.safe_dump(PAKET, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    videos = tmp_path / "lernvideos"
+    (videos / "S").mkdir(parents=True)
+    (videos / "S" / "V1.mp4").write_bytes(b"video" * 1000)
+    monkeypatch.setattr(paket, "PAKETE", pakete)
+    monkeypatch.setattr(paket, "programmdaten", lambda: (set(), {"aikido/k5"}))
+    monkeypatch.setattr(bundle, "bilder", lambda p: 100)
+    monkeypatch.setattr(bundle, "laufzeit", lambda p: 10.0)
+    monkeypatch.setattr(bundle, "_laenge_fehler", lambda *a: [])
+    monkeypatch.setattr(bundle.shutil, "which", lambda name: "/usr/bin/" + name)
+    return pakete, videos
+
+
+def _gebaut_paket(lernpaket, **mehr):
+    bundle.befehl_build(_paket_args(lernpaket[1], **mehr))
+    return bundle.manifest_lesen()["lernpakete"][0]
+
+
+def test_paket_fertig_verlangt_einen_eigenen_ordner(geheim, lernpaket):
+    """Ohne --videos wären es die Lernvideos im Original, die dann als kodiert gälten."""
+    with pytest.raises(SystemExit, match="--videos"):
+        bundle.befehl_build(_paket_args(lernpaket[1], videos=None, ohne_kodieren=False, fertig=True))
+
+
+def test_paket_bauen(geheim, lernpaket):
+    e = _gebaut_paket(lernpaket)
+    m = bundle.manifest_lesen()
+    assert m["format"] == 2 and m["bundles"] == []
+    assert set(e) == {"id", "version", "titel", "titel_en", "videos", "inhalt", "hinweis"}
+    assert (e["id"], e["version"], e["titel_en"], e["hinweis"]) == ("shirakawa-1", 1, "Shirakawa EN", "")
+    v = e["videos"][0]
+    assert v["video"] == "shirakawa-1/v1" and v["datei"] == "shirakawa-1-v1.mvb" and "kapitel" not in v
+    assert v["bilder"] == 100 and v["beschnitten"] is False and v["klar"] == 5000
+    aus = geheim / "aus" / "shirakawa-1" / "1"
+    assert (aus / v["datei"]).stat().st_size == v["groesse"]
+    i = e["inhalt"]
+    assert i["datei"] == "inhalt.mvb" and i["format"] == 1
+    assert (aus / "inhalt.mvb").stat().st_size == i["groesse"]
+    bundle.entschluesselt(aus / "inhalt.mvb", geheim / "klar.json", bundle.schluessel("shirakawa-1"))
+    j = json.loads((geheim / "klar.json").read_text(encoding="utf-8"))
+    assert j == paket.inhalt("shirakawa-1") and i["klar"] == (geheim / "klar.json").stat().st_size
+    assert j["abschnitte"][0]["techniken"][0]["id"] == "lern/shirakawa-1/irimi"
+    assert j["abschnitte"][0]["techniken"][0]["angriff"]["jp"] == "正面打ち"
+    assert not (geheim / "arbeit" / "shirakawa-1" / "inhalt.json").exists()
+
+
+def test_paket_hat_hoehere_version(geheim, lernpaket):
+    _gebaut_paket(lernpaket)
+    with pytest.raises(SystemExit, match="Version 1"):
+        bundle.befehl_build(_paket_args(lernpaket[1], version=1))
+    assert _gebaut_paket(lernpaket)["version"] == 2
+
+
+def test_paket_kodiert_ohne_schnitt(geheim, lernpaket, monkeypatch):
+    """Ohne `beschnitt` nur HEVC: beschnitten() bekommt einen leeren Beschnitt (Filter null)."""
+    gesehen = []
+
+    def kodiere(quelle, ziel, beschnitt):
+        gesehen.append(beschnitt)
+        ziel.write_bytes(b"hevc")
+
+    monkeypatch.setattr(bundle, "beschnitten", kodiere)
+    e = _gebaut_paket(lernpaket, ohne_kodieren=False)
+    assert gesehen == [{}] and e["videos"][0]["beschnitten"] is True and e["videos"][0]["klar"] == 4
+
+
+def test_paket_fertig(geheim, lernpaket, monkeypatch):
+    monkeypatch.setattr(bundle, "beschnitten", lambda *a: pytest.fail("nichts wird kodiert"))
+    e = _gebaut_paket(lernpaket, ohne_kodieren=False, fertig=True)
+    assert not bundle.ist_testbau(e)
+
+
+def test_paket_standardordner_der_videos():
+    assert bundle.LERNVIDEOS == str(bundle.WURZEL.parent / "Mitori Lernvideos")
+
+
+def test_paket_entwurf_wird_nicht_gebaut(geheim, lernpaket):
+    d = json.loads(json.dumps(PAKET))
+    d["abschnitte"][0]["techniken"][0]["pruefen"] = True
+    (lernpaket[0] / "shirakawa-1.yaml").write_text(yaml.safe_dump(d), encoding="utf-8")
+    with pytest.raises(SystemExit, match="Entwurf"):
+        bundle.befehl_build(_paket_args(lernpaket[1]))
+    assert bundle.manifest_lesen()["lernpakete"] == [] and not (geheim / "aus").exists()
+
+
+def test_paket_mit_fehler_wird_nicht_gebaut(geheim, lernpaket):
+    d = json.loads(json.dumps(PAKET))
+    d["sparte"] = "judo"
+    (lernpaket[0] / "shirakawa-1.yaml").write_text(yaml.safe_dump(d), encoding="utf-8")
+    with pytest.raises(SystemExit, match="Sparte"):
+        bundle.befehl_build(_paket_args(lernpaket[1]))
+
+
+def test_paket_technik_hinter_dem_videoende(geheim, lernpaket, monkeypatch):
+    monkeypatch.setattr(bundle, "laufzeit", lambda p: 5.0)
+    with pytest.raises(SystemExit, match="endet bei"):
+        bundle.befehl_build(_paket_args(lernpaket[1]))
+    assert bundle.manifest_lesen()["lernpakete"] == []
+
+
+def test_paket_verifizieren(geheim, lernpaket):
+    _gebaut_paket(lernpaket)
+    assert bundle.verifiziert("shirakawa-1") == []
+    k = bundle.schluessel("shirakawa-1")
+    inhalt = geheim / "aus" / "shirakawa-1" / "1" / "inhalt.mvb"
+    echt = inhalt.read_bytes()
+
+    roh = bytearray(echt)
+    roh[-5] ^= 1
+    inhalt.write_bytes(roh)
+    assert any("inhalt.mvb" in f for f in bundle.verifiziert("shirakawa-1"))
+
+    fremd = geheim / "fremd.json"                               # heil, aber das falsche Paket
+    fremd.write_text('{"id": "anderes"}', encoding="utf-8")
+    g, sha, klar = bundle.verschluesselt(fremd, inhalt, k)
+    m = bundle.manifest_lesen()
+    m["lernpakete"][0]["inhalt"].update(groesse=g, sha256=sha, klar=klar)
+    bundle.manifest_schreiben(m)
+    assert any("gehört nicht zu shirakawa-1" in f for f in bundle.verifiziert("shirakawa-1"))
+
+    fremd.write_text("kein json", encoding="utf-8")
+    g, sha, klar = bundle.verschluesselt(fremd, inhalt, k)
+    m["lernpakete"][0]["inhalt"].update(groesse=g, sha256=sha, klar=klar)
+    bundle.manifest_schreiben(m)
+    assert any("kein JSON" in f for f in bundle.verifiziert("shirakawa-1"))
+
+    inhalt.unlink()
+    assert any("inhalt.mvb: fehlt" in f for f in bundle.verifiziert("shirakawa-1"))
+
+
+def test_paket_stand_und_codes(geheim, lernpaket, capsys):
+    assert any(z == "shirakawa-1: nicht gebaut" for z in bundle.stand_zeilen())
+    _gebaut_paket(lernpaket)
+    bundle.befehl_codes(type("A", (), {"bundle": "shirakawa-1", "anzahl": 2, "fuer": "Dojo"}))
+    zeile = next(z for z in bundle.stand_zeilen() if z.startswith("shirakawa-1"))
+    assert "Version 1" in zeile and "2 Codes" in zeile and "Testbau" in zeile
+    code = (geheim / "codes" / "shirakawa-1.csv").read_text(encoding="utf-8").splitlines()[1].split(",")[0]
+    bundle.befehl_pruefen(type("A", (), {"code": code}))
+    assert "öffnet shirakawa-1: ja" in capsys.readouterr().out
+    with pytest.raises(SystemExit, match="unbekanntes Bundle"):
+        bundle.befehl_codes(type("A", (), {"bundle": "gibt-es-nicht", "anzahl": 1, "fuer": ""}))
+
+
+def test_paket_verifizieren_ohne_name_nimmt_alle(geheim, lernpaket, capsys):
+    _gebaut_paket(lernpaket)
+    bundle.befehl_verifizieren(type("A", (), {"bundle": None}))
+    assert "1 Bundles in Ordnung" in capsys.readouterr().err
+
+
+def test_alle_baut_pakete_und_ueberspringt_entwuerfe(geheim, lernpaket, monkeypatch, capsys):
+    d = json.loads(json.dumps(PAKET))
+    d["videos"][0]["id"] = "entwurf/v1"
+    d["abschnitte"][0]["techniken"][0].update(video="entwurf/v1", pruefen=True)
+    (lernpaket[0] / "entwurf.yaml").write_text(yaml.safe_dump(d), encoding="utf-8")
+    gebaut = []
+    monkeypatch.setattr(bundle, "befehl_build", lambda args: gebaut.append(args.bundle))
+    bundle.befehl_alle(type("A", (), {"neu": False, "ohne_kodieren": True}))
+    assert "shirakawa-1" in gebaut and "entwurf" not in gebaut
+    assert "entwurf ist ein Entwurf" in capsys.readouterr().err
+
+
+def test_alle_nimmt_je_art_ihren_ordner(geheim, lernpaket, monkeypatch):
+    ordner = {}
+    monkeypatch.setattr(bundle, "befehl_build", lambda args: ordner.setdefault(args.bundle, args.videos))
+    bundle.befehl_alle(type("A", (), {"neu": False, "ohne_kodieren": True, "videos": "pruefung", "lernvideos": "lern"}))
+    assert ordner["shirakawa-1"] == "lern"
+    assert ordner["aikido-kyu"] == "pruefung"
+
+
+def test_alle_baut_gebautes_paket_nicht_neu(geheim, lernpaket, monkeypatch):
+    _gebaut_paket(lernpaket, ohne_kodieren=False, fertig=True)
+    gebaut = []
+    monkeypatch.setattr(bundle, "befehl_build", lambda args: gebaut.append(args.bundle))
+    bundle.befehl_alle(type("A", (), {"neu": False, "ohne_kodieren": False}))
+    assert "shirakawa-1" not in gebaut
+
+
+def test_veroeffentlichtes_manifest_hat_adressen_fuer_den_inhalt(geheim, lernpaket):
+    _gebaut_paket(lernpaket)
+    m = bundle.manifest_lesen()
+    aus = bundle.veroeffentlichtes_manifest(m, "https://v.example/m")
+    e = aus["lernpakete"][0]
+    assert e["inhalt"]["url"] == "https://v.example/m/shirakawa-1/1/inhalt.mvb"
+    assert e["videos"][0]["url"] == "https://v.example/m/shirakawa-1/1/shirakawa-1-v1.mvb"
+    assert "url" not in m["lernpakete"][0]["inhalt"] and "url" not in m["lernpakete"][0]["videos"][0]
+
+
+def test_adressen_pruefen_auch_den_inhalt(monkeypatch):
+    m = {"bundles": [], "lernpakete": [{"id": "p", "version": 1, "videos": [{"datei": "a.mvb", "groesse": 5}],
+                                         "inhalt": {"datei": "inhalt.mvb", "groesse": 5}}]}
+    abgefragt = []
+
+    class Antwort:
+        headers = {"Content-Length": "5"}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    monkeypatch.setattr(bundle.urllib.request, "urlopen", lambda anfrage, timeout: abgefragt.append(anfrage.full_url) or Antwort())
+    assert bundle.adressen_fehler(m, "https://v.example") == []
+    assert abgefragt == ["https://v.example/p/1/a.mvb", "https://v.example/p/1/inhalt.mvb"]
+
+
+def test_altes_manifest_bekommt_lernpakete(geheim):
+    geheim.mkdir()
+    (geheim / "manifest.json").write_text(json.dumps({"format": 2, "bundles": [], "codes": {}}))
+    assert bundle.manifest_lesen()["lernpakete"] == []
+
+
+@rsync
+def test_paket_hochladen(geheim, lernpaket, tmp_path, monkeypatch):
+    """Videos und Inhalt gehen zum Server, das Manifest nennt beide mit Adresse; ohne Kapitel gibt es keinen Fehler."""
+    _gebaut_paket(lernpaket, ohne_kodieren=False, fertig=True)
+    ziel = tmp_path / "server"
+    ziel.mkdir()
+    (geheim / "gitea-token").write_text("t")
+    (geheim / "video-basis").write_text("https://v.example/m/\n")
+    (geheim / "video-ziel").write_text(str(ziel))
+    gesendet = []
+    monkeypatch.setattr(bundle.shutil, "which", shutil.which)
+    monkeypatch.setattr(bundle, "bilder", lambda p: 100)
+    monkeypatch.setattr(bundle, "adressen_fehler", lambda m, basis: [])
+    monkeypatch.setattr(bundle, "hochladen", lambda paket_, version, name, daten, token, laenge=None: gesendet.append(json.loads(daten)))
+    bundle.befehl_hochladen(HOCH)
+    assert sorted(p.name for p in (ziel / "shirakawa-1" / "1").iterdir()) == ["inhalt.mvb", "shirakawa-1-v1.mvb"]
+    assert gesendet[0]["lernpakete"][0]["inhalt"]["url"] == "https://v.example/m/shirakawa-1/1/inhalt.mvb"
+
+
+def test_paket_testbau_wird_nicht_hochgeladen(geheim, lernpaket, monkeypatch):
+    _gebaut_paket(lernpaket)
+    with pytest.raises(SystemExit, match="Testbau"):
+        bundle.befehl_hochladen(type("A", (), {"nur_manifest": False, "verband_stimmt_zu": True, "probe": False}))

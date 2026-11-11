@@ -8,6 +8,7 @@ Eingabe (daten/):
   shinki-toho.yaml             Grade, Kamae, Suburi, Ô-dachi-Formen
   shinki-toho-kommentare.yaml  Kommentare von shinkiryu.de (erzeugt von tools/kommentare.py)
   lexikon.yaml                 Aiki-Budo-Lexikon Japanisch–Deutsch (erzeugt von tools/lexikon.py)
+  Lernpakete                   außerhalb des Repos (tools/lernpakete.md), nur geprüft (tools/paket.py), nicht in der Ausgabe
   videos.yaml                  Videostelle je Technik (erzeugt von tools/kapitel.py, von Hand geprüft)
   begriffe.yaml                Kanji (Aikido, Shinki Toho), gesichert
   daitoryu-begriffe.yaml       Kanji-Bausteine Daitoryu, ungeprüft
@@ -700,6 +701,9 @@ def erzeuge(ausgabe):
         + lua(st_heft) + "\n", encoding="utf-8")
 
     mit_video, videos = videostellen(disziplinen)
+    import paket    # erst hier: paket.py importiert daten.py
+    for f in paket.pruefe_alle(paket.eintrags_ids(disziplinen), set(videos)):
+        melde(f)
     stand = datenstand()
     (ausgabe / "stand.lua").write_text(
         "-- erzeugt von tools/daten.py aus STAND, nicht von Hand bearbeiten\nreturn " + lua(stand) + "\n",

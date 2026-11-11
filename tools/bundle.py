@@ -6,13 +6,19 @@ Aufruf aus dem Projektordner:
   python3 tools/bundle.py build aikido-kyu [--videos "../Mitori Videos"] [--version 2] [--ohne-kodieren]
   python3 tools/bundle.py build aikido-kyu --videos "../Remaster" --fertig [--schnitt schnitt.yaml]
                                                              von Hand fertige Videos, nur verschlüsseln
-  python3 tools/bundle.py alle [--neu] [--videos …] [--ohne-kodieren|--fertig] [--schnitt …]    alle Bundles, Gebautes bleibt
+  python3 tools/bundle.py build shirakawa-1 [--videos "../Mitori Lernvideos"]    ein Lernpaket (<PAKETE>/<id>.yaml), sonst wie ein Bundle
+  python3 tools/bundle.py alle [--neu] [--videos …] [--lernvideos …] [--ohne-kodieren|--fertig] [--schnitt …]    alle Bundles und Lernpakete, Gebautes bleibt
   python3 tools/bundle.py verifizieren [aikido-kyu]          entschlüsselt alles, prüft Größe, sha256, Bilderzahl
   python3 tools/bundle.py codes aikido-kyu --anzahl 50 --fuer "Dojo Köln"   Lizenzen: CSV, Einträge im Manifest
   python3 tools/bundle.py sperren 7KQ2M-X9HDV-3TAPR-WE6YC    Eintrag eines Codes aus dem Manifest
   python3 tools/bundle.py pruefen 7KQ2M-X9HDV-3TAPR-WE6YC    öffnet den Schlüssel wie die App
   python3 tools/bundle.py hochladen --probe                  zeigt, was hochginge
   python3 tools/bundle.py hochladen --verband-stimmt-zu [--nur-manifest]   Videos zu Caddy, Manifest zu Gitea
+
+Lernpakete (tools/paket.py, tools/lernpakete.md) sind Bundles mit eigenen Techniken: Ihre Videos stehen in
+<PAKETE>/<id>.yaml (`datei` relativ zu --videos, Standard LERNVIDEOS; bei `alle` --lernvideos), werden wie Prüfungsvideos kodiert
+(ohne `beschnitt` nur HEVC, kein Schnitt). Dazu kommt `inhalt.mvb`: der Inhalt des Pakets als JSON (UTF-8),
+verschlüsselt wie ein Video mit dem Schlüssel des Pakets. Ein Paket mit `pruefen: true` baut `build` nicht.
 
 Der Weg: build oder alle → verifizieren → codes → stand → hochladen. Nichts geht ohne
 --verband-stimmt-zu hinaus; hochgeladen wird nur Verschlüsseltes. Mit Code lädt die App das Bundle.
@@ -67,8 +73,16 @@ Formate (dieselben in app/store/bundlecrypto.cpp):
                    "kapitel": [{"id": "aikido/…/ikkyo-1", "von": 302.32, "bis": 343.64}]}],
                 "hinweis": "neu geschnitten …"}],
    "codes": {"<Kennung>": {"bundle": "aikido-kyu", "salz": "…", "t": 3, "m": 65536, "schluessel": "…"}}}
+  Lernpakete stehen unter "lernpakete" (Mitori bis 0.3.0 kennt nur "bundles" und überliest den Rest):
+   "lernpakete": [{"id": "shirakawa-1", "version": 1, "titel": "…", "titel_en": "…", "videos": [
+                    {"video": "shirakawa-1/v1", "datei": "shirakawa-1-v1.mvb", "groesse": 123, "sha256": "…",
+                     "klar": 120, "beschnitten": true, "bilder": 3000}],
+                  "inhalt": {"datei": "inhalt.mvb", "format": 1, "groesse": 456, "sha256": "…", "klar": 440},
+                  "hinweis": ""}]
+  Wie ein Bundle, aber ohne "kapitel" (die Stellen verraten die Techniken); "titel_en" nur, wo es abweicht.
+  Codes stehen wie bei jedem Bundle unter "codes".
   Das Manifest: <GITEA>/mitori-manifest/1/manifest.json. `url` kommt erst beim Hochladen dazu
-  (<video-basis>/<bundle>/<version>/<datei>).
+  (<video-basis>/<bundle>/<version>/<datei>), auch für `inhalt`.
 
 Braucht PyNaCl (libsodium), PyYAML; build braucht ffmpeg.
 """
@@ -93,13 +107,18 @@ from pathlib import Path
 import yaml
 from nacl import bindings, pwhash
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paket  # noqa: E402
+
 WURZEL = Path(__file__).resolve().parent.parent
-GEHEIM = Path(os.environ.get("MITORI_BUNDLE_GEHEIM", WURZEL.parent / "mitori-bundle-geheim"))
+GEHEIM = paket.GEHEIM
 GITEA = "https://git.arianw.de/api/packages/shrippen/generic"
 MANIFEST_FORMAT = 2
 VIDEO_BASIS = "video-basis"
 VIDEO_ZIEL = "video-ziel"
 ORIGINALE = str(WURZEL.parent / "Mitori Videos")
+LERNVIDEOS = str(WURZEL.parent / "Mitori Lernvideos")
+INHALT = "inhalt.mvb"                           # der Inhalt eines Lernpakets, verschlüsselt wie ein Video
 MANIFEST_VERSUCHE = 3
 MANIFEST_PAUSE = 10                             # Sekunden zwischen zwei Versuchen
 SCHNITT_SPIEL = 1.0                             # Sekunden, die ein Schnittpunkt hinter dem Ende liegen darf
@@ -247,8 +266,9 @@ def manifest_lesen():
         m = json.loads(p.read_text(encoding="utf-8"))
         m["format"] = MANIFEST_FORMAT   # ein älterer Stand: die Adressen kommen beim Hochladen dazu
         m.pop("basis", None)
+        m.setdefault("lernpakete", [])
         return m
-    return {"format": MANIFEST_FORMAT, "bundles": [], "codes": {}}
+    return {"format": MANIFEST_FORMAT, "bundles": [], "lernpakete": [], "codes": {}}
 
 
 def manifest_schreiben(m):
@@ -276,7 +296,25 @@ def vorhandener_schluessel(bundle):
 
 
 # Ids werden Ordnernamen in der App (BundleShelf::validId): nur a-z, 0-9 und Bindestriche.
-ID = re.compile(r"[a-z0-9][a-z0-9-]*")
+ID = paket.ID
+
+
+def eintraege(m):
+    """Bundles und Lernpakete des Manifests."""
+    return m["bundles"] + m.get("lernpakete", [])
+
+
+def ist_paket(eintrag):
+    return "inhalt" in eintrag
+
+
+def dateien_von(eintrag):
+    """Die Dateien eines Eintrags im Manifest: die Videos, bei einem Lernpaket dazu der Inhalt."""
+    return eintrag["videos"] + ([eintrag["inhalt"]] if ist_paket(eintrag) else [])
+
+
+def paket_ids():
+    return sorted(paket.laden()[0])
 
 
 def definitionen():
@@ -376,6 +414,8 @@ def beschnitten(quelle, ziel, beschnitt):
 
 def arbeitsname(video, beschnitt):
     """Der Beschnitt im Namen: ändert er sich in den Daten, gilt die alte Kodierung nicht mehr."""
+    if not beschnitt:
+        return f"{video.replace('/', '-')}.mkv"
     return f"{video.replace('/', '-')}.{beschnitt.get('h')}y{beschnitt.get('y')}.mkv"
 
 
@@ -390,18 +430,27 @@ def bilder(pfad):
     return int(zeilen[0]) if zeilen and zeilen[0].isdigit() else 0
 
 
+def neue_version(args, alt, bundle_id):
+    version = args.version or ((alt["version"] + 1) if alt else 1)
+    if alt and version <= alt["version"]:     # die gleiche Nummer ersetzte auf dem Server die geltende Datei
+        sys.exit(f"bundle: {bundle_id} hat schon Version {alt['version']}, eine neue braucht eine höhere")
+    return version
+
+
 def befehl_build(args):
     geheim_pruefen()
     fertig = getattr(args, "fertig", False)
-    if fertig and Path(args.videos).resolve() == Path(ORIGINALE).resolve():
+    if args.bundle in paket_ids():
+        befehl_build_paket(args)
+        return
+    videos_ordner = Path(args.videos or ORIGINALE)
+    if fertig and videos_ordner.resolve() == Path(ORIGINALE).resolve():
         sys.exit("bundle: --fertig braucht --videos mit den gemasterten Dateien, sonst gälten die Originale als beschnitten")
     b = definitionen()[args.bundle]
     daten = videodaten()
     m = manifest_lesen()
     alt = next((x for x in m["bundles"] if x["id"] == b["id"]), None)
-    version = args.version or ((alt["version"] + 1) if alt else 1)
-    if alt and version <= alt["version"]:     # die gleiche Nummer ersetzte auf dem Server die geltende Datei
-        sys.exit(f"bundle: {b['id']} hat schon Version {alt['version']}, eine neue braucht eine höhere")
+    version = neue_version(args, alt, b["id"])
     aus = GEHEIM / "aus" / b["id"] / str(version)
     arbeit = GEHEIM / "arbeit" / b["id"]
     aus.mkdir(parents=True, exist_ok=True)
@@ -410,7 +459,7 @@ def befehl_build(args):
     videos = []
     for v in b["videos"]:
         info = daten[v]
-        quelle = Path(args.videos) / info["datei"]
+        quelle = videos_ordner / info["datei"]
         datei = v.replace("/", "-") + ".mvb"
         klar = arbeit / arbeitsname(v, info["beschnitt"])
         if args.ohne_kodieren or fertig:
@@ -434,18 +483,90 @@ def befehl_build(args):
     print(f"bundle: {b['id']} Version {version}, {len(videos)} Dateien → {aus}", file=sys.stderr)
 
 
+def paket_kodiert(v, quelle, arbeit, args):
+    """Die Datei, die verschlüsselt wird: das Original (Test, fertig) oder die Kodierung, nur HEVC ohne Schnitt,
+    wenn das Video keinen `beschnitt` hat."""
+    if args.ohne_kodieren or getattr(args, "fertig", False):
+        return quelle
+    klar = arbeit / arbeitsname(v["id"], v.get("beschnitt") or {})
+    if not klar.exists():
+        print(f"bundle: {v['id']} kodieren …", file=sys.stderr)
+        beschnitten(quelle, klar, v.get("beschnitt") or {})
+    return klar
+
+
+def paket_schnitt_fehler(p, video, laenge):
+    """Die Techniken eines Videos gegen seine Länge (die Zeiten selbst prüft tools/paket.py)."""
+    stellen = [{"id": t["id"], "von": t["von"], "bis": t["bis"]}
+               for a in p["abschnitte"] for t in a["techniken"] if t["video"] == video]
+    return schnitt_fehler(video, stellen, laenge) if stellen else []
+
+
+def befehl_build_paket(args):
+    """Ein Lernpaket: die Videos wie die Prüfungsvideos, dazu sein Inhalt verschlüsselt als inhalt.mvb."""
+    pid = args.bundle
+    fehler = paket.fehler_alle()
+    if fehler:
+        sys.exit("bundle: " + "; ".join(fehler))
+    p = paket.laden()[0][pid]
+    if paket.ist_entwurf(p):
+        sys.exit(f"bundle: {pid} ist ein Entwurf (pruefen: true in {paket.PAKETE / pid}.yaml), nichts wird gebaut")
+    fertig = getattr(args, "fertig", False)
+    videos_ordner = Path(args.videos or LERNVIDEOS)
+    if fertig and videos_ordner.resolve() == Path(LERNVIDEOS).resolve():
+        sys.exit("bundle: --fertig braucht --videos mit den fertig kodierten Dateien, sonst gälten die Originale als kodiert")
+    m = manifest_lesen()
+    alt = next((x for x in m["lernpakete"] if x["id"] == pid), None)
+    version = neue_version(args, alt, pid)
+    aus = GEHEIM / "aus" / pid / str(version)
+    arbeit = GEHEIM / "arbeit" / pid
+    aus.mkdir(parents=True, exist_ok=True)
+    arbeit.mkdir(parents=True, exist_ok=True)
+    k = schluessel(pid)
+    videos = []
+    for v in p["videos"]:
+        quelle = videos_ordner / v["datei"]
+        datei = v["id"].replace("/", "-") + ".mvb"
+        klar = paket_kodiert(v, quelle, arbeit, args)
+        zahl = bilder_der_kodierung(v["id"], quelle, klar, getattr(args, "laenge_egal", False))
+        fehler = paket_schnitt_fehler(p, v["id"], laufzeit(klar) if shutil.which("ffprobe") else None)
+        if fehler:
+            sys.exit("bundle: " + "; ".join(fehler))
+        groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
+        videos.append({"video": v["id"], "datei": datei, "groesse": groesse, "sha256": sha, "klar": klargroesse,
+                       "beschnitten": fertig or not args.ohne_kodieren, "bilder": zahl})
+    json_datei = arbeit / "inhalt.json"
+    json_datei.write_text(json.dumps(paket.inhalt(pid), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    groesse, sha, klargroesse = verschluesselt(json_datei, aus / INHALT, k)
+    json_datei.unlink()
+    eintrag = {"id": pid, "version": version, "titel": p["titel"],
+               **({"titel_en": p["titel_en"]} if "titel_en" in p else {}), "videos": videos,
+               "inhalt": {"datei": INHALT, "format": paket.FORMAT, "groesse": groesse, "sha256": sha,
+                          "klar": klargroesse},
+               "hinweis": args.hinweis or ""}
+    m["lernpakete"] = sorted([x for x in m["lernpakete"] if x["id"] != pid] + [eintrag], key=lambda x: x["id"])
+    manifest_schreiben(m)
+    print(f"bundle: {pid} Version {version}, {len(videos)} Videos und Inhalt → {aus}", file=sys.stderr)
+
+
 def befehl_alle(args):
     """Alle Bundles nacheinander; Gebautes bleibt (ein abgebrochener Lauf geht weiter), --neu baut neu."""
     # Ein Testbau (Originale, --ohne-kodieren) zählt für den echten Lauf nicht.
     # Ein Bau ohne Schnittpunkte auch nicht: `hochladen` nähme ihn nicht.
-    gebaut = {x["id"] for x in manifest_lesen()["bundles"] if (args.ohne_kodieren or not ist_testbau(x))
-              and all(v.get("kapitel") for v in x["videos"])}
+    gebaut = {x["id"] for x in eintraege(manifest_lesen()) if (args.ohne_kodieren or not ist_testbau(x))
+              and (ist_paket(x) or all(v.get("kapitel") for v in x["videos"]))}
     args.version = None
-    for bundle_id in definitionen():
+    videos, lernvideos = getattr(args, "videos", None), getattr(args, "lernvideos", None)
+    pakete = paket.laden()[0]
+    for bundle_id in [*definitionen(), *pakete]:
         if bundle_id in gebaut and not args.neu:
             print(f"bundle: {bundle_id} schon gebaut", file=sys.stderr)
             continue
+        if bundle_id in pakete and paket.ist_entwurf(pakete[bundle_id]):
+            print(f"bundle: {bundle_id} ist ein Entwurf, übersprungen", file=sys.stderr)
+            continue
         args.bundle = bundle_id
+        args.videos = lernvideos if bundle_id in pakete else videos     # je Art ihr Ordner
         befehl_build(args)
 
 
@@ -457,7 +578,7 @@ def verifiziert(bundle_id):
     """Was an einem gebauten Bundle nicht stimmt: je Datei Größe, sha256, jeder Block entschlüsselt, wie die App."""
     geheim_pruefen()
     m = manifest_lesen()
-    eintrag = next((x for x in m["bundles"] if x["id"] == bundle_id), None)
+    eintrag = next((x for x in eintraege(m) if x["id"] == bundle_id), None)
     if not eintrag:
         return [f"{bundle_id}: nicht gebaut"]
     k = vorhandener_schluessel(bundle_id)
@@ -470,10 +591,25 @@ def verifiziert(bundle_id):
             fehler.append(f"{bundle_id}/{v['datei']}: fehlt")
             continue
         fehler += _datei_fehler(bundle_id, v, pfad, k)
+    if ist_paket(eintrag):
+        pfad = GEHEIM / "aus" / bundle_id / str(eintrag["version"]) / eintrag["inhalt"]["datei"]
+        fehler += _datei_fehler(bundle_id, eintrag["inhalt"], pfad, k, inhalt=True) if pfad.exists() \
+            else [f"{bundle_id}/{eintrag['inhalt']['datei']}: fehlt"]
     return fehler
 
 
-def _datei_fehler(bundle_id, v, pfad, k):
+def _inhalt_fehler(name, probe, bundle_id):
+    """Der Inhalt eines Lernpakets: JSON, zum Paket gehörig."""
+    try:
+        j = json.loads(probe.read_text(encoding="utf-8"))
+    except ValueError:
+        return [f"{name}: kein JSON"]
+    if not isinstance(j, dict) or j.get("id") != bundle_id:
+        return [f"{name}: gehört nicht zu {bundle_id}"]
+    return []
+
+
+def _datei_fehler(bundle_id, v, pfad, k, inhalt=False):
     name = f"{bundle_id}/{v['datei']}"
     if pfad.stat().st_size != v["groesse"]:
         return [f"{name}: Größe {pfad.stat().st_size}, im Manifest {v['groesse']}"]
@@ -489,6 +625,8 @@ def _datei_fehler(bundle_id, v, pfad, k):
         entschluesselt(pfad, probe, k)
         if probe.stat().st_size != v["klar"]:
             return [f"{name}: Klartext {probe.stat().st_size}, im Manifest {v['klar']}"]
+        if inhalt:
+            return _inhalt_fehler(name, probe, bundle_id)
         return _laenge_fehler(name, probe, v.get("bilder"))
     except Exception as e:
         return [f"{name}: lässt sich nicht entschlüsseln ({type(e).__name__})"]
@@ -509,7 +647,7 @@ def _laenge_fehler(name, probe, soll):
 
 
 def befehl_verifizieren(args):
-    ids = [args.bundle] if args.bundle else [x["id"] for x in manifest_lesen()["bundles"]]
+    ids = [args.bundle] if args.bundle else [x["id"] for x in eintraege(manifest_lesen())]
     if not ids:
         sys.exit(f"bundle: keine Bundles in {GEHEIM}")
     fehler = [f for i in ids for f in verifiziert(i)]
@@ -526,9 +664,9 @@ def stand_zeilen():
     codes = {}
     for c in m["codes"].values():
         codes[c["bundle"]] = codes.get(c["bundle"], 0) + 1
-    gebaut = {x["id"]: x for x in m["bundles"]}
+    gebaut = {x["id"]: x for x in eintraege(m)}
     zeilen = []
-    for bundle_id in definitionen():
+    for bundle_id in [*definitionen(), *paket_ids()]:
         x = gebaut.get(bundle_id)
         if not x:
             zeilen.append(f"{bundle_id}: nicht gebaut")
@@ -545,7 +683,7 @@ def befehl_stand(args):
 
 
 def befehl_codes(args):
-    if args.bundle not in definitionen():
+    if args.bundle not in definitionen() and args.bundle not in paket_ids():
         sys.exit(f"bundle: unbekanntes Bundle {args.bundle}")
     m = manifest_lesen()
     k = schluessel(args.bundle)
@@ -622,7 +760,7 @@ def video_url(basis, bundle, datei):
 def videos_kopieren(b, ziel, aufraeumen=False):
     """rsync nur der Dateien aus dem Manifest, nichts anderes aus dem Ordner. Mit `aufraeumen` verschwinden
     auf dem Server die anderen Versionen des Bundles."""
-    filter_ = [f"--filter=+ /{b['version']}/"] + [f"--filter=+ /{b['version']}/{v['datei']}" for v in b["videos"]]
+    filter_ = [f"--filter=+ /{b['version']}/"] + [f"--filter=+ /{b['version']}/{v['datei']}" for v in dateien_von(b)]
     aufruf = ["rsync", "-a", "--partial", "--chmod=D755,F644", *filter_, "--filter=- *"]
     if aufraeumen:
         aufruf += ["--delete", "--delete-excluded"]
@@ -637,8 +775,8 @@ def videos_kopieren(b, ziel, aufraeumen=False):
 def adressen_fehler(m, basis):
     """Liefert der Server jede Datei des Manifests in der richtigen Größe? Vor dem Ersetzen des Manifests."""
     fehler = []
-    for b in m["bundles"]:
-        for v in b["videos"]:
+    for b in eintraege(m):
+        for v in dateien_von(b):
             url = video_url(basis, b, v["datei"])
             try:
                 with urllib.request.urlopen(urllib.request.Request(url, method="HEAD"), timeout=60) as r:
@@ -654,8 +792,8 @@ def adressen_fehler(m, basis):
 def veroeffentlichtes_manifest(m, basis):
     """Das Manifest für den Server: mit der Adresse jeder Datei."""
     aus = json.loads(json.dumps(m))
-    for b in aus["bundles"]:
-        for v in b["videos"]:
+    for b in eintraege(aus):
+        for v in dateien_von(b):
             v["url"] = video_url(basis, b, v["datei"])
     return aus
 
@@ -678,7 +816,7 @@ def befehl_hochladen(args):
     m = manifest_lesen()
     dateien = [] if args.nur_manifest else [
         (b, v["datei"], GEHEIM / "aus" / b["id"] / str(b["version"]) / v["datei"])
-        for b in m["bundles"] for v in b["videos"]]
+        for b in eintraege(m) for v in dateien_von(b)]
     if args.probe:
         p = GEHEIM / VIDEO_BASIS
         basis = einstellung(VIDEO_BASIS) if p.exists() else "<video-basis fehlt>"
@@ -690,13 +828,13 @@ def befehl_hochladen(args):
     if not args.verband_stimmt_zu:
         sys.exit("bundle: hochladen nur mit --verband-stimmt-zu (die Zustimmung des Verbands liegt vor)")
     # Alles vor dem ersten Request: was hier scheitert, hat den Rechner nicht verlassen.
-    for b in m["bundles"]:
+    for b in eintraege(m):
         if ist_testbau(b):
             sys.exit(f"bundle: {b['id']} ist ein Testbau (unbeschnittene Originale), nichts wird hochgeladen")
     for _, _, pfad in dateien:
         if pfad.exists():
             verschluesselt_pruefen(pfad)
-    if not m["bundles"]:     # ein leeres Manifest nähme auf dem Server alle Codes und Bundles weg
+    if not eintraege(m):     # ein leeres Manifest nähme auf dem Server alle Codes und Bundles weg
         sys.exit(f"bundle: keine Bundles in {GEHEIM}, nichts wird hochgeladen")
     # Die Techniken nur für neue Dateien: Das Manifest allein (eine Sperre) darf nicht am Datenstand hängen.
     fehler = [f for b in m["bundles"] for v in b["videos"]
@@ -709,7 +847,7 @@ def befehl_hochladen(args):
             sys.exit("bundle: ohne ffprobe keine Prüfung der Videos, nichts wird hochgeladen")
         if not shutil.which("rsync"):
             sys.exit("bundle: ohne rsync gehen die Videos nicht hinaus, nichts wird hochgeladen")
-        fehler = [f for b in m["bundles"] for f in verifiziert(b["id"])]
+        fehler = [f for b in eintraege(m) for f in verifiziert(b["id"])]
         if fehler:
             sys.exit("bundle: " + "; ".join(fehler) + "; nichts wird hochgeladen")
     basis = einstellung(VIDEO_BASIS)
@@ -717,7 +855,7 @@ def befehl_hochladen(args):
     token = (GEHEIM / "gitea-token").read_text().strip()
 
     if not args.nur_manifest:
-        for b in m["bundles"]:
+        for b in eintraege(m):
             videos_kopieren(b, ziel)
     # Auch bei --nur-manifest: Es darf keine Datei nennen, die der Server nicht hat.
     fehler = adressen_fehler(m, basis)
@@ -726,7 +864,7 @@ def befehl_hochladen(args):
     daten = json.dumps(veroeffentlichtes_manifest(m, basis), ensure_ascii=False, indent=1).encode()
     manifest_ersetzen(daten, token)
     if not args.nur_manifest:
-        for b in m["bundles"]:
+        for b in eintraege(m):
             videos_kopieren(b, ziel, aufraeumen=True)
 
 
@@ -735,7 +873,7 @@ def main():
     sub = p.add_subparsers(dest="befehl", required=True)
     b = sub.add_parser("build")
     b.add_argument("bundle")
-    b.add_argument("--videos", default=ORIGINALE)
+    b.add_argument("--videos", help=f"Ordner der Videos (Standard {ORIGINALE}, bei einem Lernpaket {LERNVIDEOS})")
     b.add_argument("--version", type=int)
     b.add_argument("--hinweis", help="was die neue Version bringt (Update-Hinweis in der App)")
     art = b.add_mutually_exclusive_group()
@@ -756,7 +894,8 @@ def main():
     h.add_argument("--verband-stimmt-zu", action="store_true", help="die Zustimmung liegt vor")
     a = sub.add_parser("alle")
     a.add_argument("--neu", action="store_true", help="auch schon Gebautes neu bauen")
-    a.add_argument("--videos", default=ORIGINALE)
+    a.add_argument("--videos", help=f"Ordner der Prüfungsvideos (Standard {ORIGINALE})")
+    a.add_argument("--lernvideos", help=f"Ordner der Lernvideos (Standard {LERNVIDEOS})")
     a.add_argument("--hinweis")
     art = a.add_mutually_exclusive_group()
     art.add_argument("--ohne-kodieren", action="store_true")
