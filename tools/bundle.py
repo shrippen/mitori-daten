@@ -10,8 +10,8 @@ Aufruf aus dem Projektordner:
   python3 tools/bundle.py alle [--neu] [--videos …] [--lernvideos …] [--ohne-kodieren|--fertig] [--schnitt …]    alle Bundles und Lernpakete, Gebautes bleibt
   python3 tools/bundle.py verifizieren [aikido-kyu]          entschlüsselt alles, prüft Größe, sha256, Bilderzahl
   python3 tools/bundle.py codes aikido-kyu --anzahl 50 --fuer "Dojo Köln"   Lizenzen: CSV, Einträge im Manifest
-  python3 tools/bundle.py sperren 7KQ2M-X9HDV-3TAPR-WE6YC    Eintrag eines Codes aus dem Manifest
-  python3 tools/bundle.py pruefen 7KQ2M-X9HDV-3TAPR-WE6YC    öffnet den Schlüssel wie die App
+  python3 tools/bundle.py sperren 7KQ2M-X9HDV-3TAPR-WE6YT    Eintrag eines Codes aus dem Manifest
+  python3 tools/bundle.py pruefen 7KQ2M-X9HDV-3TAPR-WE6YT    öffnet den Schlüssel wie die App
   python3 tools/bundle.py hochladen --probe                  zeigt, was hochginge
   python3 tools/bundle.py hochladen --verband-stimmt-zu [--nur-manifest]   Videos zu Caddy, Manifest zu Gitea
 
@@ -53,7 +53,7 @@ geladenen Version, so passen sie immer zur Datei auf dem Gerät.
 Formate (dieselben in app/store/bundlecrypto.cpp):
 
   Code      20 Zeichen Crockford-Base32 (0-9 A-Z ohne I L O U), 19 zufällig (95 Bit) und ein
-            Prüfzeichen (Luhn mod 32); angezeigt in Gruppen zu fünf: 7KQ2M-X9HDV-3TAPR-WE6YC.
+            Prüfzeichen (Luhn mod 32); angezeigt in Gruppen zu fünf: 7KQ2M-X9HDV-3TAPR-WE6YT.
             Eingabe: Groß/klein, Bindestriche und Leerzeichen egal, O gilt als 0, I und L als 1.
   Kennung   hex(BLAKE2b-128("mitori-code:" + Code)): findet den Eintrag, verrät den Code nicht
   Umhüllung Argon2id(Code, Salz 16 Byte, t, m KiB, 1 Spur) → 32 Byte; damit XChaCha20-Poly1305
