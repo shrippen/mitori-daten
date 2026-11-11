@@ -119,6 +119,9 @@ VIDEO_ZIEL = "video-ziel"
 ORIGINALE = str(WURZEL.parent / "Mitori Videos")
 LERNVIDEOS = str(WURZEL.parent / "Mitori Lernvideos")
 INHALT = "inhalt.mvb"                           # der Inhalt eines Lernpakets, verschlüsselt wie ein Video
+ART_VIDEO, ART_INHALT, ART_UNTERTITEL = "video", "inhalt", "untertitel"   # Art einer Datei im Bundle
+UNTERTITEL_ENDUNG = ".vtt.mvb"                  # Untertitel eines Lernvideos: <video>.<sprache>.vtt.mvb
+VTT_KOPF = b"WEBVTT"
 MANIFEST_VERSUCHE = 3
 MANIFEST_PAUSE = 10                             # Sekunden zwischen zwei Versuchen
 SCHNITT_SPIEL = 1.0                             # Sekunden, die ein Schnittpunkt hinter dem Ende liegen darf
@@ -308,9 +311,14 @@ def ist_paket(eintrag):
     return "inhalt" in eintrag
 
 
+def untertitel_von(eintrag):
+    """Die Untertitel der Videos eines Eintrags im Manifest."""
+    return [u for v in eintrag["videos"] for u in v.get("untertitel", [])]
+
+
 def dateien_von(eintrag):
-    """Die Dateien eines Eintrags im Manifest: die Videos, bei einem Lernpaket dazu der Inhalt."""
-    return eintrag["videos"] + ([eintrag["inhalt"]] if ist_paket(eintrag) else [])
+    """Die Dateien eines Eintrags im Manifest: die Videos, bei einem Lernpaket dazu Untertitel und Inhalt."""
+    return eintrag["videos"] + untertitel_von(eintrag) + ([eintrag["inhalt"]] if ist_paket(eintrag) else [])
 
 
 def paket_ids():
@@ -502,6 +510,25 @@ def paket_schnitt_fehler(p, video, laenge):
     return schnitt_fehler(video, stellen, laenge) if stellen else []
 
 
+def paket_untertitel(v, videos_ordner, arbeit, aus, k):
+    """Die Untertitel eines Videos als WebVTT verschlüsselt (Manifest-Einträge); die Klardatei bleibt nicht liegen."""
+    eintraege_ = []
+    for u in v.get("untertitel", []):
+        quelle = videos_ordner / u["datei"]
+        if not quelle.is_file():
+            sys.exit(f"bundle: Untertitel {quelle} fehlt")
+        datei = f"{v['id'].replace('/', '-')}.{u['sprache']}{UNTERTITEL_ENDUNG}"
+        klar = arbeit / (datei + ".klar")
+        klar.write_text(paket.webvtt(quelle.read_text(encoding="utf-8")), encoding="utf-8")
+        try:
+            groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
+        finally:
+            klar.unlink(missing_ok=True)
+        eintraege_.append({"sprache": u["sprache"], "datei": datei, "groesse": groesse, "sha256": sha,
+                           "klar": klargroesse})
+    return eintraege_
+
+
 def befehl_build_paket(args):
     """Ein Lernpaket: die Videos wie die Prüfungsvideos, dazu sein Inhalt verschlüsselt als inhalt.mvb."""
     pid = args.bundle
@@ -535,6 +562,9 @@ def befehl_build_paket(args):
         groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
         videos.append({"video": v["id"], "datei": datei, "groesse": groesse, "sha256": sha, "klar": klargroesse,
                        "beschnitten": fertig or not args.ohne_kodieren, "bilder": zahl})
+        untertitel = paket_untertitel(v, videos_ordner, arbeit, aus, k)
+        if untertitel:
+            videos[-1]["untertitel"] = untertitel
     json_datei = arbeit / "inhalt.json"
     json_datei.write_text(json.dumps(paket.inhalt(pid), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     groesse, sha, klargroesse = verschluesselt(json_datei, aus / INHALT, k)
@@ -591,9 +621,13 @@ def verifiziert(bundle_id):
             fehler.append(f"{bundle_id}/{v['datei']}: fehlt")
             continue
         fehler += _datei_fehler(bundle_id, v, pfad, k)
+    for u in untertitel_von(eintrag):
+        pfad = GEHEIM / "aus" / bundle_id / str(eintrag["version"]) / u["datei"]
+        fehler += _datei_fehler(bundle_id, u, pfad, k, art=ART_UNTERTITEL) if pfad.exists() \
+            else [f"{bundle_id}/{u['datei']}: fehlt"]
     if ist_paket(eintrag):
         pfad = GEHEIM / "aus" / bundle_id / str(eintrag["version"]) / eintrag["inhalt"]["datei"]
-        fehler += _datei_fehler(bundle_id, eintrag["inhalt"], pfad, k, inhalt=True) if pfad.exists() \
+        fehler += _datei_fehler(bundle_id, eintrag["inhalt"], pfad, k, art=ART_INHALT) if pfad.exists() \
             else [f"{bundle_id}/{eintrag['inhalt']['datei']}: fehlt"]
     return fehler
 
@@ -609,7 +643,16 @@ def _inhalt_fehler(name, probe, bundle_id):
     return []
 
 
-def _datei_fehler(bundle_id, v, pfad, k, inhalt=False):
+def _untertitel_fehler(name, probe):
+    """Ein Untertitel: WebVTT-Text."""
+    try:
+        kopf = probe.read_bytes()[:len(VTT_KOPF)]
+    except OSError:
+        return [f"{name}: nicht lesbar"]
+    return [] if kopf == VTT_KOPF else [f"{name}: kein WebVTT"]
+
+
+def _datei_fehler(bundle_id, v, pfad, k, art=ART_VIDEO):
     name = f"{bundle_id}/{v['datei']}"
     if pfad.stat().st_size != v["groesse"]:
         return [f"{name}: Größe {pfad.stat().st_size}, im Manifest {v['groesse']}"]
@@ -625,8 +668,10 @@ def _datei_fehler(bundle_id, v, pfad, k, inhalt=False):
         entschluesselt(pfad, probe, k)
         if probe.stat().st_size != v["klar"]:
             return [f"{name}: Klartext {probe.stat().st_size}, im Manifest {v['klar']}"]
-        if inhalt:
+        if art == ART_INHALT:
             return _inhalt_fehler(name, probe, bundle_id)
+        if art == ART_UNTERTITEL:
+            return _untertitel_fehler(name, probe)
         return _laenge_fehler(name, probe, v.get("bilder"))
     except Exception as e:
         return [f"{name}: lässt sich nicht entschlüsseln ({type(e).__name__})"]

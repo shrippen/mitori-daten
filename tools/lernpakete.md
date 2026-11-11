@@ -19,6 +19,8 @@ videos:
     datei: "Ordner/Video.mp4"           # relativ zu --videos von bundle.py
     titel: Vol. 1 · Irimi Tenkan
     beschnitt: {hoehe: 1080, y: 0, h: 1080, verhaeltnis: 1.7778}   # optional, wie in videos.yaml
+    untertitel:                         # optional: je Sprache eine Spur (WebVTT oder SRT)
+      - {datei: "Ordner/Video.srt", sprache: en}   # datei relativ zu --videos, sprache ISO 639-1, einmal je Video
 abschnitte:
   - titel: Grundtechniken
     titel_en: Basic techniques
@@ -57,6 +59,21 @@ JSON, `format` 1; Texte wie in `mitori-daten.json` mit `x_en` nur, wo es abweich
     "angriff": {"name": "Shomen-uchi", "jp": "正面打ち"}, "zusatz": "…", "text": "…",
     "wie": ["aikido/…"], "video": "shirakawa-1/video", "von": 129.0, "bis": 152.6}]}]}
 ```
+
+## Untertitel im Bundle
+
+Die Untertitel stehen nicht im Video, die App zeichnet sie selbst. `bundle.py build` liest jede Datei, macht
+WebVTT daraus (ist sie schon WebVTT, bleibt sie; bei SRT werden Kommas der Zeiten zu Punkten, die Nummern
+fallen weg, `WEBVTT` kommt davor) und verschlüsselt sie wie den Inhalt mit dem Schlüssel des Pakets als
+`<video-id, / → ->.<sprache>.vtt.mvb`. Die Klardatei bleibt nicht liegen. Im Manifest hängt am Video, nur wenn es
+Untertitel gibt (ältere Apps ignorieren den Schlüssel, `format` bleibt; `url` setzt `hochladen`):
+
+```json
+"untertitel": [{"sprache": "en", "datei": "shirakawa-1-video.en.vtt.mvb", "groesse": 1234, "sha256": "…", "klar": 1200}]
+```
+
+`verifizieren`, `hochladen` (rsync und Adressprüfung) behandeln sie wie jede Datei des Bundles. Untertitel
+echter Videos liegen wie die Videos nie im Repo.
 
 Im öffentlichen Manifest steht ein Lernpaket unter `lernpakete` (nicht `bundles`: Mitori bis 0.3.0
 kennt nur diese), wie ein Bundle, aber ohne `kapitel` (die Stellen verraten die Techniken) und mit
