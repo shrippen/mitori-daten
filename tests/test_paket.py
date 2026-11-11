@@ -75,6 +75,23 @@ FALSCH = {
     "Technik-Id": (lambda d: d["abschnitte"][0]["techniken"][1].update(id="Gross Klein"), "Id nur aus a-z"),
     "von nach bis": (lambda d: d["abschnitte"][0]["techniken"][1].update(von=9, bis=3), "von 9 bis 3"),
     "von negativ": (lambda d: d["abschnitte"][0]["techniken"][1].update(von=-1), "von -1"),
+    "Untertitel keine Liste": (lambda d: d["videos"][0].update(untertitel="a.srt"), "untertitel ist keine nichtleere Liste"),
+    "Untertitel leer": (lambda d: d["videos"][0].update(untertitel=[]), "untertitel ist keine nichtleere Liste"),
+    "Untertitel kein Eintrag": (lambda d: d["videos"][0].update(untertitel=["a.srt"]), "kein Eintrag mit Feldern"),
+    "Untertitel ohne Sprache": (lambda d: d["videos"][0].update(untertitel=[{"datei": "a.srt"}]), "sprache fehlt"),
+    "Untertitel ohne Datei": (lambda d: d["videos"][0].update(untertitel=[{"sprache": "en"}]), "datei fehlt"),
+    "Untertitel Feld": (lambda d: d["videos"][0].update(untertitel=[{"datei": "a.srt", "sprache": "en", "x": 1}]),
+                        "unbekanntes Feld x"),
+    "Untertitel Sprache lang": (lambda d: d["videos"][0].update(untertitel=[{"datei": "a.srt", "sprache": "eng"}]),
+                                "sprache aus zwei Kleinbuchstaben"),
+    "Untertitel Sprache gross": (lambda d: d["videos"][0].update(untertitel=[{"datei": "a.srt", "sprache": "EN"}]),
+                                 "sprache aus zwei Kleinbuchstaben"),
+    "Untertitel Sprache doppelt": (lambda d: d["videos"][0].update(
+        untertitel=[{"datei": "a.srt", "sprache": "en"}, {"datei": "b.srt", "sprache": "en"}]), "sprache en steht doppelt"),
+    "Untertitel absolut": (lambda d: d["videos"][0].update(untertitel=[{"datei": "/a.srt", "sprache": "en"}]),
+                           "datei nur relativ"),
+    "Untertitel mit ..": (lambda d: d["videos"][0].update(untertitel=[{"datei": "../a.srt", "sprache": "en"}]),
+                          "datei nur relativ"),
     "wie unbekannt": (lambda d: d["abschnitte"][0]["techniken"][1].update(wie=["aikido/gibt-es-nicht"]), "unbekannte Id"),
     "wie doppelt": (lambda d: d["abschnitte"][0]["techniken"][0].update(wie=d["abschnitte"][0]["techniken"][0]["wie"] * 2),
                     "wie aikido/kyu-grade/x/k5/irimi-nage-2 steht doppelt"),
@@ -327,3 +344,22 @@ def test_vorschau_bleibt_in_ihrem_ordner(pakete, tmp_path, monkeypatch):
     with pytest.raises(SystemExit, match="flucht"):
         paket.vorschau("p", videos)
     assert not list(tmp_path.rglob("flucht*"))
+
+
+def test_gute_untertitel(pakete):
+    d = geaendert(lambda d: d["videos"][0].update(
+        untertitel=[{"datei": "S/V1.srt", "sprache": "en"}, {"datei": "S/V1.de.srt", "sprache": "de"}]))
+    schreibe(pakete, "shirakawa-1", d)
+    assert fehler() == []
+
+
+def test_webvtt_bleibt():
+    vtt = "WEBVTT\n\n1\n00:00:01.000 --> 00:00:02.500\nHallo\n"
+    assert paket.webvtt(vtt) == vtt
+    assert paket.webvtt("\ufeff" + vtt.replace("\n", "\r\n")) == vtt
+
+
+def test_srt_wird_webvtt():
+    srt = "1\r\n00:00:01,000 --> 00:00:02,500\r\nHallo, Welt\r\nzweite Zeile\r\n\r\n2\r\n00:01:03,250 --> 00:01:04,000\r\nEnde\r\n"
+    assert paket.webvtt(srt) == ("WEBVTT\n\n00:00:01.000 --> 00:00:02.500\nHallo, Welt\nzweite Zeile\n\n"
+                                 "00:01:03.250 --> 00:01:04.000\nEnde\n")

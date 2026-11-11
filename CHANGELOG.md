@@ -10,6 +10,8 @@
   verschlüsselt als `inhalt.mvb` dazu. Sie stehen nicht in `mitori-daten.json` und nicht im Heft.
 - `tools/paket.py vorschau <id>`: drei Standbilder je Technik und eine `index.html`, um die Zeiten eines
   Lernpaket-Entwurfs am Video zu prüfen.
+- Lernpakete mit Untertiteln: `untertitel` je Video im Paket; `tools/bundle.py` legt jede Spur als WebVTT
+  verschlüsselt dazu (SRT wird umgewandelt), das Manifest nennt sie am Video.
 
 ## [2026.11.1] — 2026-11-07
 

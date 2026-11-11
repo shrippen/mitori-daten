@@ -1,4 +1,5 @@
 """Checks of tools/bundle.py: codes, wrapping the key, encrypting files (the app reads the same)."""
+import copy
 import importlib.util
 import json
 import os
@@ -916,6 +917,76 @@ def test_paket_bauen(geheim, lernpaket):
     assert j["abschnitte"][0]["techniken"][0]["id"] == "lern/shirakawa-1/irimi"
     assert j["abschnitte"][0]["techniken"][0]["angriff"]["jp"] == "正面打ち"
     assert not (geheim / "arbeit" / "shirakawa-1" / "inhalt.json").exists()
+
+
+def _mit_untertitel(lernpaket, text):
+    """Dem Lernpaket einen englischen Untertitel geben; gibt den Ordner der Videos zurück."""
+    pakete, videos = lernpaket
+    d = copy.deepcopy(PAKET)
+    d["videos"][0]["untertitel"] = [{"datei": "S/V1.srt", "sprache": "en"}]
+    (pakete / "shirakawa-1.yaml").write_text(yaml.safe_dump(d, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    (videos / "S" / "V1.srt").write_text(text, encoding="utf-8")
+
+
+def test_paket_untertitel(geheim, lernpaket):
+    vtt = "WEBVTT\n\n00:00:01.000 --> 00:00:02.500\nHello\n"
+    _mit_untertitel(lernpaket, vtt)
+    e = _gebaut_paket(lernpaket)
+    u = e["videos"][0]["untertitel"]
+    assert [x["sprache"] for x in u] == ["en"] and set(u[0]) == {"sprache", "datei", "groesse", "sha256", "klar"}
+    assert u[0]["datei"] == "shirakawa-1-v1.en.vtt.mvb"
+    aus = geheim / "aus" / "shirakawa-1" / "1"
+    assert (aus / u[0]["datei"]).stat().st_size == u[0]["groesse"]
+    bundle.entschluesselt(aus / u[0]["datei"], geheim / "klar.vtt", bundle.schluessel("shirakawa-1"))
+    assert (geheim / "klar.vtt").read_text(encoding="utf-8") == vtt and u[0]["klar"] == len(vtt.encode())
+    assert not list((geheim / "arbeit" / "shirakawa-1").glob("*.klar"))
+    assert bundle.verifiziert("shirakawa-1") == []
+    assert u[0] in bundle.dateien_von(e)
+    aus_m = bundle.veroeffentlichtes_manifest(bundle.manifest_lesen(), "https://v.example/m")
+    assert aus_m["lernpakete"][0]["videos"][0]["untertitel"][0]["url"] == "https://v.example/m/shirakawa-1/1/shirakawa-1-v1.en.vtt.mvb"
+
+
+def test_paket_untertitel_srt_wird_webvtt(geheim, lernpaket):
+    _mit_untertitel(lernpaket, "1\n00:00:01,000 --> 00:00:02,500\nHello\n")
+    e = _gebaut_paket(lernpaket)
+    datei = e["videos"][0]["untertitel"][0]["datei"]
+    bundle.entschluesselt(geheim / "aus" / "shirakawa-1" / "1" / datei, geheim / "klar.vtt", bundle.schluessel("shirakawa-1"))
+    assert (geheim / "klar.vtt").read_text(encoding="utf-8") == "WEBVTT\n\n00:00:01.000 --> 00:00:02.500\nHello\n"
+
+
+def test_paket_ohne_untertitel_hat_den_schluessel_nicht(geheim, lernpaket):
+    assert "untertitel" not in _gebaut_paket(lernpaket)["videos"][0]
+
+
+def test_paket_untertitel_fehlt(geheim, lernpaket):
+    _mit_untertitel(lernpaket, "x")
+    (lernpaket[1] / "S" / "V1.srt").unlink()
+    with pytest.raises(SystemExit, match="Untertitel .* fehlt"):
+        bundle.befehl_build(_paket_args(lernpaket[1]))
+
+
+def test_paket_untertitel_ohne_eintrag(geheim, lernpaket):
+    """Eine leere oder fremde Datei (falscher Pfad) wird nicht gebaut: in der App wäre es eine Spur ohne Text."""
+    for text in ("", "Hallo\n"):
+        _mit_untertitel(lernpaket, text)
+        with pytest.raises(SystemExit, match="keinen Eintrag"):
+            bundle.befehl_build(_paket_args(lernpaket[1]))
+
+
+def test_paket_verifizieren_prueft_untertitel(geheim, lernpaket):
+    _mit_untertitel(lernpaket, "WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nA\n")
+    e = _gebaut_paket(lernpaket)
+    pfad = geheim / "aus" / "shirakawa-1" / "1" / e["videos"][0]["untertitel"][0]["datei"]
+    k = bundle.schluessel("shirakawa-1")
+    fremd = geheim / "fremd.txt"
+    fremd.write_text("kein vtt", encoding="utf-8")
+    g, sha, klar = bundle.verschluesselt(fremd, pfad, k)
+    m = bundle.manifest_lesen()
+    m["lernpakete"][0]["videos"][0]["untertitel"][0].update(groesse=g, sha256=sha, klar=klar)
+    bundle.manifest_schreiben(m)
+    assert any("kein WebVTT" in f for f in bundle.verifiziert("shirakawa-1"))
+    pfad.unlink()
+    assert any(".en.vtt.mvb: fehlt" in f for f in bundle.verifiziert("shirakawa-1"))
 
 
 def test_paket_hat_hoehere_version(geheim, lernpaket):

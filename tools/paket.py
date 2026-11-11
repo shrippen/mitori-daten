@@ -56,6 +56,7 @@ VORSCHAU_CSS = ("body{font:14px sans-serif;margin:1em;background:#fff;color:#111
 # Wie bundle.ID: Ids werden Ordnernamen in der App (nur a-z, 0-9 und Bindestriche).
 ID = re.compile(r"[a-z0-9][a-z0-9-]*")
 VIDEO_ID = re.compile(r"[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9-]*")
+SPRACHE = re.compile(r"[a-z]{2}")                # ISO 639-1
 
 # Je Sparte das Glossar der Kanji, wie tools/daten.py es für das Programm nimmt: (Datei, Bausteine).
 SPARTEN = {"aikido": ("begriffe.yaml", False), "shinkitoho": ("begriffe.yaml", False),
@@ -64,7 +65,8 @@ SPARTEN = {"aikido": ("begriffe.yaml", False), "shinkitoho": ("begriffe.yaml", F
 # Felder; zu jedem Feld in MIT_ENGLISCH darf `<feld>_en` stehen, aber nur neben dem Feld.
 MIT_ENGLISCH = {"titel", "text", "name", "angriff", "zusatz"}
 PAKET_FELDER = {"titel", "sparte", "text", "videos", "abschnitte"}
-VIDEO_FELDER = {"id", "datei", "titel", "beschnitt"}
+VIDEO_FELDER = {"id", "datei", "titel", "beschnitt", "untertitel"}
+UNTERTITEL_FELDER = {"datei", "sprache"}
 ABSCHNITT_FELDER = {"titel", "text", "techniken"}
 TECHNIK_FELDER = {"id", "name", "angriff", "zusatz", "text", "wie", "video", "von", "bis", "pruefen"}
 TECHNIK_PFLICHT = ("id", "name", "video", "von", "bis")
@@ -75,6 +77,8 @@ ENDE = "-->"
 ZEIT = re.compile(r"(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{3})")
 MARKE = re.compile(r"<[^>]*>")
 KOPF_BLOECKE = ("WEBVTT", "NOTE", "STYLE", "REGION")
+VTT_KOPF = "WEBVTT"
+ZEIT_KOMMA = re.compile(r"(\d{1,2}:\d{2}),(\d{3})")
 
 
 # ── Laden und Prüfen ──
@@ -142,12 +146,42 @@ def liste_fehler(wo, d, feld):
     return []
 
 
+def untertitel_fehler(wo, v):
+    """Die Untertitel eines Videos: Liste aus datei (relativ) und sprache (ISO 639-1), je Sprache eine."""
+    if "untertitel" not in v:
+        return []
+    liste = v["untertitel"]
+    if not isinstance(liste, list) or not liste:
+        return [f"{wo}: untertitel ist keine nichtleere Liste"]
+    fehler, sprachen = [], set()
+    for u in liste:
+        fehler += felder_fehler(f"{wo}, Untertitel", u, UNTERTITEL_FELDER, ("datei", "sprache"))
+        if not isinstance(u, dict):
+            continue
+        datei = u.get("datei")
+        if "datei" in u:
+            pfad = Path(datei) if isinstance(datei, str) and datei else None
+            if pfad is None or pfad.is_absolute() or ".." in pfad.parts:
+                fehler.append(f"{wo}, Untertitel: datei nur relativ zu --videos, ohne ..")
+        sprache = u.get("sprache")
+        if "sprache" not in u:
+            continue
+        if not isinstance(sprache, str) or not SPRACHE.fullmatch(sprache):
+            fehler.append(f"{wo}, Untertitel: sprache aus zwei Kleinbuchstaben (ISO 639-1)")
+        elif sprache in sprachen:
+            fehler.append(f"{wo}, Untertitel: sprache {sprache} steht doppelt")
+        sprachen.add(sprache)
+    return fehler
+
+
 def video_fehler(pid, d, belegt, pruefung):
     fehler = liste_fehler(pid, d, "videos")
     erklaert = set()
     for v in d.get("videos") or []:
         wo = f"{pid}, Video {v.get('id') if isinstance(v, dict) else v}"
         fehler += felder_fehler(wo, v, VIDEO_FELDER, ("id", "datei", "titel"))
+        if isinstance(v, dict):
+            fehler += untertitel_fehler(wo, v)
         if not isinstance(v, dict) or "id" not in v:
             continue
         datei = Path(str(v.get("datei")))
@@ -311,6 +345,24 @@ def untertitel(text):
         if inhalt_:
             zeilen.append((sekunden(zeiten[0]), sekunden(zeiten[1]), inhalt_))
     return zeilen
+
+
+def webvtt(text):
+    """WebVTT-Text aus WebVTT (bleibt) oder SRT: Kommas der Zeiten werden Punkte, Nummern der Blöcke fallen weg,
+    der Kopf WEBVTT kommt davor."""
+    text = text.replace("\r\n", "\n").replace("\r", "\n").lstrip("\ufeff")
+    if text.startswith(VTT_KOPF):
+        return text.rstrip("\n") + "\n"
+    blocks = []
+    for block in re.split(r"\n\s*\n", text.strip()):
+        zeilen = block.splitlines()
+        if zeilen and zeilen[0].strip().isdigit():
+            zeilen = zeilen[1:]
+        if not zeilen:
+            continue
+        zeilen[0] = ZEIT_KOMMA.sub(r"\1.\2", zeilen[0])
+        blocks.append("\n".join(zeilen))
+    return VTT_KOPF + "\n\n" + "\n\n".join(blocks) + "\n"
 
 
 def ist_kandidat(zeile):
