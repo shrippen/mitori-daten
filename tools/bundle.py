@@ -518,8 +518,12 @@ def paket_untertitel(v, videos_ordner, arbeit, aus, k):
         if not quelle.is_file():
             sys.exit(f"bundle: Untertitel {quelle} fehlt")
         datei = f"{v['id'].replace('/', '-')}.{u['sprache']}{UNTERTITEL_ENDUNG}"
+        text = paket.webvtt(quelle.read_text(encoding="utf-8"))
+        # Ohne einen Eintrag (leer, falscher Pfad) wäre es in der App eine Spur ohne Text.
+        if not paket.untertitel(text):
+            sys.exit(f"bundle: Untertitel {quelle} hat keinen Eintrag")
         klar = arbeit / (datei + ".klar")
-        klar.write_text(paket.webvtt(quelle.read_text(encoding="utf-8")), encoding="utf-8")
+        klar.write_text(text, encoding="utf-8")
         try:
             groesse, sha, klargroesse = verschluesselt(klar, aus / datei, k)
         finally:

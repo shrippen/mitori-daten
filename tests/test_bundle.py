@@ -965,6 +965,14 @@ def test_paket_untertitel_fehlt(geheim, lernpaket):
         bundle.befehl_build(_paket_args(lernpaket[1]))
 
 
+def test_paket_untertitel_ohne_eintrag(geheim, lernpaket):
+    """Eine leere oder fremde Datei (falscher Pfad) wird nicht gebaut: in der App wäre es eine Spur ohne Text."""
+    for text in ("", "Hallo\n"):
+        _mit_untertitel(lernpaket, text)
+        with pytest.raises(SystemExit, match="keinen Eintrag"):
+            bundle.befehl_build(_paket_args(lernpaket[1]))
+
+
 def test_paket_verifizieren_prueft_untertitel(geheim, lernpaket):
     _mit_untertitel(lernpaket, "WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nA\n")
     e = _gebaut_paket(lernpaket)
