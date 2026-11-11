@@ -64,7 +64,7 @@ Lernpakete (Bundles mit eigenen Techniken) beschreibt `tools/lernpakete.md`.
 ```
 Manifest laden ──► Code eingeben ──► Eintrag finden ──► Inhaltsschlüssel auspacken
                                                               │
-  Datei laden (url) ──► Größe und sha256 prüfen ──► Blöcke entschlüsseln ──► Video (MKV, HEVC)
+  Datei laden (url) ──► Blöcke entschlüsseln, sha256 mitrechnen ──► Video (meist MKV, HEVC)
 ```
 
 1. **Manifest:** `https://git.arianw.de/api/packages/shrippen/generic/mitori-manifest/1/manifest.json`.
@@ -72,7 +72,7 @@ Manifest laden ──► Code eingeben ──► Eintrag finden ──► Inhalt
    jedes Bundles, alte Dateien verschwinden vom Server.
 2. **Code** normalisieren: Großbuchstaben, ohne Bindestriche und Leerzeichen, `O`→`0`,
    `I` und `L`→`1`. Ergebnis: 20 Zeichen Crockford-Base32 (`0-9A-Z` ohne `ILOU`), 19 zufällige
-   (95 Bit) und ein Prüfzeichen. Angezeigt wird er in Fünfergruppen: `7KQ2M-X9HDV-3TAPR-WE6YC`.
+   (95 Bit) und ein Prüfzeichen. Angezeigt wird er in Fünfergruppen: `7KQ2M-X9HDV-3TAPR-WE6YT`.
    Das Prüfzeichen ist Luhn mod 32. Es wird von rechts über die ersten 19 Zeichen gerechnet:
    Faktor 2, 1, 2, …, `summe += w // 32 + w % 32` mit `w = Faktor × Wert`,
    Prüfzeichen `(32 − summe % 32) % 32`.
@@ -80,13 +80,15 @@ Manifest laden ──► Code eingeben ──► Eintrag finden ──► Inhalt
    Fehlt sie, ist der Code falsch oder gesperrt.
 4. **Inhaltsschlüssel auspacken:**
    `kek = Argon2id(passwort = code, salz, t Durchläufe, m KiB, 1 Spur) → 32 Byte`.
-   `roh = base64(schluessel)` = Nonce (24 Byte) + Geheimtext + Tag (16 Byte).
+   `roh = base64-dekodiert(schluessel)` = Nonce (24 Byte) + Geheimtext + Tag (16 Byte).
    `inhaltsschluessel = XChaCha20-Poly1305-IETF-open(roh, AD = "mitori-key:" + bundle, kek)`
    ergibt 32 Byte. `t` und `m` vor dem Rechnen begrenzen. Mitori nimmt `t` 1–16 und `m` 8 KiB–256 MiB, mehr gilt als beschädigt.
    Der Schlüssel bleibt über alle Versionen eines Bundles gleich: Wer ihn einmal hat, lädt neue
    Versionen ohne Code.
-5. **Datei** von `url` laden, `groesse` und `sha256` (der verschlüsselten Datei) prüfen, dann
-   entschlüsseln (Format unten). Heraus kommen `klar` Byte.
+5. **Datei** von `url` laden und dabei Stück für Stück entschlüsseln (Format unten) und sha256
+   mitrechnen. Am Ende müssen `groesse` und `sha256` (der verschlüsselten Datei) stimmen, sonst
+   die Datei verwerfen. Heraus kommen `klar` Byte, meist MKV mit HEVC. Mit von Hand fertigen
+   Videos bleibt der Container der Quelle (z. B. MP4), also nicht voraussetzen.
 
 ### Dateiformat (`.mvb`)
 
