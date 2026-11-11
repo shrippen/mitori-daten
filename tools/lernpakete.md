@@ -40,6 +40,11 @@ Entwurf: kurze Zeilen (Einblendungen) werden Techniken mit `pruefen: true` in ei
 Abschnitte und Namen von Hand. Die Zeiten von Hand am Video prüfen,
 dann das Feld löschen. Ein Paket mit `pruefen` baut `bundle.py` nicht.
 
+`tools/paket.py vorschau <id> [--videos <ordner>]` hilft dabei: je Technik drei Standbilder (von + 1 s, Mitte,
+bis − 1 s, 320 px breit, braucht ffmpeg) und eine `index.html` mit Namen, Zeiten und `pruefen` nach
+`<MITORI_BUNDLE_GEHEIM>/arbeit/<id>/vorschau/` (nie ins Repo: Standbilder sind Videoinhalt). Ein zweiter Lauf holt nur Bilder
+geänderter Zeiten.
+
 ## Inhalt im Bundle (`inhalt.mvb`, verschlüsselt wie ein Video)
 
 JSON, `format` 1; Texte wie in `mitori-daten.json` mit `x_en` nur, wo es abweicht:
