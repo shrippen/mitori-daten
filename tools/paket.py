@@ -426,7 +426,21 @@ def vorschau_seite(d, bilder):
 
 def vorschau(pid, videos_ordner):
     """Schreibt die Vorschau von Paket `pid` nach <GEHEIM>/arbeit/<pid>/vorschau/; gibt den Ordner zurück."""
+    if not ID.fullmatch(pid):
+        sys.exit(f"paket: Id {pid} nur aus a-z, 0-9 und Bindestrichen")
     d = yaml.safe_load((PAKETE / f"{pid}.yaml").read_text(encoding="utf-8"))
+
+    # Ein Entwurf ist ungeprüft: Seine Technik-Ids werden Dateinamen und müssen im Ordner bleiben.
+    falsch = [str(t.get("id")) for a in d["abschnitte"] for t in a["techniken"]
+              if not (isinstance(t.get("id"), str) and ID.fullmatch(t["id"]))]
+    if falsch:
+        sys.exit("paket: Technik-Ids nur aus a-z, 0-9 und Bindestrichen: " + ", ".join(falsch))
+
+    # Standbilder sind Videoinhalt: nie in ein Git-Repo, wie bei bundle.py.
+    import bundle       # erst hier: bundle.py lädt selbst paket.py
+    repo = bundle.repo_von(GEHEIM.resolve())
+    if repo:
+        sys.exit(f"paket: {GEHEIM} liegt im Git-Repo {repo}; MITORI_BUNDLE_GEHEIM außerhalb setzen")
     dateien = {v["id"]: Path(videos_ordner) / v["datei"] for v in d["videos"]}
     fehlt = [str(p) for p in dateien.values() if not p.is_file()]
     if fehlt:

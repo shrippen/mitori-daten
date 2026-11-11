@@ -303,3 +303,27 @@ def test_vorschau_ohne_ffmpeg(pakete, monkeypatch, capsys):
     with pytest.raises(SystemExit) as e:
         paket.befehl_vorschau(type("A", (), {"id": "p", "videos": None})())
     assert "ffmpeg" in str(e.value.code)
+
+
+@ffmpeg
+def test_vorschau_nie_in_ein_repo(pakete, tmp_path, monkeypatch):
+    """Standbilder sind Videoinhalt: Liegt GEHEIM in einem Git-Repo, schreibt die Vorschau nichts."""
+    videos = vorschau_paket(pakete, tmp_path, monkeypatch)
+    repo = tmp_path / "repo"
+    (repo / ".git").mkdir(parents=True)
+    monkeypatch.setattr(paket, "GEHEIM", repo / "geheim")
+    with pytest.raises(SystemExit, match="Git-Repo"):
+        paket.vorschau("p", videos)
+    assert not (repo / "geheim" / "arbeit").exists()
+
+
+@ffmpeg
+def test_vorschau_bleibt_in_ihrem_ordner(pakete, tmp_path, monkeypatch):
+    """Eine Technik-Id aus einem ungeprüften Entwurf wird kein Pfad außerhalb des Vorschau-Ordners."""
+    videos = vorschau_paket(pakete, tmp_path, monkeypatch)
+    d = yaml.safe_load((pakete / "p.yaml").read_text(encoding="utf-8"))
+    d["abschnitte"][0]["techniken"][0]["id"] = "../../../flucht"
+    schreibe(pakete, "p", d)
+    with pytest.raises(SystemExit, match="flucht"):
+        paket.vorschau("p", videos)
+    assert not list(tmp_path.rglob("flucht*"))
