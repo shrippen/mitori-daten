@@ -9,7 +9,8 @@ schwarzem Bild die Titeltafel in der Mitte. Dann richtet es die erkannten Texte 
 der Techniken des Grades aus (Needleman-Wunsch): Kapitel ohne passende Technik (Vorspann,
 Zwischentitel) fallen weg, eine Technik ohne Kapitel bleibt ohne Videostelle. Eine Lücke zwischen
 zwei zugeordneten Nachbarn mit gleich vielen Kapiteln wie Techniken füllt es der Reihe nach
-(Kapitel ohne Titel, z. B. Jiyu-waza). Das Kapitel endet am Anfang des nächsten.
+(Kapitel ohne Titel, z. B. Jiyu-waza). Das Kapitel endet am Anfang des nächsten. Beschnitt und
+Prüfvermerk eines Videos, das schon in daten/videos.yaml steht, bleiben (von Hand gesetzt).
 
 daten/videos.yaml ist erzeugt, aber nicht in der CI prüfbar (die Videos liegen nicht im Repo):
 nach jedem Lauf die Einträge mit `pruefen: true` von Hand gegen das Video ansehen.
@@ -200,6 +201,27 @@ def stoff(daten, disziplin, grad):
             for t in d["techniken"] if t["grad"] == grad and t["gruppe"] not in text]
 
 
+# Felder eines Videos, die von Hand stehen (mitori-tools, Beschnitt) und ein neuer Lauf behält,
+# in der Reihenfolge der Datei: datei, pruefen_beschnitt, beschnitt, kapitel.
+VON_HAND = ("pruefen_beschnitt", "beschnitt")
+
+
+def zusammenfuehren(alt, neu):
+    """Die neu gelesenen Videos in den Stand von daten/videos.yaml. Ein Video, das schon dort steht,
+    behält Beschnitt und Prüfvermerk (auch einen Anker, den es mit anderen teilt); nur ein neues
+    bekommt den Beschnitt aus BESCHNITT."""
+    for schluessel, eintrag in neu.items():
+        vorher = alt.get(schluessel) or {}
+        fertig = {"datei": eintrag["datei"]}
+        for feld in VON_HAND:
+            fertig[feld] = vorher.get(feld, eintrag.get(feld))
+        if fertig["pruefen_beschnitt"] is None:
+            del fertig["pruefen_beschnitt"]
+        fertig["kapitel"] = eintrag["kapitel"]
+        alt[schluessel] = fertig
+    return alt
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--videos", default=str(WURZEL.parent / "Mitori Videos"))
@@ -248,7 +270,7 @@ def main():
         return
     ziel = WURZEL / "daten" / "videos.yaml"
     alt = yaml.safe_load(ziel.read_text(encoding="utf-8")) if ziel.exists() else {}
-    alt.update(ausgabe)
+    alt = zusammenfuehren(alt, ausgabe)
     kopf = ("# Videostellen je Technik: erzeugt von tools/kapitel.py aus den Kapiteln der Prüfungsvideos.\n"
             "# Einträge mit `pruefen: true` von Hand gegen das Video prüfen und das Feld dann löschen;\n"
             "# von Hand geänderte Zeiten überschreibt ein neuer Lauf (darum nur mit --nur neu erzeugen).\n")

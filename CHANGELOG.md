@@ -13,6 +13,13 @@
 - Lernpakete mit Untertiteln: `untertitel` je Video im Paket; `tools/bundle.py` legt jede Spur als WebVTT
   verschlüsselt dazu (SRT wird umgewandelt), das Manifest nennt sie am Video.
 
+### Behoben
+
+- `tools/kapitel.py` behält bei einem neuen Lauf den Beschnitt eines Videos und seinen Prüfvermerk
+  (`pruefen_beschnitt`), die von Hand gesetzt sind (mitori-tools, Beschnitt). Vorher schrieb es den
+  Beschnitt aus seinen Konstanten zurück, und ein für ein Video abgetrennter Block hing wieder am
+  gemeinsamen Anker.
+
 ## [2026.11.1] — 2026-11-07
 
 Die Programme haben jetzt englische Texte, und die Videos lassen sich für den Download vorbereiten.
